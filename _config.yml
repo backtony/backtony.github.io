@@ -51,7 +51,7 @@ disqus: True
 disqus_shortname:    Backtony
 
 # This text will appear in the footer of every page. Markdown enabled.
-copyright:           '&copy; 2019.04. by theorydb'
+copyright:           '&copy; 2020.07. by Backtony'
 
 # Format of the permalinks
 permalink:           pretty
@@ -137,4 +137,3 @@ tipue_search:
     files: [search.html, index.html, tags.html]
     categories: []
     tags: []
-    
