@@ -9,7 +9,7 @@ theorydb:
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:             |
     * 기계공학도의 개발자 도전기
-    * 독학으로 공부한 내용을 정리하는 중
+    * 독학으로 공부한 내용을 정리하는 중입니다.
 
   # This photo will be used in the about section
   picture:
