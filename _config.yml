@@ -12,13 +12,8 @@ url:                 https://backtony.github.io
 # Set to '/<reponame>' when using the `gh-pages` branch of a repository
 baseurl:             ""
 
-<<<<<<< HEAD
 # A very short description of your page
 tagline:             "초보 개발 공부 로그"
-=======
-# A very short description of your page
-tagline:             "초보 개발 공부 로그"
->>>>>>> d89e151aafe27ad4e173560468f8936edc76724b
 
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
