@@ -13,7 +13,8 @@ url:                 https://backtony.github.io
 baseurl:             ""
 
 <<<<<<< HEAD
-# A very short description of your pagetagline:             "초보 개발 공부 로그"
+# A very short description of your page
+tagline:             "초보 개발 공부 로그"
 =======
 # A very short description of your page
 tagline:             "초보 개발 공부 로그"
