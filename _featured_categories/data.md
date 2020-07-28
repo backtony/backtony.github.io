@@ -6,5 +6,5 @@ menu: true
 submenu: false
 order: 3
 description: >
-  C언어로 자료구조 정리
+  '윤성우의 열혈 자료구조'를 읽고 정리
 ---
