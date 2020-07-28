@@ -1,7 +1,7 @@
 ---
 layout: list
 title: Data Structure
-slug: data structure
+slug: data
 menu: true
 submenu: false
 order: 3
