@@ -3,7 +3,7 @@ layout: post
 title:  재귀(팩토리얼, 피보나치, 하노이 타워)
 subtitle:   재귀(팩토리얼, 피보나치, 하노이 타워)
 categories: data
-tags: book datastructure 재귀 하노이타워 피보나치 팩토리얼
+tags: theory book datastructure 재귀 하노이타워 피보나치 팩토리얼
 comments: true
 # header-img:
 ---
@@ -58,11 +58,11 @@ int BSearchRecur(int ar[], int first, int last, int target)
     if(ar[mid] < target)
     {
         BBSearchRecur(ar, mid+1, last, target);  // 뒷부분 대상으로 재 탐색
-    } 
+    }
     else if (ar[mid] > target)
     {
         BBSearchRecur(ar, first, mid -1, target); // 앞부분 대상으로 재 탐색
-    } 
+    }
     else return mid;
 }
 ```

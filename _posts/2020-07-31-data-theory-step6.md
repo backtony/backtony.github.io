@@ -1,0 +1,12 @@
+---
+layout: post
+title:  양방향 리스트 (Linked List) 3  
+subtitle: 양방향 리스트 (Linked List) 3
+categories: data
+tags: theory book datastructure linkedlist 연결리스트
+comments: true
+# header-img:
+---
++ __목차__
+  - [1. 원형 연결 리스트의 이해](#1-원형-연결-리스트의-이해)
+  - [2. 원형 연결 리스트의 대표적 장점](#2-원형-연결-리스트의-대표적-장점)

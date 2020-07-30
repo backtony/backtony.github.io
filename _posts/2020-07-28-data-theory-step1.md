@@ -3,7 +3,7 @@ layout: post
 title:  알고리즘의 성능분석 방법
 subtitle:   알고리즘의 성능 분석 방법
 categories: data
-tags: book datastructure 자료구조 c언어 이진탐색 순차탐색 빅오
+tags: theory book datastructure 자료구조 c언어 이진탐색 순차탐색 빅오
 comments: true
 # header-img:
 ---
@@ -21,7 +21,7 @@ comments: true
 "프로그램이란 데이터를 표현하고, 그렇게 표현된 데이터를 처리하는 것이다"
 ```
 위에서 말하는 '데이터의 표현'은 '데이터의 저장'을 포함하는 개념입니다. 그리고 이렇듯 '데이터의 저장'을 담당하는 것이 바로 자료구조이고, 자료구조에서는 데이터를 표현하고 저장하는 방법에 대해서 설명합니다. 알고리즘은 표현이 저장된 데이터를 대상으로 하는 '문제의 해결 방법'을 뜻합니다.  
-<br> 
+<br>
 
 ## 2. 시간 복잡도 & 공간 복잡도
 ---
@@ -105,7 +105,7 @@ int BSearch(int ar[], int len, int target)
     {
         mid = (first+last)/2; // 탐색대상 중간
         if(target == ar[mid]) return mid;
-        else 
+        else
         {
             if(target < ar[mid]) last = mid-1;
             else first = mid +1;            

@@ -3,7 +3,7 @@ layout: post
 title:  배열을 이용한 리스트 구현
 subtitle: 배열을 이용한 리스트 구현
 categories: data
-tags: book datastructure linkedlist 연결리스트
+tags: theory book datastructure linkedlist 연결리스트
 comments: true
 # header-img:
 ---
@@ -141,7 +141,7 @@ void ListInit(List * plist)
 
 void LInsert(List * plist, LData data)
 {
-	if(plist->numOfData > LIST_LEN) 
+	if(plist->numOfData > LIST_LEN)
 	{
 		puts("저장이 불가능합니다.");
 		return;
@@ -171,7 +171,7 @@ int LNext(List * plist, LData * pdata)
 	return TRUE;
 }
 
-LData LRemove(List * plist) 
+LData LRemove(List * plist)
 {
 	int rpos = plist->curPosition;
 	int num = plist->numOfData;
@@ -214,7 +214,7 @@ int main(void)
 	if(LFirst(&list, &data))    // 첫 번째 데이터 조회
 	{
 		printf("%d ", data);
-		
+
 		while(LNext(&list, &data))    // 두 번째 이후의 데이터 조회
 			printf("%d ", data);
 	}
@@ -225,7 +225,7 @@ int main(void)
 	{
 		if(data == 22)
 			LRemove(&list);
-		
+
 		while(LNext(&list, &data))
 		{
 			if(data == 22)
@@ -239,7 +239,7 @@ int main(void)
 	if(LFirst(&list, &data))
 	{
 		printf("%d ", data);
-		
+
 		while(LNext(&list, &data))
 			printf("%d ", data);
 	}
@@ -265,10 +265,10 @@ typedef struct _point
 
  // Point 변수의 xpos, ypos 값 설정
 void SetPointPos(Point * ppos, int xpos, int ypos);
-// Point 변수의 xpos, ypos 정보 출력 
-void ShowPointPos(Point * ppos); 
+// Point 변수의 xpos, ypos 정보 출력
+void ShowPointPos(Point * ppos);
 // 두 Point 변수의 비교
-int PointComp(Point * pos1, Point * pos2); 
+int PointComp(Point * pos1, Point * pos2);
 
 #endif
 ```
@@ -321,13 +321,13 @@ int main(void)
 	/*** 4개의 데이터 저장 ***/
 	// Point 구조체크기만큼 메모리 할당한 Point 구조체 주소 반환
   ppos = (Point*)malloc(sizeof(Point));   
-  
+
   // 해당 주소 Point 구조체의 멤버값 대입
 	SetPointPos(ppos, 2, 1);                
 
   // 리스트배열에 point구조체크기만큼 메모리 할당한 Point 구조체 주소 저장
 	LInsert(&list, ppos);                   
-  
+
   // 또 다른 Point 구조체크기만큼 메모리 할당한 Point 구조체 주소 반환
 	ppos = (Point*)malloc(sizeof(Point));  
   SetPointPos(ppos, 2, 2);
@@ -349,7 +349,7 @@ int main(void)
 	if(LFirst(&list, &ppos))
 	{
 		ShowPointPos(ppos);
-		
+
 		while(LNext(&list, &ppos))
 			ShowPointPos(ppos);
 	}
@@ -368,8 +368,8 @@ int main(void)
 			ppos=LRemove(&list);          			
       free(ppos);                  
 		}
-		
-		while(LNext(&list, &ppos)) 
+
+		while(LNext(&list, &ppos))
 		{
 			if(PointComp(ppos, &compPos)==1)
 			{
@@ -385,7 +385,7 @@ int main(void)
 	if(LFirst(&list, &ppos))
 	{
 		ShowPointPos(ppos);
-		
+
 		while(LNext(&list, &ppos))
 			ShowPointPos(ppos);
 	}

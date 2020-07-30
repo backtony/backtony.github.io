@@ -3,13 +3,13 @@ layout: post
 title:  연결 리스트 (Linked List) 1  
 subtitle: 연결 리스트 (Linked List) 1
 categories: data
-tags: book datastructure linkedlist 연결리스트
+tags: theory book datastructure linkedlist 연결리스트
 comments: true
 # header-img:
 ---
 + __목차__
   - [1. 더미 노드 연결 리스트](#1-더미-노드-연결-리스트)
-  - [2. 더미 노드 연결 리스트 구현](#2-더미-노드-연결-리스트-구현) 
+  - [2. 더미 노드 연결 리스트 구현](#2-더미-노드-연결-리스트-구현)
 
 ## 1. 더미 노드 연결 리스트
 ---
@@ -149,12 +149,12 @@ void SInsert(List * plist, LData data)
   // 정렬기준에 따른 비교를 위해 새로운 구조체 포인터가 필요함
 
 	Node * pred = plist->head;
-  /* 왜 더미노드를 가리키는가? 
-  => 2개의 대상 사이에 들어갈지 판단하기 위해서는 맨 앞의 노드 주소값을 알고 있다면 
+  /* 왜 더미노드를 가리키는가?
+  => 2개의 대상 사이에 들어갈지 판단하기 위해서는 맨 앞의 노드 주소값을 알고 있다면
   맨 앞 노드의 next값을 통해 다음 노드의 주소도 알 수 있다.*/
 
 	newNode->data = data;
-    
+
 	while(pred->next != NULL && plist->comp(data, pred->next->data) != 0)
  //다음이 끝이 아니고, 비교과정에서 받은 데이터값이 기존 값보다 head에서 더 멀리 떨어져야 할때
 	{
@@ -181,7 +181,7 @@ int LFirst(List * plist, LData * pdata)
 		return FALSE;
 
 	plist->before = plist->head;    //첫 참조 => before에 더미노드 주소값 대입
-	plist->cur = plist->head->next; 
+	plist->cur = plist->head->next;
   // 첫 잠조 => cur에 더미노드 next 값, 실질적인 첫 번째 노드주소값 대입
 
 	*pdata = plist->cur->data;
@@ -212,7 +212,7 @@ LData LRemove(List * plist)
   /* before도 뒤로 이동해야하는거 아닌가?
   연결 리스트의 삭제는 참조과정에서 삭제를 진행하므로 참조 과정에서 before는
   cur을 받고 cur은 앞 노드로 이동기 때문에 before은 신경쓰지 않아도 된다. */
-  
+
 	free(rpos);                 // 공간 반환
 	(plist->numOfData)--;
 	return rdata;               // 삭제 값 반환
@@ -263,8 +263,8 @@ int main(void)
 	if(LFirst(&list, &data)) // 참조 성공시
 	{
 		printf("%d ", data);
-		
-		while(LNext(&list, &data)) 
+
+		while(LNext(&list, &data))
 			printf("%d ", data);
 	}
 	printf("\n\n");
@@ -274,7 +274,7 @@ int main(void)
 	{
 		if(data == 22)
 			LRemove(&list);
-		
+
 		while(LNext(&list, &data))
 		{
 			if(data == 22)
@@ -288,7 +288,7 @@ int main(void)
 	if(LFirst(&list, &data))
 	{
 		printf("%d ", data);
-		
+
 		while(LNext(&list, &data))
 			printf("%d ", data);
 	}

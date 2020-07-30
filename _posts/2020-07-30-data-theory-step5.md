@@ -3,13 +3,13 @@ layout: post
 title:  원형 리스트 (Linked List) 2  
 subtitle: 원형 리스트 (Linked List) 2
 categories: data
-tags: book datastructure linkedlist 연결리스트
+tags: theory book datastructure linkedlist 연결리스트
 comments: true
 # header-img:
 ---
 + __목차__
   - [1. 원형 연결 리스트의 이해](#1-원형-연결-리스트의-이해)
-  - [2. 원형 연결 리스트의 대표적 장점](#2-원형-연결-리스트의-대표적-장점) 
+  - [2. 원형 연결 리스트의 대표적 장점](#2-원형-연결-리스트의-대표적-장점)
   - [3. head 대신 tail을 사용하는 이유](#3-head-대신-tail을-사용하는-이유)
   - [4. 원형 연결 리스트의 구현 범위](#4-원형-연결-리스트의-구현-범위)
   - [5. 원형 연결 리스트 구현](#5-원형-연결-리스트의-구현)
@@ -121,12 +121,12 @@ void LInsert(List * plist, Data data)
 	Node * newNode = (Node*)malloc(sizeof(Node));
 	newNode->data = data;
 
-	if(plist->tail == NULL) 
+	if(plist->tail == NULL)
 	{
 		plist->tail = newNode;
 		newNode->next = newNode;
 	}
-	else 
+	else
 	{
 		newNode->next = plist->tail->next;
 		plist->tail->next = newNode;
@@ -200,19 +200,19 @@ int main(void)
 	int data, i, nodeNum;
 	ListInit(&list);
 
-	// 리스트에 5개의 데이터를 저장 /////// 
+	// 리스트에 5개의 데이터를 저장 ///////
 	LInsert(&list, 3);
 	LInsert(&list, 4);
 	LInsert(&list, 5);
 	LInsertFront(&list, 2);
 	LInsertFront(&list, 1);
-	
+
 	// 리스트에 저장된 데이터를 연속 3회 출력 ///////
     // 단순 연결 리스트와 다르게 끝이 없어 for을 사용//
 	if(LFirst(&list, &data))
 	{
 		printf("%d ", data);
-		
+
 		for(i=0; i<LCount(&list)*3-1; i++) // 첫째는 바로 위에 썼으므로 -1
 		{
 			if(LNext(&list, &data))
@@ -231,7 +231,7 @@ int main(void)
 		LFirst(&list, &data);
 		if(data%2 == 0)
 			LRemove(&list);
-		
+
 		for(i=0; i < nodeNum-1; i++)
 		{
 			LNext(&list, &data);
@@ -244,7 +244,7 @@ int main(void)
 	if(LFirst(&list, &data))
 	{
 		printf("%d ", data);
-		
+
 		for(i=0; i<LCount(&list)-1; i++)
 		{
 			if(LNext(&list, &data))
