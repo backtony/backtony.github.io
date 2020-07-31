@@ -1,9 +1,9 @@
 ---
 layout: post
 title:  (Question 3-1) 리스트 라이브러리의 활용
-subtitle: 문제
+subtitle: (Question 3-1) 리스트 라이브러리의 활용
 categories: data
-tags: question book datastructure linkedlist 연결리스트
+tags: question book datastructure linkedlist 연결리스트 배열리스트
 comments: true
 # header-img:
 ---
@@ -162,4 +162,6 @@ int main(void)
 ```
 
 
+---
 
+__본 포스팅은 '윤성우의 열혈 자료구조'를 읽고 공부한 내용을 바탕으로 작성하였습니다.__
