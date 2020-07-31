@@ -8,15 +8,8 @@ comments: true
 # header-img:
 ---
 ## 문제
+---
 NameCard.h 에 대응하는 소스파일 NameCard.c를 작성하자. 그리고 아래 나열된 순서대로 main함수를 정의하자. [3-1](https://backtony.github.io/data/2020/07/31/data-question-step3-1/)에서 구현한 리스트를 활용해야한다.  
-
-1. 총 3명의 전화번호 정보를 앞서 구현한 리스트에 저장한다.
-2. 특정 이름을 대상으로 탐색을 진행하여 그 사람의 정보를 출력한다.
-3. 특정 이름을 대상으로 탐색을 진행하여, 그 사람의 전화번호 정보를 변경한다.
-4. 특정 이름을 대상으로 탐색을 진행하여, 그 사람의 정보를 삭제한다.
-5. 끝으로 남아 있는 모든 사람의 전화번호 정보를 출력한다.
-
-더불어 저장의 형태는 NameCard 구조체 변수의 주소값이어야 하며, 이름은 서로 다른 이름으로 임의로 지정한다.
 
 ### NameCard.h // 주어진 헤더 
 ```
@@ -48,14 +41,22 @@ void ChangePhoneNum(NameCard * pcard, char * phone);
 
 #endif
 ```
+
+1. 총 3명의 전화번호 정보를 앞서 구현한 리스트에 저장한다.
+2. 특정 이름을 대상으로 탐색을 진행하여 그 사람의 정보를 출력한다.
+3. 특정 이름을 대상으로 탐색을 진행하여, 그 사람의 전화번호 정보를 변경한다.
+4. 특정 이름을 대상으로 탐색을 진행하여, 그 사람의 정보를 삭제한다.
+5. 끝으로 남아 있는 모든 사람의 전화번호 정보를 출력한다.
+
 <br>
 
+## 풀이
+---
 먼저 ArrayList.h 에서 변경사항이 있습니다.
 문제에서 저장의 형태는 NameCard 구조체 변수의 주소값이라고 했으며, NameCard*의 정의는 NameCard.h 헤더에 있기 때문에 다음과 같이 추가/ 수정을 해줘야 합니다.
 ```
 #include "NameCard.h"
 typedef NameCard* LData;
-
 ```
 
 ### NameCard.c
@@ -135,7 +136,7 @@ int main(void)
 				if (!NameCompare(pcard->name, "유관순"))
 				{
 					ShowNameCardInfo(pcard);
-					break;
+					break; // 찾고 출력했으면 멈추기
 				}
 			}
 		}		
