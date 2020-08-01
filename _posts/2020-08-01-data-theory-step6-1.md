@@ -86,8 +86,8 @@ void SPush(Stack* pstack, Data data)
 Data SPop(Stack* pstack)
 {
 	Data remv = pstack->topindex;
-
-	if (SIsEmpty(pstack))
+		
+	if (SIsEmpty(pstack))  
 	{
 		printf("stack memory error");
 		exit(-1);
@@ -119,12 +119,12 @@ int main(void)
 	Stack stack;
 	StackInit(&stack);
 
-	// 데이터 넣기 ///////
+	// 데이터 넣기 ///////	
 	SPush(&stack, 1);  SPush(&stack, 2);
 	SPush(&stack, 3);  SPush(&stack, 4);
 	SPush(&stack, 5);
 
-	// 데이터 꺼내기 ///////
+	// 데이터 꺼내기 ///////	
 	while (!SIsEmpty(&stack))
 		printf("%d ", SPop(&stack));
 
@@ -137,7 +137,7 @@ int main(void)
 ---
 ![그림2](https://backtony.github.io/assets/img/post/data/step7/2.PNG)
 
-메모리 구조만 봐서는 스택인지 구분되지 않는다. 저장된 순서의 역순으로 데이터(노드)를 참조(삭제)하는 연결 리스트가 바로 연결 기반의 스택이다.  
+메모리 구조만 봐서는 스택인지 구분되지 않습니다. 저장된 순서의 역순으로 데이터(노드)를 참조(삭제)하는 연결 리스트가 바로 연결 기반의 스택입니다.  
 <br>
 
 ### ListBaseStack.h
