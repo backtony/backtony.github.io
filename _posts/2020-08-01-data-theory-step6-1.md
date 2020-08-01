@@ -83,6 +83,7 @@ void SPush(Stack* pstack, Data data)
 	(pstack->topindex)++;
 	pstack->ary[pstack->topindex] = data;
 }
+
 Data SPop(Stack* pstack)
 {
 	Data remv = pstack->topindex;
@@ -106,6 +107,7 @@ Data SPeek(Stack* pstack)
 }
 
 ```
+SPop에서 실제 배열에 접근하는 힌트가 되는 것은 top입니다. 따라서 top 위에 데이터가 실제로 있어도 유효한 데이터로 인정받지 못합니다. 왜냐하면 새로운 데이터를 저장할때 top의 위치를 올리고 거기다가 덮어쓰기 때문입니다. 따라서 삭제하고 top의 위치를 내릴때 굳이 내리기 전에 데이터를 따로 0으로 초기화하지 않아도 됩니다.
 <br>
 
 ### ArrayBaseStackMain.c
