@@ -189,7 +189,7 @@ int main(void)
 ```
 <br>
 
-__head와 tail에 더미 노드 추가의 장점__
+__head와 tail에 더미 노드 추가의 장점__  
 head와 tail이 더미 노드를 가리키고 있기 때문에 삭제할 경우 head, tail의 재조정이 필요 없게 되므로 코딩이 더욱 간단해진다.
 
 ---
