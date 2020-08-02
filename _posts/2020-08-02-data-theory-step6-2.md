@@ -9,7 +9,7 @@ comments: true
 ---
 + __목차__
   - [1. 세 가지 수식의 표기법](#1-세-가지-수식의-표기법)
-  - [2. 중위 -> 후위](#2-중위--후위)
+  - [2. 중위 -> 후위](#2-중위---후위)
   - [3. 프로그램 구현](#3-프로그램-구현)
 
 ## 1. 세 가지 수식의 표기법
@@ -64,7 +64,7 @@ __연산자를 쟁반에 옮길때 행동 방식__
 #define TRUE 1
 #define FALSE 0
 
-typedef int Data;
+typedef char Data;
 
 typedef struct __node
 {
@@ -227,6 +227,8 @@ void ConvToRPNExp(char exp[])
 
 			case '+': case '-':
 			case '*': case '/':
+			//스텍안에 존재하고 스택 안에 있는 연산자가 우선순위가 높은경우
+			// 비교만 하므로 SPeek 사용
 				while (!SIsEmpty(&stack) &&
 					WhoPrecOp(SPeek(&stack), tok) >= 0)
 					convExp[idx++] = SPop(&stack);
@@ -236,7 +238,7 @@ void ConvToRPNExp(char exp[])
 			}
 		}
 	}
-
+	// 스택 안에 있는 연산자 다 꺼내기
 	while (!SIsEmpty(&stack))
 		convExp[idx++] = SPop(&stack);
 
@@ -265,7 +267,7 @@ int EvalRPNExp(char exp[]);
 
 int EvalRPNExp(char exp[])
 {
-	Stack stack;
+	Stack stack;	// 피연산자를 스택에 넣음
 	int expLen = strlen(exp);
 	int i;
 	char tok, op1, op2;
@@ -306,7 +308,8 @@ int EvalRPNExp(char exp[])
 			}
 		}
 	}
-	return SPop(&stack);
+	// 최종적으로 스택에는 결과값만 들어가 있음
+	return SPop(&stack); 
 }
 
 ```
@@ -333,8 +336,8 @@ int EvalInfixExp(char exp[])
 	int len = strlen(exp);
 	int ret;
 	char* expcpy = (char*)malloc(len + 1);
-	// 포인터로 안하면 ConvToRPNExp,EvalInfixExp 함수에 인자로
-	// 똑같은 것을 넣게 됨. 새로 선언해서 바뀐것을 넣어줘야함
+	// 포인터로 안하면 ConvToRPNExp,EvalInfixExp 함수에 인자로 똑같은 것을 넣게 됨. 
+	// 따라서 새로 선언 후 후위로 바꿔준 것을 다시 함수 인자로 넣어줘야함.
 	strcpy(expcpy, exp);
 
 	ConvToRPNExp(expcpy);
