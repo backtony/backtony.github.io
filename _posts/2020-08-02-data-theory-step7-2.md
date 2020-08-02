@@ -16,7 +16,9 @@ comments: true
 ---
 ### 덱의 이해
 __"덱은 앞으로도 뒤로도 넣을 수 있고, 앞으로도 뒤로도 뺄 수 있는 자료구조 입니다"__  
-![그림1](https://backtony.github.io/assets/img/post/data/step77/6.PNG)
+
+![그림1](https://backtony.github.io/assets/img/post/data/question/step5/1.PNG)
+
 이전에 구현했던 양방향 연결 리스트의 구조에서 tail의 존재 유무만이 차이 입니다.  
 <br>
 

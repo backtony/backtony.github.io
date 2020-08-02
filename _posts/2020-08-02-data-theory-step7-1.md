@@ -16,6 +16,7 @@ comments: true
 ---
 ### 큐의 이해
 ![그림1](https://backtony.github.io/assets/img/post/data/step77/1.PNG)
+
 큐는 First-in, First-out의 자료구조입니다. 따라서 먼저 들어가면 먼저 나오는 일종의 줄서기에 비유할 수 있습니다.  
 <br>
 
@@ -40,13 +41,16 @@ comments: true
 ## 2. 큐의 배열 기반 구현
 ---
 ![그림2](https://backtony.github.io/assets/img/post/data/step77/2.PNG)
+
 cf) F:출구(맨 먼저 들어온) , R:입구(이제 삽입되는)  
 배열 기반으로 했을 경우 배열의 끝이 존재합니다. 그런데 enqueue와 dequeue를 실행하다 보니 끝에 도달했는데 결과적으로 앞쪽의 메모리는 비어있는 즉, 낭비되는 현상이 발생합니다. 이를 보완하기 배열의 머리와 끝을 연결한 구조인 원형 큐를 사용합니다.  
-[그림3](https://backtony.github.io/assets/img/post/data/step77/3.PNG)
+![그림3](https://backtony.github.io/assets/img/post/data/step77/3.PNG)
+
 하지만 원형 큐에서도 약간의 문제가 있습니다. 아래 그림과 같이 꽉 채워져 있는 경우와 비어있는 경우 차이를 확인할 수 없다는 점입니다.  
-[그림4](https://backtony.github.io/assets/img/post/data/step77/4.PNG)
-따라서 이 문제를 해결하기 위해 초기화 직후에 F와 R이 같은 빈 공간을 가리키는 상태를 Empty 상태로 인정하고 F는 항상 빈공간을 가리키게 합니다. 따라서, 저장 공간을 다 채우게 되도 F는 빈공간을 가리키게 되므로 결국 메모리의 하나를 비운 상태가 FULL 상태가 됩니다. 정리하면, F와 R이 같은 곳을 가리킬때 Empty상태가 되고 R의 다음 인덱스값이 F일때가 FULL 상태가 되는 겁니다. 구분이 가능하게 되는 것입니다.
-[그림5](https://backtony.github.io/assets/img/post/data/step77/5.PNG)
+![그림4](https://backtony.github.io/assets/img/post/data/step77/4.PNG)
+
+이 문제를 해결하기 위해 초기화 직후에 F와 R이 같은 빈 공간을 가리키는 상태를 Empty 상태로 인정하고 F는 항상 빈공간을 가리키게 합니다. 따라서, 저장 공간을 다 채우게 되도 F는 빈공간을 가리키게 되므로 결국 메모리의 하나를 비운 상태가 FULL 상태가 됩니다. 정리하면, F와 R이 같은 곳을 가리킬때 Empty상태가 되고 R의 다음 인덱스값이 F일때가 FULL 상태가 되는 겁니다. 구분이 가능하게 되는 것입니다.  
+![그림5](https://backtony.github.io/assets/img/post/data/step77/5.PNG)
 
 <br>
 
