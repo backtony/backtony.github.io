@@ -177,7 +177,7 @@ int main(void)
 ```
 <br>
 
-더미 노드 기반의 양방향 연결 리스트(삭제 추가) [[클릭]()]
+더미 노드 기반의 양방향 연결 리스트(삭제 추가) [[클릭](https://backtony.github.io/data/2020/08/01/data-question-step5-2/)]
 
 ---
 

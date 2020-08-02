@@ -274,7 +274,31 @@ Data QPeek(Queue * pq)
 	return pq->front->data;
 }
 ```
+<br>
 
+### ListBaseQueueMain.c // 구현 활용
+```
+#include <stdio.h>
+#include "ListBaseQueue.h"
+
+int main(void)
+{
+	// Queue의 생성 및 초기화 ///////
+	Queue q;
+	QueueInit(&q);
+
+	// 데이터 넣기 ///////
+	Enqueue(&q, 1);  Enqueue(&q, 2);
+	Enqueue(&q, 3);  Enqueue(&q, 4);
+	Enqueue(&q, 5);
+
+	// 데이터 꺼내기 ///////
+	while(!QIsEmpty(&q))
+		printf("%d ", Dequeue(&q)); 
+
+	return 0;
+}
+```
 
 ---
 __본 포스팅은 '윤성우의 열혈 자료구조'를 읽고 공부한 내용을 바탕으로 작성하였습니다.__
