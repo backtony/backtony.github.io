@@ -65,7 +65,7 @@ if(arr[j] > arr[j+1])
 
 하나씩 선택해서 정렬 결과를 완성해 나간다. 하지만 별도의 메로리 공간이 요구된다는 단점이 있다. 이 단점을 개선한 방법이 아래 사진이다.
 
-[그림3](https://backtony.github.io/assets/img/post/data/step10/3.PNG)
+![그림3](https://backtony.github.io/assets/img/post/data/step10/3.PNG)
 
 하나씩 비워 가면서 이동시키는 방법이다.  
 
@@ -107,14 +107,14 @@ int main()
 ```
 ### 성능평가
 ```
-if(arr[j] < arr[maxidx]>) 
+if(arr[j] < arr[maxidx]) 
 ```
 최악의 경우와 최상의 경우 구분 없이 비교 횟수가 동일하다. 비교 횟수가 (n-1) + (n-2) + ... +2 +1 이므로 빅오는 O($$n^2$$) 이다.  
 
 ## 3. 삽입 정렬
 ---
 ### 삽입 정렬의 이해
-[그림4](https://backtony.github.io/assets/img/post/data/step10/4.PNG)
+![그림4](https://backtony.github.io/assets/img/post/data/step10/4.PNG)
 
 선택 정렬은 우선순위가 가장 높은 데이터를 선택해서 해당 자리에 가져다 놓고 그 자리에서 더이상 바뀌지 않는다. 하지만 삽입 정렬은 제일 첫 번째는 이미 정렬되어있다고 가정하고 그 이후의 정렬 안되었던 것들을 하나씩 정렬된 곳으로 옮기면서 그것의 위치를 정한다. 구현을 고려하면 정렬된 곳으로 옮길때 정렬되어있는 곳의 제일 뒤에 것부터 비교하면서 하나씩 뒤로 밀어내는 형식으로 코딩한다.  
 
