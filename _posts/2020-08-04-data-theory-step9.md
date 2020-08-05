@@ -122,7 +122,8 @@ void HInsert(Heap* ph, HData data)
 	
 	while (idx !=1)
 	{
-		if (ph->comp(data,ph->heapArr[GetParentIDX(idx)])>0)
+		// 양수면 data가 우선순위가 높게 정의
+		if (ph->comp(data,ph->heapArr[GetParentIDX(idx)])>0) 
 		{
 			ph->heapArr[idx] = ph->heapArr[GetParentIDX(idx)];
 			idx = GetParentIDX(idx);
@@ -172,7 +173,7 @@ __Main.c //활용__
 
 int DataPriorityComp(char ch1, char ch2)
 {
-	return ch2 - ch1;
+	return ch2 - ch1; // 오름차순
 	//	return ch1-ch2;
 }
 
