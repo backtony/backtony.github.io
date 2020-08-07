@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  탐색 (Search) 1
-subtitle: 탐색 (Search) 1
+title:  탐색 (Search) 1 이진 탐색 트리
+subtitle: 탐색 (Search) 1 이진 탐색 트리
 categories: data
 tags: theory book datastructure search 탐색
 comments: true
