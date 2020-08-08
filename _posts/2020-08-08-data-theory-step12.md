@@ -22,7 +22,7 @@ comments: true
 ---
 ![그림2](https://backtony.github.io/assets/img/post/data/step12/2.PNG)
 
-한 해쉬 값에 다수의 데이터를 저장할 수 있도록 각 해쉬 값 별로 연결 리스트를 구성하는 모델이다. 이전에 구현했던 연결 리스트를 활용한다.    
+한 해쉬 값에 다수의 데이터를 저장할 수 있도록 각 해쉬 값 별로 연결 리스트를 구성하는 모델이다. 이전에 구현했던 연결 리스트를 활용한다. 간단히 말하자면 해쉬값별 연결 리스트를 구성하고 각 연결 리스트에서 이어진 노드에 data로는 slot이 저장된다. slot안에는 key와 value 포인터가 있다. value 포인터에는 해당 정보가 저장된 구조체의 주소를 받는다. 따라서 del할 경우 value 포인터를 free해주면 된다.  
 
 ### 구현
 __DLinkedList.h__  
@@ -251,12 +251,13 @@ __Table2.h__
 
 #define MAX_TBL     100
 
-typedef int HashFunc(Key k);
+// 함수 포인터 
+typedef int (*HashFunc)(Key k);
 
 typedef struct _table
 {
 	List tbl[MAX_TBL]; // 해쉬값별로 연결 리스트 구성
-	HashFunc * hf;
+	HashFunc hf;
 } Table;
 
 void TBLInit(Table * pt, HashFunc * f); 
