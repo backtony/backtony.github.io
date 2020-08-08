@@ -22,7 +22,7 @@ comments: true
 ---
 ![그림2](https://backtony.github.io/assets/img/post/data/step12/2.PNG)
 
-한 해쉬 값에 다수의 데이터를 저장할 수 있도록 각 해쉬 값 별로 연결 리스트를 구성하는 모델이다.  
+한 해쉬 값에 다수의 데이터를 저장할 수 있도록 각 해쉬 값 별로 연결 리스트를 구성하는 모델이다. 이전에 구현했던 연결 리스트를 활용한다.    
 
 ### 구현
 __DLinkedList.h__  
@@ -255,8 +255,7 @@ typedef int HashFunc(Key k);
 
 typedef struct _table
 {
-//	Slot tbl[MAX_TBL];
-	List tbl[MAX_TBL];
+	List tbl[MAX_TBL]; // 해쉬값별로 연결 리스트 구성
 	HashFunc * hf;
 } Table;
 
