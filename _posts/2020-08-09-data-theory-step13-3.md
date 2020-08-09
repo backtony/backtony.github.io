@@ -658,6 +658,7 @@ int WhoIsPrecede(int data1, int data2)
 		return 1;
 }
 
+// 내림차순
 int PQWeightComp(Edge d1, Edge d2)
 {
 	return d1.weight - d2.weight;
@@ -668,7 +669,6 @@ int VisitVertex(ALGraph * pg, int visitV)
 	if(pg->visitInfo[visitV] == 0)
 	{
 		pg->visitInfo[visitV] = 1;
-	//	printf("%c ", visitV + 65);
 		return TRUE;
 	}
 	
@@ -684,7 +684,6 @@ void DFShowGraphVertex(ALGraph * pg, int startV)
 
 	StackInit(&stack);
 	VisitVertex(pg, visitV);
-	SPush(&stack, visitV);
 
 	while(LFirst(&(pg->adjList[visitV]), &nextV) == TRUE)
 	{
