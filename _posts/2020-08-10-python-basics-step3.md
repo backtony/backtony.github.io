@@ -111,3 +111,6 @@ else :
      raise NotImplementedError
 ``` 
 코드는 정상적으로 실행되나 구현되지 않은 부분에 들어서는 순간 NotImplementedError 이라는 오류를 발생시킨다.
+
+---
+__본 포스팅은 '혼자 공부하는 파이썬'을 읽고 공부한 내용을 바탕으로 작성하였습니다.__

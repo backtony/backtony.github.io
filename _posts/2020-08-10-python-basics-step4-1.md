@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  파이썬 파트 4. 리스트와 반복문
-subtitle:   파이썬 파트 4. 리스트와 반복문
+title:  파이썬 파트 4-1. 리스트와 반복문
+subtitle:   파이썬 파트 4-1. 리스트와 반복문
 categories: python
 tags: basics book python 
 comments: true
@@ -125,5 +125,13 @@ numbers = [273,103,5,32,65,9,72,800,99]
 for i in numbers:
     print("{}는 {} 자리수 입니다".format(i,len(str(i))))
 ```
-리스트 안에 정수가 들어있으므로 정수를 str함수로 문자형으로 바꾼뒤 len 함수를 이용해서 자리수 출력가능
+리스트 안에 정수가 들어있으므로 정수를 str함수로 문자형으로 바꾼뒤 len 함수를 이용해서 자리수 출력가능  
 
+__cf) print문 공백 없애는 법__  
++ 숫자의 경우 str로 문자열로 바꾼후 + 연산자 사용
++ format함수 사용
+
+
+
+---
+__본 포스팅은 '혼자 공부하는 파이썬'을 읽고 공부한 내용을 바탕으로 작성하였습니다.__
