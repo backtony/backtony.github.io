@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  파이썬 파트 7-2. 클래스의 기본
-subtitle:   파이썬 파트 7-2. 클래스의 기본
+title:  파이썬 파트 7-2. 클래스의 추가적인 구문
+subtitle:   파이썬 파트 7-2. 클래스의 추가적인 구문
 categories: python
 tags: basics book python class
 comments: true
