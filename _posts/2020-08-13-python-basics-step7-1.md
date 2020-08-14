@@ -140,7 +140,7 @@ a.setdata(4,2)
 ```
 setdata 메소드에는 매개변수가 3개인데 왜 2개의 값만 전달할까? 그 이유는 a.setdata(4,2) 처럼 호출하면 setdata 메소드의 첫 번째 매개변수 self에는 setdata 메소드를 호출한 객체 a가 자동으로 전달되기 때문이다.  
 
-![그림1](https://backtony.github.io/assets/img/post/python/basics/7-1.PNG)(https://wikidocs.net/28)
+[![그림1](https://backtony.github.io/assets/img/post/python/basics/7-1.PNG)](https://wikidocs.net/28)
 
 <br>
 
