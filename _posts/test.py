@@ -1,16 +1,64 @@
-class Student:
-    def __init__(self, name, korean, math):
-        self.name = name
-        self.korean = korean
-        self.math = math
+"""
+# 모듈 가져오기
+import math
 
-    def get_sum(self):
-        return self.korean + self.math
+# 클래스 선언
+class Circle:
+    def __init__(self,radius):
+        if radius <= 0:
+            raise TypeError("양수를 넣어주세요")
+        self.__radius = radius
+    def get_circumference(self):
+        return 2 * math.pi * self.__radius
+    def get_area(self):
+        return math.pi*(self.__radius**2)
+    def get_radius(self):
+        return self.__radius
+    def set_radius(self,value):
+        if value<=0 :
+            raise TypeError("길이가 양의 숫자여야 한다.")
+        self.__radius = value        
 
-    def get_avg(self):
-        return self.get_sum() / 2  # ()는 자동적으로 self
+circle = Circle(10)
+print("원의 둘레 :",circle.get_circumference())
+print("원의 넓이 :",circle.get_area())
 
-student = [Student("장보고",85,95), Student("이순신",90,93), Student("손오공",85,90)]
-for i in student:
-    print("{}의 평균 : {}".format(i.name,i.get_avg()))
-    
+print("__radius 에 접근")
+print(circle.get_radius())
+circle.set_radius(15)
+print(circle.get_radius())
+"""
+# 모듈 가져오기
+import math
+
+# 클래스 선언
+class Circle:
+    def __init__(self,radius):
+        if radius <= 0:
+            raise TypeError("양수를 넣어주세요")
+        self.__radius = radius
+    def get_circumference(self):
+        return 2 * math.pi * self.__radius
+    def get_area(self):
+        return math.pi*(self.__radius**2)
+    @property
+    def radius(self):
+        return self.__radius
+    @radius.setter
+    def radius(self,value):
+        if value<=0 :
+            raise TypeError("길이가 양의 숫자여야 한다.")
+        self.__radius = value        
+
+circle = Circle(10)
+print("원의 둘레 :",circle.get_circumference())
+print("원의 넓이 :",circle.get_area())
+
+print("원래 반지름 :",circle.radius)
+circle.radius = 15
+print("변경된 반지름 :",circle.radius)
+"""
+print("__radius 에 접근")
+print(circle.get_radius())
+circle.set_radius(15)
+print(circle.get_radius())"""
