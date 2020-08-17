@@ -75,6 +75,7 @@ for i in student:
 ```
 
 __cf) 크기 비교 함수 이름__  
+
 이름|영어|설명
 ---|---|---
 eq|equal|같다
@@ -98,7 +99,7 @@ class Student:
         return self.get_sum() / 2  # ()는 자동적으로 self
         
     def __eq__(self,value):
-        if isinstance(value,Student): # 자료형을 한정하고 싶다면
+        if not isinstance(value,Student): # 자료형을 한정하고 싶다면
           raise TypeError("Student 클래스의 인스턴스만 비교 가능합니다")
         return self.get_sum() == value.get_sum()
     def __ne__(self,value):
@@ -249,8 +250,8 @@ print("원의 둘레 :",circle.get_circumference())
 print("원의 넓이 :",circle.get_area())
 
 print("__radius 에 접근")
-print(circle.__radius)
-# AttributeError: 'Circle' object has no attribute
+# 프라이빗 변수로 접근 불가하기 때문에 아래 같이 예외가 발생
+print(circle.__radius) # AttributeError: 'Circle' object has no attribute
 ```
 <br>
 
@@ -292,6 +293,7 @@ print(circle.get_radius())
 + 함수의 이름은 변수 이름과 같게 한다.
 + 더욱 짧은 코딩으로 접근이 가능
 + 연산자를 이용해서 수정 가능
++ 클래스이름.변수명 (__ 없이)으로 변수 사용 가능
 
 ```
 # 모듈 가져오기

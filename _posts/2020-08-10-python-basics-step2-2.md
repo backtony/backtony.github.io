@@ -62,7 +62,7 @@ string_a = int(input("정수를 입력 "))
 
 __변환할 수 없는 것 변환시 오류 발생 ValueError__  
 ```
-output_a = int("52)
+output_a = int("52")
 output_b = float("52.273")
 output_c = float("안녕하세요") # 오류 발생
 output_d = int("12.567") # 부동 소수점 오류 발생
@@ -76,6 +76,9 @@ output_d = int("12.567") # 부동 소수점 오류 발생
 
 output_a = str(52)
 print(type(output_a), output_a)
+
+# 출력
+<class 'str'> 52
 ```
 <br>
 
@@ -92,6 +95,7 @@ string_a = "{}".format(10) # 함수로 숫자를 문자열로 변환
 string_b = "{} 만원".format(5000)
 ```
 + 중괄호{}를 포함한 문자열 뒤에 마침표를 찍고 format() 함수를 사용한다.
++ 함수의 매개인자를 문자열 처리한다.
 + 반드시 중괄호의 갯수와 format 함수 괄호 안 매개변수의 개수는 같아야 한다.
 + {} 기호 대신 format 괄호 안에 있는 매개변수로 대체하는 것 뿐이기에 {}와 {} 사이에 다양한 문자열을 넣을 수 있다.
 + {} 개수가 매개변수의 개수보다 많으면 IndexError 예외가 발생하지만 매개변수의 개수가 더 많은 경우에는 {} 개수만큼만 적용되고 나머지는 버려진다.
@@ -105,7 +109,7 @@ output_c = "{:05d}".format(52) # 총 5칸 차지하고 왼쪽에 남은 공간 0
 output_d = "{:05d}".format(-52) # 맨 앞칸은 -부호가 차지한다. -0052
 output_e = "{:+d}".format(52) # 부호화 함께 출력 +52
 output_f = "{:+d}".format(-52) # 부호화 함께 출력 -52
-output_g = "{: d}".format(52) # 부호부분 공백 ,, 즉, 3칸 차지하고 맨 앞 공백
+output_g = "{: d}".format(52) # 부호부분 공백 ,, 즉, 총 3칸 차지하고 맨 앞 공백
 output_h = "{: d}".format(-52) # -52 출력
 output_i = "{:+5d}".format(52) # 기호 뒤로 밀기 즉, 앞 2칸 공백 이후 +52
 output_j = "{:=+5d}".format(52) # 기호 앞으로 밀기, 부호만 맨 앞으로
