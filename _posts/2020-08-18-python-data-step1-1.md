@@ -3,7 +3,7 @@ layout: post
 title:  파이썬 자료구조 1장. 알고리즘 기초
 subtitle:   파이썬 자료구조 1장. 알고리즘 기초
 categories: python
-tags: data book python datastructure algorithm
+tags: pdata book python datastructure algorithm
 comments: true
 # header-img:
 ---
