@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  파이썬 자료구조 4-1장. 스택
-subtitle:   파이썬 자료구조 4장. 스택
+subtitle:   파이썬 자료구조 4-1장. 스택
 categories: python
 tags: pdata book python datastructure algorithm
 comments: true
