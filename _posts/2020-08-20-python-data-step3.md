@@ -267,6 +267,7 @@ Menu = Enum('Menu',"추가 삭제 검색 덤프 종료")
 def select_menu():
     s = [f'({m.value}) {m.name}' for m in Menu]
     while True :
+        # * 설명 아래 참조
         print(*s,sep="  ",end=" ")
         n = int(input(": "))
         if 1<= n <= len(Menu):
@@ -392,8 +393,17 @@ class OpenHash:
             else :
                 print(f"{p.key} ({p.value})")       
 ```
-OpenHash 클래스 안에 다 적용시켜 놨으므로 실제 사용할때는 import OpenHash만 하면 된다. 실습문제는 위에 체인해시 예시의 main.py로 OpenHash로만 수정하면 된다.
+OpenHash 클래스 안에 다 적용시켜 놨으므로 실제 사용할때는 import OpenHash만 하면 된다. 실습문제는 위에 체인해시 예시의 main.py로 OpenHash로만 수정하면 된다.  
+<br>
 
+__컬렉션(시퀀스 타입)의 언패킹 기능: *__  
+```
+a = [1,2,3,4]
+위 구문에서 변수 a는 패킹에 의해 리스트 형이 되고, 반대로 변수 a를 언패킹 하려면,
+*표를 사용하게 된다. 따라서 아래 구문은
+print(*a,sep=" ")
+print(1, 2, 3, 4, sep=' ') 처럼 print() 함수에 전달됩니다.
+```
 <br>
 
 
