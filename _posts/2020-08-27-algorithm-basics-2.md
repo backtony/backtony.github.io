@@ -24,6 +24,7 @@ comments: true
   - [1024번](#1024번)
   - [1025번](#1025번)
   - [1026번](#1026번)
+  - [1027번](#1027번)
   
 
 [[코드업 기초 100제 링크](https://codeup.kr/problemsetsol.php?psid=23){: target="_blank"}]
@@ -145,4 +146,10 @@ for i in range(len(a)):
 ```python
 a,b,c = input().split(":")
 print(int(b))
+```
+
+# 1027번
+```python
+a,b,c = input().split(".")
+print("%02d-%02d-%04d" %(int(c),int(b),int(a)))
 ```
