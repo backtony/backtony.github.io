@@ -30,8 +30,8 @@ comments: true
 # 오름차순
 def buble_sort(a):
     n = len(a)
-    k = 0 # 교환 후 오른쪽 대상을 가리키는 변수, 범위를 단축시켜줌
-    while k<n-1:  # k = n-1 이면 정렬 완료
+    k = 0 # 정렬한 원소를 넣을 인덱스, 교환 후 오른쪽 대상을 가리키는 변수, 범위를 단축시켜줌
+    while k<n-1:  # 총 인덱스는 n-1이므로 인덱스 n까지 정렬이 완료되면 정렬 완료
         last = n-1 # last가 안바뀌었으면 이미 정렬이 완료된것으로 k에 그대로 들어가 종료
         for j in range(n-1,k,-1):
             if a[j]<a[j-1]:
@@ -122,7 +122,7 @@ __계속 조건__
 ```
 def insertion_sort(a):
     n = len(a)
-    for i in range(1,n):
+    for i in range(1,n): # 더 앞쪽의 알맞은 위치로 삽입해야하므로 앞에 비교대상으로 인덱스0
         tmp = a[i]
         j=i-1
         while j>=0 and tmp<a[j]:
@@ -186,7 +186,7 @@ print(a)
 # 사용법
 bisect.insort(a,x,lo,hi)
 a는 들어올 때 정렬 상태를 그대로 유지하면서 a[lo~hi]사이에 x를 삽입한다. 
-만약 같은 값을 같은 원소가 여러 개 있으면 가장 오른쪽에 삽입
+만약 같은 원소가 여러 개 있으면 가장 오른쪽에 삽입
 
 # 이진 삽입 정렬
 from bisect import insort
