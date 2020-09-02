@@ -39,14 +39,14 @@ comments: true
 import math
 n=1000 # 2부터 1000까지의 숫자 중에서 소수 판별
 arr = [True for i in range(n+1)] # 모든 수가 소수 True # n+1까지해야 인덱스 n까지 형성
-arr[0] = arr[1] = 'False' # 0과 1은 소수가 아님
+arr[0] = arr[1] = False # 0과 1은 소수가 아님
 
 # 에라토스테네스의 체 알고리즘
 for i in range(2,int(math.sqrt(n)+1)): # 제곱근 이후에는 2*8 8*2처럼 중복이므로 할 필요가 없다
     if arr[i]==True:
         j=2
         while i*j<=n:
-            arr[i*j]="False"
+            arr[i*j]=False
             j+=1
 
 for i in range(2,n+1):
@@ -91,9 +91,169 @@ print(count)
 1. 정렬된 리스트 A와 B를 입력받는다.
 2. 리스트 A에서 처리되지 않은 원소 중 가장 작은 원소를 i가 가리키도록 한다.
 3. 리스트 B에서 처리되지 않은 원소 중 가장 작은 원소를 j가 가리키도록 한다.
-4. A[i]와 B[j]중에서 더 작으 ㄴ원소를 결과 리스트에 담는다.
+4. A[i]와 B[j]중에서 더 작은 원소를 결과 리스트에 담는다.
 5. 리스트 A와 B에서 더이상 처리할 원소가 없을 때까지 2~4과정을 반복한다.
 
 ```python
+# 이미 정렬된 리스트
+a=[1,3,5]
+b=[2,4,6,8]
+result = [0]*(len(a)+len(b))
+i=j=k=0
+while k < len(result):
+    # i<len(a)를 먼저 작성해야함 안그러면 index out of range
+    if i<len(a) and a[i]<b[j]: 
+        result[k]=a[i]
+        i+=1        
+    else :
+        result[k]=b[j]        
+        j+=1
+    k+=1
+
+for i in result:
+    print(i,end=' ')
+```
+결과적으로 정렬된 리스트 A와 B의 데이터 개수가 각각 N, M이라고 할때, 시간 복잡도는 O(N+M)이다. 각 리스트의 모든 원소를 한 번씩만 순회하면 되기 때문이다.
+
+<br>
+
+## 3. 구간 합 계산
+---
+코딩 테스트에서는 구간 합을 구해야 하는 문제가 종종 출제된다. 구간 합 문제란 연속적으로 나열된 N개의 수가 있을 때, 특정 구간의 모든 수를 합한 값을 구하는 문제를 말한다. 예를 들어 5개의 데이터 [10,20,30,40,50]이 있다고 가정하면 두 번째 수부터 네 번째 수까지의 합은 20+30+40으로 90이 될 것이다.  
+이러한 구간 합 계산 문제는 여러 개의 쿼리로 구성되는 문제 형태로 출제되는 경우가 많다. 예를 들어 M개의 쿼리가 존재한다고 가정해보자. 각 쿼리는 Left와 Right로 구성되며 이는 [Left,Right]의 구간을 의미한다. 결과적으로 M개의 쿼리가 주어졌을 때, 모든 쿼리에 대하여 구간의 합을 출력하는 문제가 전형적인 구간 합 계산 문제이다.  
+만약 M개의 쿼리, 데이터의 개수 N 각각 매번 구간 합을 계산한다면 복잡도는 O(MN)이다. 쿼리가 수행될 때마다 전체 리스트의 구간 합을 모두 계산하라고 요구할 수도 있기 때문이다. 그렇다면 N, M이 커지게 되면 이 알고리즘으로는 해결할 수 없게 된다.  
+알고리즘 설계에서 항상 고려해야할 점은, 여러 번 사용될 만한 정보는 미리 구해 저장해 놓을수록 유리하다는 것이다. 여기서 쿼리는 M개이지만 N개의 수는 한 번 주어진 뒤에 변경되지 않는다는 점을 이용해야 한다. 따라서 N개의 수에 대해서 어떠한 처리를 수행한 뒤에 나중에 M개의 쿼리가 각각 주어질 때마다 빠르게 구간 합을 도출할 수 있을까?  
+구간 합 계싼을 위해 가장 많이 사용되는 기법이 바로 접두사 합이다. 각 쿼리에 대해 구간 합을 빠르게 계산하기 위해서는 N개의 수의 위치 각각에 대하여 접두사 합을 미리 구해놓으면 된다. 접두사 합이란 리스트의 맨 앞부터 특정 위치까지의 합을 구해 놓은 것을 의미한다. 알고리즘은 다음과 같다.  
+1. N개의 수에 대하여 접두사 합을 계산하여 배열 P에 저장한다.
+2. 매 M개의 쿼리 정보 [L,R]을 확인할 때, 구간 합은 P[R] - P[L-1]이다.
+
+P[L-1]을 빼주는 이유는 p[L]은 첫 번째부터 인덱스L까지의 합이므로 L인덱스를 제외하고 앞의 부분의 합을 빼줘야하기 때문이다.  
+예를 들어 10,20,30,40,50 이라는 데이터가 있으면 p= [0,10,30,60,100,150] 이렇게 형성 되는 것이다.  
+```python
+data = [10,20,30,40,50]
+sum_value = 0
+prefix_sum=[0] # 배열 p
+for i in data:
+    sum_value +=i
+    prefix_sum.append(sum_value)
+
+# 구간 합 구하기
+left =3
+right =4
+print(prefix_sum[right]-prefix_sum[left-1])
+```
+<br>
+
+## 4. 순열과 조합
+---
+파이썬은 순열과 조합 라이브러리를 기본적으로 제공하고 있으므로 이를 간단히 이용할 수 있다.  
++ 순열 : 서로 다른 n개에서 r개를 선택하여 일렬로 나열하는 것(순서를 고려하는것)
++ 조합 : 서로 다른 n개에서 순서에 상관없이 서로 다른 r개를 선택하는 것(순서 상관 없이)
+
+```python
+import itertools
+
+data = [1,2]
+# permutations와 combinations는 클래스이므로
+# 객체 초기화 이후에는 리스트 자료형 으로 변환하여 사용한다.
+for x in itertools.permutations(data,2):     
+    print(list(x))
+print()
+for x in itertools.combinations(data,2):
+    print(list(x))
+```
+
+## 5. 예제
+---
+### 문제 : 소수 구하기
+M 이상 N 이하의 소수를 모두 출력하는 프로그램을 작성하시오.  
+1 <= M <= N <= 1,0000,0000  
 
 ```
+입력 예시
+3 16
+
+출력 예시
+3
+5
+7
+11
+13
+```
+
+#### 풀이
+```python
+import sys
+from math import sqrt
+m,n = map(int,sys.stdin.readline().rstrip().split())
+
+arr = [True for i in range(n+1)]
+arr[0]=arr[1] = False
+for i in range(2,int(sqrt(n))+1): # m부터 구하지만 m이하의 수들로 소수를 제거해줘야함
+    if arr[i]==True:
+        j=2
+        while i*j<=n:
+            arr[i*j]=False
+            j+=1
+
+for i in range(m,n+1):
+    if arr[i]==True:
+        print(i) 
+```
+
+
+### 문제 : 암호 만들기
+암호는 서로 다른 L개의 알파벳 소문자들로 구성되며 최소 한 개의 모음과 최소 두 개의 자음으로 구성되어져있다. 또한 암호를 이루는 알파벳이 암호에서 증가하는 순서로 배열되어있다. 즉, abc는 가능성이 있지만 bac는 아니다. 암호로 사용했을 법한 문자의 종류는 C가지가 있다고 한다. C개의 문자들이 모두 주어졌을 때, 가능성이 있는 암호들을 모두 구하시오.  
++ 첫 째줄에 두 정수 L,C가 주어진다. (3<=L<=C<=15)
++ 다음 줄에는 C개의 문자들이 주어지며 공백으로 구분
++ 주어지는 문자들은 알파벳 소문자이며 중복은 없다.
+
+```
+입력 예시
+4 6
+a t c i s w
+
+출력 예시
+acis
+acit
+aciw
+asct
+acsw
+actw
+aist
+aisw
+aitw
+astw
+cist
+cisw
+citw
+istw
+```
+
+#### 풀이
+```python
+from itertools import combinations
+# combination은 조합 -> 순서상관 X, 주어진 배열 맨 앞부터 골라서 만듦
+# 예) 4개 고르는 거면 배열 맨 앞 3개 고르고 마지막 1개는 차례차례식으로 한다는 뜻
+L,C = map(int,input().split())
+p = input().split()
+p.sort() # 사전식을 위해서 정렬
+vowels = ['a','e','i','o','u']
+
+# list(combinations(p,L)는 튜플을 원소로 하는 리스트
+for x in list(combinations(p,L)): # x에는 리스트의 원소인 튜플이 들어감
+    count=0
+    for i in x: # 튜플의 원소 str문자가 i에 들어감
+        if i in vowels: 
+            count+=1
+    if count>=1 and len(x)>=3:        
+        print(''.join(x))
+        # print(*x) 도 가능
+```
+
+
+
+<br>
+
+---
+__본 포스팅은 '이것이 코딩 테스트다 with 파이썬'을 읽고 공부한 내용을 바탕으로 작성하였습니다.__
