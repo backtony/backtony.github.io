@@ -310,9 +310,7 @@ def bfs(x,y):
             px = x + dx[i]
             py = y + dy[i]
             if px>=N or px<0 or py >=M or py <0:
-                continue
-            if graph[px][py] == 0:
-                continue
+                continue            
             if graph[px][py] == 1:
                 graph[px][py] = graph[x][y]+1
                 queue.append((px,py))
