@@ -317,7 +317,31 @@ def bfs(x,y):
     return graph[N-1][M-1]
 print(bfs(0,0))
 ```
-이 문제는 BFS를 이용했을 때 매우 효과적으로 해결할 수 있다. BFS는 시작 지점에서 가까운 노드부터 차례대로 그래프의 모든 노드를 탐색하기 때문이다.
+이 문제는 BFS를 이용했을 때 매우 효과적으로 해결할 수 있다. BFS는 시작 지점에서 가까운 노드부터 차례대로 그래프의 모든 노드를 탐색하기 때문이다.  
+<br>
+
+__Cf) 지도 만들때 혼동되었던 점__  
+```
+game_map = []
+game_map.append(list(map(int,input())))
+print(game_map)
+ #결과는 [[0, 0, 1, 1, 0, 0]]
+# 문자열을 입력받고 그 문자열 각각의 원소 하나씩 map으로 인해 int로 변환
+# 후에 리스트로 다시 변환
+
+import sys
+graph = []
+graph.append(list(map(int,sys.stdin.readline().rstrip().split())))
+print(graph)
+# 결과는 [[1100]]
+# 이유는 split()때문이다. 공백이 없이 입력되었으므로 split()으로 인해 001100을 하나로 인식
+# map에 001100이 들어가고 int변환시 앞에 00이 사라짐.
+# 똑같이 사용하려면 split을 지우면 된다.
+
+0055
+0006
+같은 문자열을 int형 변환하면 앞의 0들은 삭제된다.
+```
 
 
 
