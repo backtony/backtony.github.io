@@ -469,8 +469,61 @@ __출력 조건__
 
 #### 풀이
 ```python
+from collections import deque
+import sys
+import copy
 
+input = sys.stdin.readline
+
+# 노드(수업)개수 입력
+v = int(input())
+# 모든 노드(수업)의 진입차수 0
+indegree=[0]*(v+1)
+# 각 노드(수업)의 간선 정보(선수강 정보)를 담기 위한 리스트
+graph = [[] for i in range(v+1)]
+# 각 노드의 강의시간 정보 리스트 
+time = [0]*(v+1)
+
+# 방향 그래프의 모든 간선 정보 입력
+for i in range(1,v+1):
+    data = list(map(int,input().split()))
+    time[i] = data[0] # 첫 시간 정보
+    for x in data[1:-1]:
+        indegree[i] +=1 # 자신의 선수강 과목으로 인해 진입 차수 증가
+        graph[x].append(i) # 선수강 과목들의 그래프 형성
+
+# 위상 정렬 함수
+# 진입차수 0인것 부터 넣으면서 모든 노드를 다 확인하며 각 수업의 최소 시간을 저장
+def topology_sort():
+    result=copy.deepcopy(time) # 수행 결과 담을 리스트
+    q = deque()
+
+    for i in range(1,v+1):
+        if indegree[i] ==0:
+            q.append(i)
+    
+    while q:
+        now = q.popleft()
+        # now 와 연결된 간선을 삭제시키자.
+        for i in graph[now]:
+            # 동시에 여러 강의가 동시 수강 가능하다고 했다.
+            # 만약 i가 진입차수가 2개라면 아래 result = 연산은 2번 실행될 것이다.
+            # 그 중에 값이 큰 것을 고르면 된다.
+            result[i] = max(result[now]+time[i],result[i])
+            indegree[i]-=1
+            if indegree[i]==0:
+                q.append(i)
+    for i in range(1,v+1):
+        print(result[i])
+
+topology_sort()
 ```
+커리큘럼은 결국 선수강과목부터 체크해야된다. 즉, 진입차수가 0인 것부터 차례대로 계산하여 최종적으로 해당 과목의 최소 시간이 나오는 것이다. 따라서 진입차수가 0인 것부터 큐에 넣고 빼내면서 연결된 간선을 삭제하고 다시 진입차수가 0인 것을 넣는 것을 반복한다.  
+문제에서 여러 강의를 동시에 수강하는 것이 가능하다고 주어졌으므로 result에 들어가는 값은 선수강 과목 중에서 시간이 더 긴 것을 넣어야 한다.  
+코드를 보면 알겠지만 result와 time을 같은 줄에 넣는 것이 있다. result를 단순히 copy를 사용한다면 result는 리스트이기 때문에 대입 연산 과정에서 값이 변경되는 문제가 발생할 수도 있기 때문에 만약의 경우를 우려해 deepcopy를 사용했다.  
+__위 코드에서 기억할 테크닉__  
++ 리스트의 값을 복제해야 할 때는 만일의 경우를 대비해 deepcopy를 사용하자.
++ for x in data[1:-1]: 1번 인덱스부터 마지막의 한 칸 뒤까지. -1은 마지막 칸을 이지만 [:x]는 x인덱스 전까지를 의미한다.
 
 <br>
 
