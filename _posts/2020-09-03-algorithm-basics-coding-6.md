@@ -211,6 +211,13 @@ bfs(graph,1,visited)
 구현 방법|재귀 함수 이용|큐 자료구조 이용
 
 BFS와 DFS를 앞서 그래프 그림을 이용해 이해했는데 1차원 배열이나 2차원 배열 또한 그래프 형태로 생각하면 수월하게 풀 수 있다. 그러므로 코딩 테스트에서 탐색 문제를 보면 그래프 형태로 표현한 다음 풀이법을 고민해보자.  
+<br>
+
+__BFS와 DFS 어느 것을 선택할까?__  
+사실 코드레벨에서 본다면 DFS가 BFS보다 훨씬 간단하다. 따라서 DFS와 BFS로 모두 풀 수 있는 경우에는 DFS를 사용하는 것이 좋다.  
+예시로 목적지가 정해져 있는 미로에서 최소 이동 칸 수를 구하는 문제를 보면 갈림길에서 어디로 이동해야 할지 선택해야 한다. 이런 경우에는 BFS를 통해 해당 좌표마다 그래프에 이동 칸수를 저장해두면 된다. 이처럼 해당 좌표를 기준으로 모든 경로에 대해 고려가 필요하다면 BFS를 사용하는 것이 좋은 선택이다.  
+최종 목적지가 정해져 있지 않은 단순히 어느 조건에 따라 탐색하고 탐색한 위치를 방문처리하고 탐색을 종료하는 경우라면 DFS를 사용하는 것이 좋은 선택이다.
+  
 
 <br>
 
@@ -240,6 +247,7 @@ __출력 조건__
 
 #### 풀이
 ```python
+# DFS 풀이
 N, M = map(int,input().split())
 # 주변을 탐색해서 0인 부분을 다 true로 만들고 끝나면 카운트 1개하고 매 인덱스마다 실행하면될거같은데
 game_map = []
@@ -264,11 +272,54 @@ for i in range(N):
         if dfs(i,j) == True:
             count+=1
 print(count)         
+
+# BFS 풀이
+import sys
+from collections import deque
+
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+graph = [[] for i in range(n)]
+for i in range(n):
+    graph[i] = list(map(int, input().rstrip()))
+
+# U D R L
+dx = [-1, 1, 0, 0]
+dy = [0, 0, 1, -1]
+count = 0
+
+
+def bfs():
+    global count
+    q = deque()
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 0:
+                graph[i][j] = 1
+                count += 1
+                q.append((i, j))
+            while q:
+                x, y = q.popleft()
+                for k in range(4):
+                    px = x + dx[k]
+                    py = y + dy[k]
+                    if px <0 or px>=n or py<0 or py>=m:
+                        continue
+                    if graph[px][py] == 0:
+                        graph[px][py] = 1
+                        q.append((px, py))
+
+
+bfs()
+print(count)
 ```
 이 문제는 DFS로 해결할 수 있다. 상, 하, 좌, 우로 연결되어 있다고 표현할 수 있으므로 그래프 형태로 모델링할 수 있다.  
 1. 특정한 지점의 주변 상, 하, 좌, 우를 살펴본 뒤에 주변 지점 중에서 값이 0이면서 아직 방문하지 않은 지점이 있다면 해당 지점을 방문
 2. 방문한 지점에서 다시 상, 하, 좌, 우를 살펴보면서 방문을 다시 진행하면, 연결된 모든 지점을 방문할 수 있다. 
 3. 1~2 과정을 모든 노드에 대해서 반복한다. 
+
+BFS로 풀이할 경우 DFS보다 코드가 길고 복잡하다. 여기서 알 수 있는 점은 
 
 <br>
 
@@ -337,6 +388,7 @@ print(graph)
 # 이유는 split()때문이다. 공백이 없이 입력되었으므로 split()으로 인해 001100을 하나로 인식
 # map에 001100이 들어가고 int변환시 앞에 00이 사라짐.
 # 똑같이 사용하려면 split을 지우면 된다.
+# rstrip()은 오른쪽 개행문자를 지우기 위해 반드시 필요하다.
 
 0055
 0006
