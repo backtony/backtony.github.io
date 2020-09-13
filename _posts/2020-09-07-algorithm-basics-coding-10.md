@@ -84,6 +84,7 @@ def dijkstra(start):
     while q:
         dist,now = heapq.heappop(q)       
         # 이미 처리된 경우는 무시
+        # start지점의 경우 = 등호가 성립하므로 <=가 아니다.
         if distance[now]<dist:
             continue
         # 처리가 안 된 경우 이제 처리
