@@ -4,6 +4,6 @@ title: Python
 slug: python
 menu: true
 submenu : true
-order: 1
+order: 3
 # description: >  
 ---

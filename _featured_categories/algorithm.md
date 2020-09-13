@@ -4,7 +4,7 @@ title: Algorithm
 slug: algorithm
 menu: true
 submenu : true
-order: 2
+order: 1
 # description: >
   
 ---
