@@ -132,9 +132,45 @@ __제한 사항__
 
 ### 내가 작성한 코드
 ```python
+import sys
+
+input = sys.stdin.readline
+
+def solution(s):
+    ans =[] # 자른 문자열의 문자개수를 append
+    
+    for i in range(1,len(s)): # 자를 문자열 개수
+        j=0
+        cnt =0
+        length = len(s)
+        while True:
+            if j>=len(s)-i: 
+                if cnt:
+                    length+=len(str(cnt+1))
+                break
+
+            if s[j:j+i] != s[j+i:j+2*i]:
+                j+=i
+                if cnt:
+                    length+=len(str(cnt+1))
+                    cnt=0                
+            else :
+                j+=i
+                length-=i
+                cnt +=1
+        ans.append(length)    
+    return min(ans)
+```
+실행 결과는 맞으나 1가지 경우에 대해 시간 초과가 발생했다.  
+<br>
+
+### 모범 답안
+```python
 
 ```
+<br>
 
+## 5. 자물쇠와 열쇠
 
 
 
