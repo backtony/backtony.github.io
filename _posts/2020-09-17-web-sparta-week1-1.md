@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  HTML
-subtitle:   HTML
+subtitle:   HTML, CSS
 categories: web
 tags: web webprogramming spartacodingclub
 comments: true
@@ -10,11 +10,8 @@ comments: true
 + __목차__
   - [1. 브라우저의 역할](#1-브라우저의-역할)
   - [2. HTML](#2-html)
-  - [3. 곱하기 혹은 더하기](#3-곱하기-혹은-더하기) 
-  - [4. 문자열 뒤집기](#4-문자열-뒤집기)
-  - [5. 만들 수 없는 금액](#5-만들-수-없는-금액)
-  - [6. 볼링공 고르기](#6-볼링공-고르기)
-  - [7. 무지의 먹방 라이브](#7-무지의-먹방-라이브)
+  - [3. CSS](#3-css) 
+
 
 
 ## 1. 브라우저의 역할
