@@ -402,3 +402,111 @@ __나홀로 메모장__
 부트스트랩에서 form, button, card, jumbotron을 이용했다. 이외에 구글 폰트도 이용했다. 새로 사용한 태그는 a 태그인데 a태그는 링크를 걸어주는 태그이다. 또 style에서는 border을 새로 사용했는데 테두리를 나타내준다.
 <Br>
 
+__판매 페이지 만들어 보기__  
+```javascript
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>이거 팔아요!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Do Hyeon', sans-serif;
+        }
+
+        .pic {
+            background-image: url("https://images.unsplash.com/photo-1477327070293-75f15e291bb0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60");
+            background-position: center;
+            background-size: cover;
+            height: 500px;
+            width: 800px;
+            margin-top:50px;
+            margin-bottom: 50px;
+        }
+        .post_tit{
+            margin-bottom: 30px;
+        }
+        .post_txt{
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+        .but{
+            display:block;
+            margin: 50px auto 100px;
+
+        }
+        .wrap {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="pic">
+    </div>
+    <div class="post_tit">
+        <h1 style="display:inline-block">맥북 팝니다</h1>
+        <h3 style="font-size:20px; display:inline-block">&nbsp&nbsp&nbsp&nbsp가격 : 2,500,000원</h3>
+    </div>
+    <div class="post_txt">
+        이 상품으로 말할 것 같으면 제가 사고 싶은 노트북입니다. <br>
+        사실 대학생이라 이제 노트북을 사야할 시기인데 컴공과는 다들 맥북을 사서 쓰더라구요. 근데 왜 굳이 비싼 맥북을 쓰는 걸까요?
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="name">주문자 성함</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect01">수량</label>
+  </div>
+  <select class="custom-select" id="inputGroupSelect01">
+    <option selected>선택</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+</div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="address">주소</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="phone_number">전화번호</span>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <button type="button" class="btn btn-primary but">주문하기</button>
+
+</div>
+</body>
+
+</html>
+```
