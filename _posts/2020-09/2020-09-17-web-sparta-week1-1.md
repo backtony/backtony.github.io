@@ -510,3 +510,10 @@ __판매 페이지 만들어 보기__
 
 </html>
 ```
+CSS의 display 속성은 inline, block, inline-block이 있다.
++ inline으로 지정된 엘리먼트는 전후 줄바꿈없이 한 줄에 다른 엘리먼트들과 함께 배치된다. 대표적으로 span, a, em 태그가 있다.
+    - width, height 속성을 지정해도 무시되며 margin과 padding은 좌우 간격만 반영되고 상하 간격은 무시된다.
++ block으로 지정된 엘리먼트는 전후 줄바꿈이 들어가 다른 엘리먼트들을 다른 줄로 밀어내고 혼자 한 줄을 차지한다. 대표적으로 div, p, h1 이 있다.
++ inline-block으로 지정된 엘리먼트는 기본적으로 inline 엘리먼트처럼 전후 줄바꿈 없이 한 줄에 다른 엘리먼트들과 나란히 배치된다. 하지만 inline 엘리먼트에서 불가능하던 width와 height 속성 지정 및 margin, padding 속성의 상하 간격 지정이 가능해 진다.
+
+위 코드에서 사용한 button의 경우 block이 아니므로 block으로 지정한 후 간격을 지정해야 했다.
