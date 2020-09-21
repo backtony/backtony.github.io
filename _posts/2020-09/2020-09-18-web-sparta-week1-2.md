@@ -83,6 +83,34 @@ function sum(num1,num2){
 ```
 <br>
 
+__버튼 홀짝__  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>홀짝판별</title>
+    <script>
+        let count =0;
+        function oddeven(){
+            count+=1;
+            if (count%2==1){
+                alert("odd")
+            } else{
+                alert("even")
+            }
+            
+        }
+    </script>
+</head>
+<body>
+<button onclick="oddeven()">나는 버튼이야</button>
+
+</body>
+</html>
+```
+<br>
+
 ## 5. 조건문
 ---
 ```javascript
