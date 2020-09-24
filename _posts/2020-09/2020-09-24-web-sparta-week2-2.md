@@ -64,12 +64,13 @@ $.ajax({
     - POST 요청은, data:{}에 넣어서 데이터를 가져간다. data: { param: 'value', param2: 'value2' },
 + success : 성공하면, response 값에 서버의 결과 값을 담아서 함수를 실행한다.
 
+<br>
+
 ### Ajax 통신의 결과값 이용해보기
 __미세먼지 OpenAPI__  
 ```
 http://openapi.seoul.go.kr:8088/6d4d776b466c656533356a4b4b5872/json/RealtimeCityAir/1/99
 ```
-<br>
 
 __OpeAPI를 통해 모든 구의 미세먼지 값 찍어보기__  
 ```html
@@ -494,6 +495,17 @@ __연습 3 풀이__
 </html>
 ```
 <br>
+
+위에서 작성한 코드들은 버튼을 누르면 onclick으로 함수가 호출되면서 업데이트가 되는 형식이었다. 그렇다면 버튼을 누르지 않고 페이지가 열리자마자 ajax로 해당 내용들을 받아오고 싶으면 어떻게 할까?
+```html
+<script>
+
+$(document).ready(function(){	
+  // 여기에 Ajax 요청을 하면 된다.
+});
+
+</script>
+```
 
 ## 4. 정리
 ---
