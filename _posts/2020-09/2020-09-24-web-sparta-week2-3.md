@@ -8,7 +8,7 @@ comments: true
 # header-img:
 ---
 앞써 포스팅했던 JQuery와 Ajax를 복습하면서 OpenAPI를 이용해서 메모장을 만들어 보자.  
-나홀로메모장 API
+__나홀로메모장 API__
 ```
 http://spartacodingclub.shop/post
 ```
