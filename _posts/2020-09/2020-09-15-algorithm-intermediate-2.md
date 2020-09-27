@@ -520,6 +520,7 @@ def solution(n, build_frame):
 
 ## 8. 치킨 배달
 ---
+[문제 클릭](https://www.acmicpc.net/problem/15686){: target="_blank"}
 크기가 N * N인 도시가 있다. 도시는 1 * 1 크기의 칸으로 나누어져 있다. 도시의 각 칸은 빈칸(0), 집(1), 치킨집(2) 중 하나이다. 도시의 칸은 (r,c)와 같은 형태로 나타내고, r행 c열을 의미한다. r과 c는 1부터 시작한다.  
 치킨 거리는 집과 가장 가까운 치킨집 사이의 거리이다. 즉, 치킨 거리는 집을 기준으로 정해지며, 각각의 집은 치킨거리를 가지고 있다. 도시의 치킨 거리는 모든 집의 치킨 거리의 합이다. 임의의 두 칸(r1,c1), (r2,c2) 사이의 거리는 절댓값( (r1-r2) + 절댓값(c1-c2))로 구한다.  
 가장 수익을 많이 낼 수 있는 치킨집의 개수는 최대 M이라고 가정하고 도시에 있는 치킨집 최대 M개를 고르고, 나머지 치킨집은 모두 폐업시켜야한다. 어떻게 하면 도시의 치킨 거리가 가장 작게 될지 구하는 프로그램을 작성하시오.  
@@ -566,57 +567,13 @@ __출력 조건__
 11
 ```
 
-### 내가 작성한 코드(틀림)
+### 모범 답안
+기존에 존재하는 치킨집을 줄여서 최대 M개로 유지하면서, 일반 집들오부터 M개의 치킨집까지의 거리를 줄이는 것이 목표다. 이후에 도시의 치킨 거리 합의 최솟값을 계산하면 된다.  
+기본적으로 입력으로 들어오는 치킨집의 개수 범위를 생각해보자. 치킨집의 개수 범위는 M <= 치킨집의 개수<= 13이다. 만약 치킨집 중에서 M개를 고르는 조합을 고려한다면 경우의 수가 얼마나 많을지 생각해보자. 최대 13개에서 M개를 선택하는 조합과 동일하다. (참고로 조합은 중간값의 개수를 선택(13의 중간값 6,7)을 하는 것이 최대값이다. 16개중 선택할 때 최대가 1만을 넘기고 20에서 선택할 때 10만을 넘긴다.) M값이 뭐가 되든지 간에 13개 중에서 M개를 고르는 조합의 경우 100,000을 넘지 않고 집의 개수가 최대 100개이므로 총 연산 횟수가 1억을 넘지 못한다. 따라서 모든 경우의 수를 계산하더라도 시간 초과 없이 문제를 해결할 수 있다.
+
 ```python
-# 범위가 매우 작으므로 복잡도를 고려 안해도 될 수준
-import sys
-input = sys.stdin.readline
 
-n,m = map(int,input().split())
-graph = [[] for _ in range(n)]
-for i in range(n):
-    graph[i]=(list(map(int,input().rstrip().split())))
-INF = int(1e9)
-shortcut = [[INF] * n for _ in range(n)] # 최단거리
-chick =[] # (카운트횟수,치킨집위치)
-house =[] # 집 위치
-chicken_house=[] # 치킨집 위치
-total = 0 # 도시의 치킨 거리 최소값
-
-# 집과 치킨집 위치 찾기
-# x,y는 1부터 시작이어도 어쩌피 서로의 거리 차이므로 0부터 해도 무관
-for x in range(n): # x는 행
-    for y in range(n): # y는 열
-            if graph[x][y]==1: #집
-                house.append((x,y))
-            if graph[x][y]==2: # 치킨집
-                chicken_house.append((x,y))
-
-# 각 집마다 최소 치킨거리의 치킨집에 카운트
-for x1,y1 in house:
-    for x2,y2 in chicken_house:
-        if shortcut[x1][y1] > abs(x1-x2) + abs(y1-y2):
-            shortcut[x1][y1] = abs(x1-x2) + abs(y1-y2)
-            px = x2
-            py = y2
-    graph[px][py]+=1
-
-for x1,y1 in chicken_house: # 카운트, 치킨집위치 넣고
-    chick.append((graph[x1][y1],x1,y1))
-chick.sort(reverse=True) # 내림차순
-for i in range(m,len(chick)) : # m개 이후의 치킨집은 빈칸으로 초기화
-    _, idx1, idx2=chick.pop()
-    graph[idx1][idx2]=0
-
-for x1,y1 in house:
-    for cnt, x2,y2 in chick:
-        if shortcut[x1][y1] > abs(x1-x2) + abs(y1-y2):
-            shortcut[x1][y1] = abs(x1-x2) + abs(y1-y2)
-    total += shortcut[x1][y1]
-
-print(total)
 ```
-예시 3 의 경우를 만족시키지 못했음
 
 <br>
 
