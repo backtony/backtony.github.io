@@ -223,7 +223,7 @@ def solution(s):
 
 ## 5. 자물쇠와 열쇠
 ---
-[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60059){: target="_blank"} 
+[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60059){: target="_blank"}  
 잠겨있는 자물쇠는 격자 한 칸의 크기가 1 * 1인 n * n 크기의 정사각 격자 형태이고 특이한 모양의 열쇠는 m * m크기인 정사각 격자 형태로 되어 있다. 자물쇠에는 홈이 파여 있고 열쇠 또한 홈과 돌기 부분이 있다. 열쇠는 회전과 이동이 가능하며 열쇠의 돌기 부분을 자물쇠의 홈 부분에 딱 맞게 채우면 자물쇠가 열리게 되는 구조이다. 자물쇠 영역을 벗어난 부분에 있는 열쇠의 홈과 돌기는 자물쇠를 여는 데 영향을 주지 않지만, 자물쇠 영역 내에서는 열쇠의 돌기 부분과 자물쇠의 홈 부분이 정확히 일치해야 하며 열쇠의 돌기와 자물쇠의 돌기가 만나서는 안된다. 또한 자물쇠의 모든 홈을 채워 비어있는 곳이 없어야 자물쇠를 열 수 있다.  
 열쇠를 나타내는 2차원 배열 key와 자물쇠를 나타내는 2차원 배열 lock이 매개변수로 주어질 때, 열쇠로 자물쇠를 열 수 있으면 true 없으면 false를 return하는 solution 함수를 완성하시오.  
 __제한 사항__  
@@ -473,7 +473,7 @@ print(simulate())
 
 ## 7. 기둥과 보 설치
 ---
-[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60061){: target="_blank"}
+[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60061){: target="_blank"}  
 
 ### 모범 답안
 전체 명령의 개수는 총 1,000개 이하이다. 따라서 O(N^2)으로 해결하는 것이 이상적이나 시간제한이 5초로 넉넉하기 때문에 O(N^3)의 알고리즘을 이용해도 정답판정을 받을 수 있다. 따라서 후자로 해결하는 가장 간단한 방법은, 설치 및 삭제 연산을 요구할 때마다 일일이 전체 구조물을 확인하며 규칙을 확인하는 것이다. 이렇게 복잡한 문제의 경우 해결에 따른 함수를 따로 만들어 사용하는 것이 좋다.
@@ -520,7 +520,7 @@ def solution(n, build_frame):
 
 ## 8. 치킨 배달
 ---
-[문제 클릭](https://www.acmicpc.net/problem/15686){: target="_blank"}
+[문제 클릭](https://www.acmicpc.net/problem/15686){: target="_blank"}  
 크기가 N * N인 도시가 있다. 도시는 1 * 1 크기의 칸으로 나누어져 있다. 도시의 각 칸은 빈칸(0), 집(1), 치킨집(2) 중 하나이다. 도시의 칸은 (r,c)와 같은 형태로 나타내고, r행 c열을 의미한다. r과 c는 1부터 시작한다.  
 치킨 거리는 집과 가장 가까운 치킨집 사이의 거리이다. 즉, 치킨 거리는 집을 기준으로 정해지며, 각각의 집은 치킨거리를 가지고 있다. 도시의 치킨 거리는 모든 집의 치킨 거리의 합이다. 임의의 두 칸(r1,c1), (r2,c2) 사이의 거리는 절댓값( (r1-r2) + 절댓값(c1-c2))로 구한다.  
 가장 수익을 많이 낼 수 있는 치킨집의 개수는 최대 M이라고 가정하고 도시에 있는 치킨집 최대 M개를 고르고, 나머지 치킨집은 모두 폐업시켜야한다. 어떻게 하면 도시의 치킨 거리가 가장 작게 될지 구하는 프로그램을 작성하시오.  
@@ -569,21 +569,95 @@ __출력 조건__
 
 ### 모범 답안
 기존에 존재하는 치킨집을 줄여서 최대 M개로 유지하면서, 일반 집들오부터 M개의 치킨집까지의 거리를 줄이는 것이 목표다. 이후에 도시의 치킨 거리 합의 최솟값을 계산하면 된다.  
-기본적으로 입력으로 들어오는 치킨집의 개수 범위를 생각해보자. 치킨집의 개수 범위는 M <= 치킨집의 개수<= 13이다. 만약 치킨집 중에서 M개를 고르는 조합을 고려한다면 경우의 수가 얼마나 많을지 생각해보자. 최대 13개에서 M개를 선택하는 조합과 동일하다. (참고로 조합은 중간값의 개수를 선택(13의 중간값 6,7)을 하는 것이 최대값이다. 16개중 선택할 때 최대가 1만을 넘기고 20에서 선택할 때 10만을 넘긴다.) M값이 뭐가 되든지 간에 13개 중에서 M개를 고르는 조합의 경우 100,000을 넘지 않고 집의 개수가 최대 100개이므로 총 연산 횟수가 1억을 넘지 못한다. 따라서 모든 경우의 수를 계산하더라도 시간 초과 없이 문제를 해결할 수 있다.
+기본적으로 입력으로 들어오는 치킨집의 개수 범위를 생각해보자. 치킨집의 개수 범위는 M <= 치킨집의 개수<= 13이다. 만약 치킨집 중에서 M개를 고르는 조합을 고려한다면 경우의 수가 얼마나 많을지 생각해보자. 최대 13개에서 M개를 선택하는 조합과 동일하다. (참고로 조합은 중간값의 개수를 선택(13의 중간값 6,7)을 하는 것이 최대값이다. 16개중 선택할 때 최대가 1만을 넘기고 20에서 선택할 때 10만을 넘긴다.) M값이 뭐가 되든지 간에 13개 중에서 M개를 고르는 조합의 경우 10,000을 넘지 않고 집의 개수가 최대 100개이므로 총 연산 횟수가 1억을 넘지 못한다. 따라서 모든 경우의 수를 계산하더라도 시간 초과 없이 문제를 해결할 수 있다.
 
 ```python
+from itertools import combinations
+import sys
 
+input = sys.stdin.readline
+n, m = map(int, input().split())
+
+# 지도, 일반집, 치킨집
+graph = [[] for _ in range(n)]
+chick = []
+house = []
+
+# 지도 작성
+for i in range(n):
+    graph[i] = list(map(int, input().rstrip().split()))
+
+# 집 정보 추출
+for i in range(n):
+    for j in range(n):
+        if graph[i][j] == 1:  # 일반집
+            house.append([i, j])
+        elif graph[i][j] == 2:  # 치킨집
+            chick.append([i, j])
+
+# 경우의 수
+choose_lists = list(combinations(chick, m))
+
+
+# 치킨 거리 최소값구하는 함수
+def solution(choose_list):
+    answer = 0
+    for x, y in house:
+        tmp = int(1e9)
+        for i, j in choose_list:
+            tmp = min(tmp, abs(x - i) + abs(y - j))
+        answer += tmp
+    return answer
+
+tmp = int(1e9)
+for choose_list in choose_lists:
+    tmp = min(tmp,solution(choose_list))
+print(tmp)
 ```
 
 <br>
 
 ## 9. 외벽 점검
 ---
-[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60061){: target="_blank"}
+[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60061){: target="_blank"}  
 
-### 내가 작성한 코드
+### 모범답안
+제한 조건을 보았을 때, weak 리스트와 dist 리스트의 길이가 매우 작은 것을 알 수 있다. 따라서 주어지는 데이터의 개수가 적을 때는 모든 경우를 일일이 확인하는 완전 탐색으로 접근해볼 수 있다.  
+문제에서 찾고자 하는 값은 투입해야 하는 친구 수의 최솟값이다. 이때 전체 친구의 수 최대는 8이다. 모든 친구를 무작위로 나열하는 모든 순열의 개수는 8!=40,320으로 충분히 계산 가능한 경우의 수이다. 따라서 친구를 나열하는 모든 경우의 수를 각각 확인하여 친구를 최소 몇 명 배치하면 되는지 계산하면 문제를 해결할 수 있다.  
+다만, 문제에서는 취약한 지점들이 원형으로 구성되어 있다고 설명하고 있다. 이처럼 __원형으로 나열된 데이터를 처리하는 경우에는, 문제 풀이를 간단히 하기 위하여 길이를 2배로 늘려서 원형을 일자 형태로 만드는 작업을 해주면 유리하다.__  
+문제에 제시된 입출력 예시 2로 확인해보자. 취약한 지점을 2배하여 일자 형태로 만들면 1, 3, 4, 9, 10, 13, 15, 16, 21, 22가 된다. 친구 나열의 경우는 3!으로 6가지가 된다. 이제 각각의 경우에 대하여 5개의 취약한 지점을 모두 검사할 수 있는지 확인하면 된다.
 ```python
+from itertools import permutations
 
+def solution(n, weak, dist):
+    length = len(weak)    
+    answer = len(dist) +1 # 친구 수 +1 나중에 수정되지 않으면 친구 투입 수 초과
+
+    # weak 2배 일렬로 만들기
+    for i in range(length):
+        weak.append(n+weak[i])
+
+    # 친구 순열 선택
+    for friends in permutations(dist,len(dist)):
+
+        # 시작 위치 설정( 0 ~ length -1)        
+        for start in range(length):
+            count = 1  # 첫 번째 친구 투입
+            position = weak[start] + friends[count-1]
+            
+            # 이후의 모든 취약 지점 확인
+            for index in range(start+1,start+length):
+                # 다음 취약 지점에 못 미치는 경우
+                if position < weak[index]:
+                    count+=1
+                    # 친구 수 초과시
+                    if count > len(dist):
+                        break
+                    position = weak[index]+friends[count-1]
+            answer = min(count,answer)
+    if answer > len(dist):
+        return -1
+    return answer
 ```
 
 
