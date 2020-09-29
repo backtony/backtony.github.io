@@ -81,7 +81,77 @@ if cnt == 0:
 <br>
 
 ## 3. 연구소
+---
+[문제 클릭](https://www.acmicpc.net/problem/14502){: target="_blank"}  
 
+<br>
+
+## 4. 경쟁적 전염
+---
+[문제 클릭](https://www.acmicpc.net/problem/18405){: target="_blank"}  
+
+### 내가 작성한 코드
+```python
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+# 시험관 크기 n, 바이러스 종류 k
+n, k = map(int, input().split())
+graph = [[] for _ in range(n)]
+cnt = 0  # 시간초
+
+# U R D L 시계방향
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+# 시험관 정보
+for i in range(n):
+    graph[i] = list(map(int, input().rstrip().split()))
+
+# s초후 x,y 위치의 값
+s, x, y = map(int, input().split())
+
+next =[]
+for i in range(n):
+    for j in range(n):
+        if graph[i][j] != 0:
+            next.append((graph[i][j], i, j))  # (바이러스 종류, 좌표)
+next.sort()  # 바이러스 번호순 정렬
+
+# 입력된 시간 까지
+while cnt < s:
+    if not next : # 전염 시작 위치가 없는 경우
+        break
+    q = deque(next)  # 큐에 삽입
+    next.clear()  # 이후 사용을 위해 비우기
+    # 큐가 빌때까지 반복
+    while q:
+        num, i, j = q.popleft()
+        # 4방향
+        for z in range(4):
+            pi = i + dx[z]
+            pj = j + dy[z]
+            # 범위 내에 있으면서 빈칸인 경우만
+            if 0 <= pi < n and 0 <= pj < n and graph[pi][pj] == 0:
+                graph[pi][pj] = num  # 바이러스 전염
+                next.append((num, pi, pj))  # 다음 전염 시작의 기준 위치
+    cnt +=1 # 큐가 다 비게 되면 1초 카운트
+
+
+print(graph[x-1][y-1])
+```
+하나씩 옆에 있는 것부터 처리하는 과정을 통해 BFS를 생각해냈다. 바이러스 번호가 작은 것부터 전염을 시작해야 하기 때문에 큐를 바로 사용하기 전에 먼저 전염 번호 순으로 정렬시키고 큐에 대입하는 방법으로 설계했다.
+
+### 모범 답안
+```python
+
+```
+<br>
+
+## 5. 괄호 변환
+---
+[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60058){: target="_blank"}  
 
 ---
 __본 포스팅은 '이것이 코딩 테스트다 with 파이썬'을 읽고 공부한 내용을 바탕으로 작성하였습니다.__
