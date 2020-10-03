@@ -73,7 +73,7 @@ db.users.delete_one({'name':'bobby'})
 
 ## 4. 연습하기
 ---
-웹스크래핑(크롤링)[클릭](https://backtony.github.io/web/2020/09/27/web-sparta-week3-2/)의 연습하기에서 사용했던 코드를 사용해 pymongo를 연습해보자.
+웹스크래핑(크롤링) [[클릭](https://backtony.github.io/web/2020/09/27/web-sparta-week3-2/)] 의 연습하기에서 사용했던 코드를 사용해 pymongo를 연습해보자.
 ```python
 from pymongo import MongoClient  # pymongo를 쓰겠다
 
