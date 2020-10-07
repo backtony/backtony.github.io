@@ -153,5 +153,84 @@ print(graph[x-1][y-1])
 ---
 [문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60058){: target="_blank"}  
 
+### 모범  답안
+```python
+
+```
+<br>
+
+## 6. 연산자 끼워 넣기
+---
+[문제 클릭](https://www.acmicpc.net/problem/14888){: target="_blank"}  
+
+### 내가 작성한 코드
+연산자 갯수가 n-1개 이므로 n-1!하면 모든 경우의수가 나온다. 3백만 정도의 연산 횟수가 되므로 완전 탐색을 해도 될 것 같아서 다음과 같이 설계했다. 시간은 2764ms로 간당간당했다.
+```python
+import sys
+from itertools import permutations
+
+input = sys.stdin.readline
+minus_INF = -int(1e10)
+INF = int(1e10)
+
+n = int(input())
+a = list(map(int, input().rstrip().split()))
+# 덧 뺄 곱 나눗
+operators = list(map(int, input().rstrip().split()))
+# 실제 문자로 연산자를 넣을 리스트
+operator = []
+
+# 연산자 넣기
+for _ in range(operators[0]):
+    operator.append('+')
+for _ in range(operators[1]):
+    operator.append('-')
+for _ in range(operators[2]):
+    operator.append('*')
+for _ in range(operators[3]):
+    operator.append('//')
+
+# 순열
+operators = list(permutations(operator, n - 1))
+
+ans_max = minus_INF
+ans_min = INF
+
+# 비교 시작
+for operator in operators:
+    tmp = a[0]
+    # 인덱스 n-1까지 정수 있고 연산자는 n-2까지 있다.
+    for i in range(1, n):  # 연산자 인덱스는 -1 해주자
+        if operator[i - 1] == '+':
+            tmp += a[i]
+        elif operator[i - 1] == '*':
+            tmp *= a[i]
+        elif operator[i - 1] == '-':
+            tmp -= a[i]
+        else:
+            # 음의 경우
+            if tmp < 0:
+                tmp = -tmp
+                tmp //= a[i]
+                tmp = -tmp
+            else:
+                tmp //= a[i]
+    ans_max = max(ans_max, tmp)
+    ans_min = min(ans_min, tmp)
+
+print(ans_max)
+print(ans_min)
+
+```
+
+## 7. 감시 피하기
+---
+[문제 클릭](https://www.acmicpc.net/problem/18428){: target="_blank"}  
+
+### 내가 작성한 코드
+```python
+
+```
+
 ---
 __본 포스팅은 '이것이 코딩 테스트다 with 파이썬'을 읽고 공부한 내용을 바탕으로 작성하였습니다.__
