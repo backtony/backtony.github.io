@@ -234,16 +234,87 @@ print(ans_min)
 
 ## 8. 인구 이동
 ---
+[문제 클릭](https://www.acmicpc.net/problem/16234){: target="_blank"}  
 
 ### 내가 작성한 코드
 ```python
+import sys
+from collections import deque
+
+input = sys.stdin.readline
+
+n, l, r = map(int, input().rstrip().split())
+graph = [[] for _ in range(n)]
+visited = [[0] * n for _ in range(n)]
+# 그래프 입력
+for i in range(n):
+    graph[i] = list(map(int, input().rstrip().split()))
+
+unions = deque()  # 큐
+q = deque()  # 큐
+# 시계방향
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+
+# 이동 전과 이동 후 위치에서 값을 비교해야 하므로 bfs 사용
+# 0,0 시작으로 대입
+def bfs(graph, x, y):
+    ans = 0  # 연합 여부
+    q.append((graph[x][y], x, y))  # 첫 위치 삽입
+    total = graph[x][y]  # 연합 총인구
+    cnt = 1  # 연합국 개수
+    # 연합 형성
+    while q:
+        value, bx, by = q.popleft()
+        # 4방향 연산
+        for i in range(4):
+            px = bx + dx[i]
+            py = by + dy[i]
+            # 범위 내, 차이도 범위 내, 연합이 되지 않은 곳
+
+            if 0 <= px < n and 0 <= py < n and l <= abs(graph[px][py] - graph[bx][by]) <= r and visited[px][py] != 1:
+                unions.append((graph[px][py], px, py))  # 연합에 넣기
+                q.append((graph[px][py], px, py))  # 큐에 넣기
+                ans = 1  # 연합여부
+                visited[px][py] = 1  # 연합이 된 지역 표시
+                visited[bx][by] = 1  # 시작 지역 연합 표시
+                cnt += 1  # 연합국 개수 더하기
+                total += graph[px][py]  # 연합국 인구 더하기
+    total //= cnt  # 연합국 개별 인구
+    graph[x][y] = total
+    # 연합의 인구이동
+    while unions:
+        union, x, y = unions.popleft()
+        graph[x][y] = total
+
+    return ans
+
+
+
+cnt =0 # 이동 횟수
+while True:
+    ans = 0
+    for i in range(n):
+        for j in range(n):
+            # 연합이 안되어 있는 경우
+            if visited[i][j] != 1:
+                ans = max(ans, bfs(graph, i, j)) # 연합이 된 경우 1이 반환됨
+    if not ans: # 연합이 안 된 경우
+        break
+    cnt+=1
+    visited = [[0] * n for _ in range(n)]  # 연합 초기화
+
+print(cnt)
 ```
 
 ## 9. 블록 이동하기
 ---
+[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60063){: target="_blank"}  
 
 ### 내가 작성한 코드
 ```python
+
 ```
 
 ---
