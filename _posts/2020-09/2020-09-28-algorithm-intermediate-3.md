@@ -391,8 +391,8 @@ import sys
 from itertools import permutations
 
 input = sys.stdin.readline
-minus_INF = -int(1e10)
-INF = int(1e10)
+minus_INF = -int(1e9)
+INF = int(1e9)
 
 n = int(input())
 a = list(map(int, input().rstrip().split()))
@@ -445,10 +445,76 @@ print(ans_min)
 
 ### 모범 답안
 최대 11개의 수가 주어졌을 때, 각 수와 수 사이에 사칙연산 중 하나를 삽입하는 모든 경우에 대하여 만들어질 수 있는 결과의 최댓값 및 최솟값을 구하면 된다. 따라서 모든 경우의 수를 계산하기 위하여 완전탐색(DFS / BFS)를 이용하여 해결할 수 있다.  
-이 문제에서는 각 사칙연산을 중복하여 사용할 수 있기 때문에, 중복 순열을 이용해야 한다. 예를 들어 n=4라고 하면, 사칙연산 중에서 중복을 허용하여 3개를 뽑아 나열하는 모든 경우를 고려해야 한다. 이는 파이썬에서 중복 순열(product) 라이브러리를 이용하여 찾을 수 있다.
+이 문제에서는 각 사칙연산을 중복하여 사용할 수 있기 때문에, 중복 순열을 이용해 풀 수도 있다. 하지만 DFS를 이용하여 풀 수도 있다.  
+__여기서 기억해야 할 점은 중복 순열을 DFS로 나타낼 수 있다는 것이다.__  
 ```python
+import sys
 
+input = sys.stdin.readline
+
+n = int(input())
+num = list(map(int, input().rstrip().split()))
+
+plus, minus, mul, div = map(int, input().rstrip().split())
+
+max_value = int(-1e9)
+min_value = int(1e9)
+
+
+def dfs(cnt, now):
+    global plus, minus, mul, div, max_value, min_value
+    # 주어진 연산자 다 사용했을때
+    if cnt == n:
+        max_value = max(max_value, now)
+        min_value = min(min_value, now)
+    else:
+        if plus > 0:
+            plus -= 1
+            dfs(cnt + 1, now + num[cnt])
+            plus += 1
+        if minus > 0:
+            minus -= 1
+            dfs(cnt + 1, now - num[cnt])
+            minus += 1
+        if mul > 0:
+            mul -= 1
+            dfs(cnt + 1, now * num[cnt])
+            mul += 1
+        if div > 0:
+            div -= 1
+            dfs(cnt + 1, int(now / num[cnt]))
+            div += 1
+
+
+dfs(1, num[0])
+print(max_value)
+print(min_value)
 ```
+__python 음수 나눗셈__  
+[![그림1](https://backtony.github.io/assets/img/post/python/intermediate/intermediate-3.PNG)](https://kj-said.tistory.com/entry/Python-%EB%82%98%EB%88%97%EC%85%88%EC%97%90-%EA%B4%80%ED%95%9C-%EA%B3%A0%EC%B0%B0-%EC%9D%8C%EC%88%98-%EB%82%98%EB%88%84%EA%B8%B0-divmod){: target="_blank"}  
+
+그림과 같이 몫은 좌측값, 즉, 작은 값을 가리킨다. 따라서 연산 결과 아래와 같다.
+```python
+2018 / 5 # 403.6
+2018 // 5 # 403
+
+-2018 / 5 # -403.6
+-2018 // 5 # -404 
+```
+따라서 위의 문제에서 주어진 나눗셈은 몫의 나눗셈이 아닌 실수 나눗셈을 한 뒤에 나머지를 버림으로 작성해야한다.  
+<br>
+
+
+#### DFS 중간정리
+3번, 6번을 못 풀었었는데 모두 DFS문제였다. 
+```python  
+count += 1
+dfs(count)
+count -= 1
+```
+dfs는 위와 같은 형태로 대부분 인자를 탈출조건에 사용했으며, 간단히 정리하자면 아래와 같다.  
++ 만약 3개를 선택했다고 가정하면, 먼저 선택한 2개는 유지하면서 나중에 선택한 1개를 다른 것으로 바꾸기.. 이후에 남은 것들을 다 선택했다면 2번째 선택했던 것을 바꾸고 마지막 선택한 것을 다시 처음부터 바꾸기 이 과정을 반복하는데 사용되었다.
++ 특정한 개수를 모두 선택한 뒤 서로의 순서를 바꾸는, 즉, 중복순열을 나타낼 때도 사용할 수 있었다.
 
 ## 7. 감시 피하기
 ---
