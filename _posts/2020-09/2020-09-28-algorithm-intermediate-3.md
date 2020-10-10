@@ -80,10 +80,129 @@ if cnt == 0:
 한 가지 출발지점이 정해진 경우에 대해서 각 지점에 대해 최소 거리를 구하는 다익스트라 알고리즘을 사용했다. 다익스트라 알고리즘의 복잡도는 선형로그시간 O(ElogV)이므로 주어진 큰 범위에 적합한 알고리즘이다. (V는 노드, E는 간선, 우선순위 큐로 인해 logV)
 <br>
 
+### 모범 답안
+그래프에서 __간선비용이 모두 동일할 때는 BFS__ 를 이용하여 최단 거리를 찾을 수 있다.  
+문제 조건에서 노드의 개수 N은 최대 300,000개이며 간선의 개수 M은 최대 1,000,000개이다. 따라서 BFS를 이용해 O(N+M)으로 동작하는 소스 코드를 작성하여 시간 초과 없이 해결할 수 있다.(선형 시간 알고리즘에서는 천만까지 범위가 가능하다.) 먼저 특정한 도시 X를 시작점으로 BFS를 수행하여 모든 도시까지의 최단 거리를 계산한 뒤, 각 최단 거리를 하나씩 확인하며 그 값이 K인 경우에 해당 도시의 번호를 출력하면 된다.  
+간선 정보에서 각각의 거리가 다르다면 다익스트라를 써야하지만, 비용이 모두 같다면 시작지점으로부터 연결되있는 차례대로 비용을 계산하면 최소거리가 되기 때문에 BFS를 사용해도 된다.  
+다익스트라의 경우는 간선비용이 다를 때 같을 때 모두 사용할 수 있다. 그래서 나는 다익스트라를 알아두는게 좋을 것 같다는 생각이 든다. BFS와 코드도 매우 비슷하다. 단지 큐 대신 우선순위 큐를 사용한다는 점 이외에는 BFS와 비슷하다.
+```python
+import sys
+from collections import deque
+
+n, m, k, x = map(int, input().rstrip().split())
+
+graph = [[] for _ in range(n + 1)]
+distance = [-1] * (n + 1)  # 최단 거리
+distance[x] = 0  # 시작위치 0
+# 간선 정보 입력
+for i in range(m):
+    a, b = map(int, input().rstrip().split())
+    graph[a].append(b)
+
+q = deque([x])
+while q:
+    now = q.popleft()
+    # 현재 위치에서 연결되어있는 노드
+    for way in graph[now]:
+        # 최단 거리 갱신이 안되어있다면
+        if distance[way] == -1:
+            # 최단거리 갱신
+            distance[way] = distance[now] + 1
+            # 큐 삽입
+            q.append(way)
+
+cnt = False  # k있는지 판단할 변수
+for i in range(1, n + 1):
+    if distance[i] == k:
+        cnt = True
+        print(i)
+if cnt == False:
+    print(-1)
+```
+
 ## 3. 연구소
 ---
 [문제 클릭](https://www.acmicpc.net/problem/14502){: target="_blank"}  
 
+### 모범 답안
+이 문제는 벽을 3개 설치하는 모든 경우의 수를 다 계산해야 한다. 간단하게 생각해보면 전체 맵의 크기가 8 * 8 이므로, 벽을 설치할 수 있는 모든 조합의 수는 최악의 경우 (바이러스가 하나도 존재하지 않는 경우) 64C3이 될 것이다. 이는 100,000보다도 작은 수이므로, 대략 선형 로그 시간의 알고리즘을 설계하면 되는데 주요 풀이 알고리즘이 BFS/DFS 이므로 인접 리스트를 사용하면 선형 시간 알고리즘으로 풀이할 수 있다. 따라서 모든 경우의 수를 고려해도 제한 시간 안에 문제를 해결할 수 있다는 것을 알 수 있다.  
+또한 모든 조합을 계산할 때는 파이썬의 조합 라이브러리를 사용하거나, DFS 혹은 BFS를 이용하여 해결할 수 있다. 따라서 벽의 개수가 3개가 되는 모든 조합을 찾은 뒤에 그러한 조합에 대해서 안전 영역의 크기를 계산하면 된다. 안전영역의 크기를 구하는 것 또한 DFS나 BFS를 이용하여 계산할 수 있다. 결과적으로 여기서는 가능한 모든 경우의 수를 계산하되, 안전 영역을 계산할 때 DFS나 BFS를 적절히 사용해야 된다는 것이다.  
+문제 풀이 아이디어를 간략히 설명함현, 초기에 비어 있는 모든 공간 중에서 3개를 골라 벽을 설치하는 것이다. 매번 벽을 설치할 때마다, 각 바이러스가 사방으로 퍼지는 것을 BFS/DFS로 계산하여 안전 영역을 구해야 한다.  
+python3 로 제출시 시간초과가 발생하고 pypy3로 하면 합격점을 받을 수 있다.
+```python
+import sys
+
+input = sys.stdin.readline
+
+n, m = map(int, input().rstrip().split())
+
+# 주어진 그래프와 벽 세우고 난 후의 그래프
+graph = []
+temp = [[0] * m for _ in range(n)]
+result = 0  # 안전 영역 개수
+# 시계방향
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+# 그래프 입력
+for _ in range(n):
+    graph.append(list(map(int, input().rstrip().split())))
+
+
+# dfs형식을 통한 바이러스 전염
+def virus(x, y):
+    for i in range(4):
+        px = x + dx[i]
+        py = y + dy[i]
+        # 범위 내, 빈칸
+        # 조건을 0<= px <n 으로 합치는 것보다 각각 쓰는게 더 빠르게 걸러진다.
+        if 0 <= px and px < n and 0 <= py and py < m and temp[px][py] == 0:
+            temp[px][py] = 2
+            virus(px, py)  # 재귀적 dfs
+
+
+# 안전 영역 카운트
+def score():
+    cnt = 0
+    for i in range(n):
+        for j in range(m):
+            if temp[i][j] == 0:
+                cnt += 1
+    return cnt
+
+
+# 모든 경우의 칸 세우기
+def dfs(count):
+    global result
+    # 벽이 모두 설치되었을 때
+    if count == 3:
+        # 그래프 옮기기
+        for i in range(n):
+            for j in range(m):
+                temp[i][j] = graph[i][j]
+        # 바이러스 전파
+        for i in range(n):
+            for j in range(m):
+                if temp[i][j] == 2:
+                    virus(i, j)
+        result = max(result, score())
+        return
+
+    # 울타리 세우기
+    for i in range(n):
+        for j in range(m):
+            # 빈칸이면
+            if graph[i][j] == 0:
+                graph[i][j] = 1  # 벽설치
+                count += 1
+                dfs(count)
+                count -= 1
+                graph[i][j] = 0  # 벽설치 해제
+
+
+dfs(0)
+print(result)
+```
 <br>
 
 ## 4. 경쟁적 전염
@@ -133,7 +252,8 @@ while cnt < s:
             pi = i + dx[z]
             pj = j + dy[z]
             # 범위 내에 있으면서 빈칸인 경우만
-            if 0 <= pi < n and 0 <= pj < n and graph[pi][pj] == 0:
+            # 따로 해주는게 더 빨리 끝남 
+            if 0 <= pi and pi < n and 0 <= pj and pj < n and graph[pi][pj] == 0:
                 graph[pi][pj] = num  # 바이러스 전염
                 next.append((num, pi, pj))  # 다음 전염 시작의 기준 위치
     cnt +=1 # 큐가 다 비게 되면 1초 카운트
@@ -144,8 +264,52 @@ print(graph[x-1][y-1])
 하나씩 옆에 있는 것부터 처리하는 과정을 통해 BFS를 생각해냈다. 바이러스 번호가 작은 것부터 전염을 시작해야 하기 때문에 큐를 바로 사용하기 전에 먼저 전염 번호 순으로 정렬시키고 큐에 대입하는 방법으로 설계했다.
 
 ### 모범 답안
+낮은 번호부터 증식하므로, 초기에 큐에 원소를 삽입할 때는 낮은 바이러스의 번호부터 삽입해야 한다. 이후 BFS를 수행하며 방문하지 않은 위치를 차례대로 방문하도록 하면 된다.
 ```python
+from collections import deque
 
+n, k = map(int, input().split())
+
+graph = [] # 전체 보드 정보를 담는 리스트
+data = [] # 바이러스에 대한 정보를 담는 리스트
+
+for i in range(n):
+    # 보드 정보를 한 줄 단위로 입력
+    graph.append(list(map(int, input().split())))
+    for j in range(n):
+        # 해당 위치에 바이러스가 존재하는 경우
+        if graph[i][j] != 0:
+            # (바이러스 종류, 시간, 위치 X, 위치 Y) 삽입
+            data.append((graph[i][j], 0, i, j))
+
+# 정렬 이후에 큐로 옮기기 (낮은 번호의 바이러스가 먼저 증식하므로)
+data.sort()
+q = deque(data)
+ 
+target_s, target_x, target_y = map(int, input().split())
+ 
+# 바이러스가 퍼져나갈 수 있는 4가지의 위치
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+# 너비 우선 탐색(BFS) 진행
+while q:
+    virus, s, x, y = q.popleft()
+    # 정확히 s초가 지나거나, 큐가 빌 때까지 반복
+    if s == target_s:
+        break
+    # 현재 노드에서 주변 4가지 위치를 각각 확인
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+        # 해당 위치로 이동할 수 있는 경우
+        if 0 <= nx and nx < n and 0 <= ny and ny < n:
+            # 아직 방문하지 않은 위치라면, 그 위치에 바이러스 넣기
+            if graph[nx][ny] == 0:
+                graph[nx][ny] = virus
+                q.append((virus, s + 1, nx, ny))
+
+print(graph[target_x - 1][target_y - 1])
 ```
 <br>
 
@@ -154,8 +318,65 @@ print(graph[x-1][y-1])
 [문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60058){: target="_blank"}  
 
 ### 모범  답안
-```python
+구현을 위한 알고리즘 자체는 문제에 그대로 제시되어 있기 때문에, 재귀 함수를 이용하여 문제에 기재되어 있는 알고리즘을 안정적으로 구현할 수 있으면 해결할 수 있다.  
+실수 없이 풀려면 소스코드를 최대한 단순화하는 것이 좋다. 따라서 특정 문자열에서 '균형잡힌 괄호 문자열'의 인덱스를 반환하는 함수와 특정한 '균형잡힌 괄호 문자열'이 '올바른 괄호 문자열'인지 판단하는 함수를 별도로 구현하고 재귀 함수에서 이 두 함수를 불러오도록 소스코드를 작성하자.  
 
+```python
+# 균형잡힌 문자열 분리
+def balance(p):
+    count = 0
+    for i in range(len(p)):
+        if p[i] == '(':
+            count += 1
+        else:
+            count -= 1
+        # 균형 잡힌 순간의 인덱스 반환
+        # 입력 자체가 균형잡힌 괄호 문자열로 주어지므로 결국 return 발생
+        if count == 0:
+            return i
+
+
+# 올바른 괄호 문자열 판단
+def proper(u):
+    count = 0
+    for i in range(len(u)):
+        if u[i] == '(':
+            count += 1
+        else:
+            # count==0인 시점에 )가 오면 올바른 문자열이 아님
+            if count == 0:
+                return False
+            count -= 1
+    return True
+
+
+# 균형잡힌 괄호 문자열을 올바른 괄호 문자열로 반환하는 솔루션
+def solution(p):
+    answer = ''
+    # 빈 문자열일 경우 빈 문자열 반환
+    if p == '':
+        return p
+    idx = balance(p)
+    u = p[:idx + 1]
+    v = p[idx+1:]
+    # 올바른 문자열이라면
+    if proper(u):
+        answer = u + solution(v)
+    # 올바른 문자열이 아니라면
+    else:
+        answer = '('
+        answer += solution(v)
+        answer += ')'
+        # 앞 뒤 문자 제거
+        u = list(u[1:-1]) # 문자열로 표현되기때문에 list로 형변환
+        # 뒤집기
+        for i in range(len(u)):
+            if u[i] == '(':
+                u[i] = ')'
+            else:
+                u[i] = '('
+        answer += ''.join(u) # 리스트를 다시 문자열로
+    return answer
 ```
 <br>
 
@@ -164,7 +385,7 @@ print(graph[x-1][y-1])
 [문제 클릭](https://www.acmicpc.net/problem/14888){: target="_blank"}  
 
 ### 내가 작성한 코드
-연산자 갯수가 n-1개 이므로 n-1!하면 모든 경우의수가 나온다. 3백만 정도의 연산 횟수가 되므로 완전 탐색을 해도 될 것 같아서 다음과 같이 설계했다. 시간은 2764ms로 간당간당했다.
+연산자 갯수가 n-1개 이므로 n-1!하면 모든 경우의수가 나온다. 3백만 정도의 연산 횟수가 되므로 완전 탐색을 해도 될 것 같아서 다음과 같이 설계했다. 
 ```python
 import sys
 from itertools import permutations
@@ -220,6 +441,12 @@ for operator in operators:
 
 print(ans_max)
 print(ans_min)
+```
+
+### 모범 답안
+최대 11개의 수가 주어졌을 때, 각 수와 수 사이에 사칙연산 중 하나를 삽입하는 모든 경우에 대하여 만들어질 수 있는 결과의 최댓값 및 최솟값을 구하면 된다. 따라서 모든 경우의 수를 계산하기 위하여 완전탐색(DFS / BFS)를 이용하여 해결할 수 있다.  
+이 문제에서는 각 사칙연산을 중복하여 사용할 수 있기 때문에, 중복 순열을 이용해야 한다. 예를 들어 n=4라고 하면, 사칙연산 중에서 중복을 허용하여 3개를 뽑아 나열하는 모든 경우를 고려해야 한다. 이는 파이썬에서 중복 순열(product) 라이브러리를 이용하여 찾을 수 있다.
+```python
 
 ```
 
