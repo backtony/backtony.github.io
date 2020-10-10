@@ -137,3 +137,6 @@ tipue_search:
     files: [search.html, index.html, tags.html]
     categories: []
     tags: []
+
+
+encoding: utf-8
