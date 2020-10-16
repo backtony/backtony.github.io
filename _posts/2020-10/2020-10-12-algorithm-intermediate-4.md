@@ -39,10 +39,26 @@ comments: true
 
 ## 2. 국영수
 ---
+[문제 클릭](https://www.acmicpc.net/problem/10825){: target="_blank"}  
 
 ### 내가 작성한 코드
 ```python
+import sys
+
+input = sys.stdin.readline
+
+n = int(input())
+students = []
+for i in range(n):
+    name, kor, eng, math = input().rstrip().split()
+    students.append([name,int(kor),int(eng),int(math)])
+
+students.sort(key = lambda x: (-x[1],x[2],-x[3],x[0]))
+for student in students:
+    print(student[0])
+
 ```
+내장함수를 사용했다.
 
 ### 모범답안
 ```python
@@ -52,10 +68,30 @@ comments: true
 
 ## 3. 안테나
 ---
+[문제 클릭](https://www.acmicpc.net/problem/18310){: target="_blank"}  
 
 ### 내가 작성한 코드
 ```python
+import sys
+
+input = sys.stdin.readline
+
+# 집 개수와 위치
+n = int(input())
+location = list(map(int,input().rstrip().split()))
+
+# 정렬하고 가운데 위치가 가장 적절한 위치
+location.sort()
+
+# n은 개수라 1부터 카운트하지만 인덱스는 0부터이므로 조정이 필요함
+# 짝수개수면 인덱스는 전체 길이 나누기2 -1
+if n%2==0 :
+    print(location[len(location)//2-1])
+# 홀수면 나누기2
+else :
+    print(location(len(location)//2))
 ```
+범위가 200,000만 이므로 적어도 선형 로그 시간 알고리즘으로 설계해야한다. 따라서 받은 위치를 일일이 뺀 값을 정리해서 정렬하는 풀이는 시간초과하게 된다. 내장함수 정렬을 이용하면 쉽게 풀 수 있다.
 
 ### 모범답안
 ```python
@@ -64,9 +100,11 @@ comments: true
 
 ## 4. 실패율
 ---
+[문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/42889){: target="_blank"}  
 
 ### 내가 작성한 코드
 ```python
+
 ```
 
 ### 모범답안
