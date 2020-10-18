@@ -58,11 +58,12 @@ for student in students:
     print(student[0])
 
 ```
-내장함수를 사용했다.
-
-### 모범답안
+내장함수를 사용했다. 모범답안과 매우 유사하다. 모범답안은 문자열을 그대로 저장하고 아래와 같이 정렬했다.
 ```python
+
+students.sort(key=lambda x: (-int(x[1]), int(x[2]), -int(x[3]), x[0]))
 ```
+
 
 <br>
 
@@ -95,7 +96,14 @@ else :
 
 ### 모범답안
 ```python
+n = int(input())
+a = list(map(int, input().split()))
+a.sort()
+
+# 중간값(median)을 출력
+print(a[(n - 1) // 2])
 ```
+홀수는 -1한 뒤 몫 나눗셈을 해도 결과값이 같다. 따라서 n-1한 값에 나누기2를 하면 짝 홀 구분없이 한번에 코드를 작성할 수 있다.
 <br>
 
 ## 4. 실패율
@@ -104,25 +112,92 @@ else :
 
 ### 내가 작성한 코드
 ```python
+def solution(N, stages):
+    temp = []
+    answer=[]
+    count = [0] * (N + 2) # N+1은 마지막 스테이지 클리어한 사용자
+    approach_people = len(stages) # 스테이지에 도달한 플레이어 수
+    # 각 스테이지에 있는 인원을 count에 정리
+    for i in stages:
+        count[i] += 1
+    # 실패율
+    for stage in range(1, N + 1):
+        # 도달한 사람이 없으면
+        if count[stage] == 0:
+            temp.append((0, stage))
+            continue
 
+        fail_percent = count[stage] / approach_people
+        approach_people-=count[stage]
+        temp.append((fail_percent, stage))
+    temp.sort(key = lambda x:(-x[0],x[1]))
+    for i in temp:
+        answer.append(i[1])
+    return answer
 ```
 
 ### 모범답안
 ```python
+def solution(N, stages):
+    answer = []
+    length = len(stages)
+
+    # 스테이지 번호를 1부터 N까지 증가시키며
+    for i in range(1, N + 1):
+        # 해당 스테이지에 머물러 있는 사람의 수 계산
+        count = stages.count(i)
+        
+        # 실패율 계산
+        if length == 0:
+            fail = 0
+        else:
+            fail = count / length
+        
+        # 리스트에 (스테이지 번호, 실패율) 원소 삽입
+        answer.append((i, fail))
+        length -= count
+
+    # 실패율을 기준으로 각 스테이지를 내림차순 정렬
+    answer = sorted(answer, key=lambda t: t[1], reverse=True)
+    # 애초에 스테이지 번호가 작은 순으로 저장되었기때문에 기준으로 정렬한 뒤에는
+    # 원래 있었던 순으로 정렬되므로 따로 스테이지 번호순 정렬을 할 필요가 없다.
+    
+    # 정렬된 스테이지 번호 반환
+    answer = [i[0] for i in answer]
+    return answer
 ```
+내가 작성한 코드와 비슷하지만 좀 더 간결하게 작성할 수 있다는 점을 볼 수 있다.
 
 <br>
 
 ## 5. 카드 정렬하기
 ---
+[문제 클릭](https://www.acmicpc.net/problem/1715){: target="_blank"}  
 
 ### 내가 작성한 코드
 ```python
-```
+import heapq
+# 문제에서 주어진바에 따르면 가장 작은 것끼리의 합이 최적의 해를 보장한다.
+n = int(input())
 
-### 모범답안
-```python
+card = []
+for _ in range(n):
+    heapq.heappush(card,int(input()))
+
+
+tot=0 # 최소비교횟수
+
+# 우선순위큐에 남은게 1개면 연산 끝
+while len(card) !=1:
+    a= heapq.heappop(card)
+    b= heapq.heappop(card)
+    tot +=a+b
+    heapq.heappush(card,a+b)
+
+print(tot)
 ```
+더한 값보다 작은 값이 2개 이상인 경우 더한 값은 그대로 두고 다시 앞에 작은 2값을 먼저 연산해줘야 한다. 따라서 우선순위 큐를 사용하면 쉽게 풆 수 있다. 모범답안은 내 코드와 거의 유사하므로 생략한다.
+
   
 
 ---
