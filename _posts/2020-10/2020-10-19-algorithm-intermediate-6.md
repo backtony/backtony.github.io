@@ -56,7 +56,57 @@ __출력 조건__
 
 ### 내가 작성한 코드
 ```python
+import sys
 
+input = sys.stdin.readline
+
+# 테스트 케이스 횟수
+t = int(input())
+
+# 위 오른쪽 아래
+dx = [-1, 0, 1]
+dy = [1, 1, 1]
+for _ in range(t):
+    n, m = map(int, input().split())
+    answer = 0  # 총 캔 금광
+    # 금광 그래프와 정보
+    graph = [[] for _ in range(n)]
+    golds = list(map(int, input().rstrip().split()))
+    cnt = 0
+    # 금광 그래프 완성시키기
+    for i in range(n):
+        for _ in range(m):
+            graph[i].append(golds[cnt])
+            cnt += 1
+
+    # max를 못쓰는게 max인 위치의 좌표를 알아야해
+    # 금광 그래프의 범위가 매우 작으므로 그냥 완전 탐색해도 될듯
+    x = y = 0
+    max_gold = graph[0][0]
+    # 첫 시작 위치
+    for i in range(1, n):
+        if max_gold < graph[i][0]:
+            x = i
+            max_gold = graph[i][0]
+    answer += max_gold
+    # 이동 과정
+    while x < n and y < m:
+        max_gold = 0
+        for i in range(3):
+            px = x + dx[i]
+            py = y + dy[i]
+            # 범위 내일 경우
+            if px < n and py < m:
+                if max_gold < graph[px][py]:
+                    ans_x = px
+                    ans_y = py
+                    max_gold = graph[px][py]
+        x=ans_x
+        y=ans_y
+        answer += max_gold
+        if y == m - 1:
+            break
+    print(answer)    
 ```
 
 ### 모범답안
