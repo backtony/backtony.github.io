@@ -117,9 +117,36 @@ for _ in range(t):
 
 ## 3. 정수 삼각형
 ---
+[문제 클릭](https://www.acmicpc.net/problem/1932){: target="_blank"}  
+
 ### 내가 작성한 코드
 ```python
+import sys
+input = sys.stdin.readline
 
+n = int(input())
+graph = [[] for _ in range(n)]
+table = [[] for _ in range(n)]
+
+# 그래프 대입
+for i in range(n):
+    graph[i]=list(map(int,input().rstrip().split()))
+
+# 탑다운 방식
+table[0]=graph[0]
+for i in range(1,n):
+    for j in range(i+1):
+        if j-1<0:
+            ans = graph[i][j] + table[i - 1][j]
+            table[i].append(ans)
+        elif j==i:
+            ans = graph[i][j] + table[i - 1][j-1]
+            table[i].append(ans)
+        else:
+            ans = graph[i][j] + max(table[i - 1][j - 1], table[i - 1][j])
+            table[i].append(ans)
+
+print(max(table[n-1]))
 ```
 
 ### 모범답안
@@ -130,10 +157,35 @@ for _ in range(t):
 
 ## 4. 퇴사
 ---
+[문제 클릭](https://www.acmicpc.net/problem/14501){: target="_blank"}  
 ### 내가 작성한 코드
 ```python
+import sys
+input = sys.stdin.readline
 
+# 일할 수 있는 기간
+n = int(input())
+
+table = [0]*(n+1)
+# 각 날짜의 상담에 해당하는 정보 입력
+for i in range(1,n+1):
+    day_cost, pay = map(int,input().rstrip().split())
+    # 이전까지 벌어온 금액 처리
+    if day_cost ==1:
+        table[i]=max(table[i],pay)
+    # day_cost가 들어오면 table의 자기 자리를 처리하지 못해
+    # 그러므로 이전에 있던 것을 가져옴
+    else :
+        table[i]=max(table[i-1],table[i])
+    # 퇴직하기 전이라면
+    if day_cost+i-1<=n:
+        # 오늘 이전까지 벌어온 금액중 최댓값 + 이제 할 상담의 금액
+        sum_pay = pay + table[i-1]
+        table[day_cost+i-1]=max(table[day_cost+i-1],sum_pay)
+
+print(table[n])
 ```
+
 
 ### 모범답안
 ```python
@@ -143,6 +195,7 @@ for _ in range(t):
 
 ## 5. 병사 배치하기
 ---
+[문제 클릭](https://www.acmicpc.net/problem/18353){: target="_blank"}  
 ### 내가 작성한 코드
 ```python
 
