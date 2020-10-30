@@ -72,11 +72,49 @@ for i in range(n):
 for i in range(n):
     print(*graph[i])
 ```
-플로이드 워셜 알고리즘 작성하면서 자기 자신으로 가는 경우는 0으로 초기화해줘야 하는 부분을 자꾸 생략하고 넘어가는데 잘 기억해두자. 마지막 출력할 때 *쓰는 방법 말고 다른 방법은 없을까?
+플로이드 워셜 알고리즘 작성하면서 자기 자신으로 가는 경우는 0으로 초기화해줘야 하는 부분을 자꾸 생략하고 넘어가는데 잘 기억해두자.
 
 ### 모범 답안
+전형적인 최단 경로 문제이다. 다만 입력 조건에 따르면 시작 도시와 도착 도시를 연결하는 간선이 여러 개일 수 있다는 점을 주의해야 한다. 또한 도시의 개수 n이 100이하의 정수이므로 플로이드 워셜 알고리즘을 이용하는 것이 효과적이다. 
 ```python
+INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
 
+# 노드의 개수 및 간선의 개수를 입력받기
+n = int(input())
+m = int(input())
+# 2차원 리스트(그래프 표현)를 만들고, 모든 값을 무한으로 초기화
+graph = [[INF] * (n + 1) for _ in range(n + 1)]
+
+# 자기 자신에서 자기 자신으로 가는 비용은 0으로 초기화
+for a in range(1, n + 1):
+    for b in range(1, n + 1):
+        if a == b:
+            graph[a][b] = 0
+
+# 각 간선에 대한 정보를 입력받아, 그 값으로 초기화
+for _ in range(m):
+    # A에서 B로 가는 비용은 C라고 설정
+    a, b, c = map(int, input().split())
+    # 가장 짧은 간선 정보만 저장
+    if c < graph[a][b]:
+        graph[a][b] = c
+
+# 점화식에 따라 플로이드 워셜 알고리즘을 수행
+for k in range(1, n + 1):
+    for a in range(1, n + 1):
+        for b in range(1, n + 1):
+            graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])
+
+# 수행된 결과를 출력
+for a in range(1, n + 1):
+    for b in range(1, n + 1):
+        # 도달할 수 없는 경우, 0을 출력
+        if graph[a][b] == INF:
+            print(0, end=" ")
+        # 도달할 수 있는 경우 거리를 출력
+        else:
+            print(graph[a][b], end=" ")
+    print()
 ```
 
 <br>
@@ -114,44 +152,333 @@ __출력 조건__
 1
 ```
 
-### 내가 작성한 코드
-```python
-
-```
-
 ### 모범 답안
+이 문제는 최단 경로를 계산하는 문제로 볼 수 있다. 문제에서도 나와 있듯이 학생들의 성적을 비교한 결과를 방향 그래프 형태로 표현할 수 있다. 성적이 낮은 학생이 성적이 높은 학생을 가리키는 방향 그래프로 표현할 수 있으므로, 최단 경로 알고리즘을 수행할 수 있다.  
+A번 학생과 B번 학생의 설적을 비교할 때, 결로를 이용하여 성적 비교 결과를 알 수 있다. A에서 B로 도달이 가능하다는 것은, A가 B보다 성적이 낮다는 의미가 된다. 따라서 A에서 B로 도달이 가능하거나 B에서 A로 도달이 가능하면 성적 비교가 가능한 것이다. 즉, 비교 과정 중에 어느 한쪽으로든 도달이 가능하면 성적 비교가 가능한 것이다.  
+이 문제에서는 학생의 수 N이 500이하의 정수이므로 O(N^3)인 플로이드 워셜 알고리즘을 이용해 해결할 수 있다.
 ```python
+INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
 
+# 노드의 개수, 간선의 개수를 입력받기
+n, m = map(int, input().split())
+# 2차원 리스트(그래프 표현)를 만들고, 모든 값을 무한으로 초기화
+graph = [[INF] * (n + 1) for _ in range(n + 1)]
+ 
+# 자기 자신에서 자기 자신으로 가는 비용은 0으로 초기화
+for a in range(1, n + 1):
+    for b in range(1, n + 1):
+        if a == b:
+            graph[a][b] = 0
+ 
+# 각 간선에 대한 정보를 입력 받아, 그 값으로 초기화
+for _ in range(m):
+    # A에서 B로 가는 비용을 1로 설정
+    a, b = map(int, input().split())
+    graph[a][b] = 1
+ 
+# 점화식에 따라 플로이드 워셜 알고리즘을 수행
+for k in range(1, n + 1):
+    for a in range(1, n + 1):
+        for b in range(1, n + 1):
+            graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])
+
+result = 0
+# 각 학생을 번호에 따라 한 명씩 확인하며 도달 가능한지 체크
+for i in range(1, n + 1):
+    count = 0
+    for j in range(1, n + 1):
+        # 어느 한쪽이든 도달이 가능한 경우 비교가 가능
+        if graph[i][j] != INF or graph[j][i] != INF:
+            count += 1
+    if count == n:
+        result += 1
+print(result)
 ```
 
 <br>
 
 ## 4. 화성 탐사
 ---
+화성 탐사 기계가 출발 지점에서 목표 지점까지 이동할 때 항상 최적의 경로를 찾도록 개발해야 한다.  
+화성 탐사 기계가 존재하는 공간은 N * N 크기의 2차원 공간이며, 각각의 칸을 지나기 위한 비용이 존재한다. 가장 왼쪽 위 칸인 0,0 위치에서 가장 오른쪽 아래 칸인 n-1,n-1 위치로 이동하는 최소 비용을 출력하는 프로그램을 작성하시오. 기계는 상하좌우로만 움직일 수 있다.  
+__입력 조건__  
++ 첫째 줄에 테스트 케이스의 수 T(1<=T<=10)
++ 매 테스트 케이스의 첫재 줄에는 탐사 공간의 크기를 의미하는 정수 N이 주어진다(2<=N<=125) 이어서 N개의 줄에 걸쳐 각 칸의 비용이 주어지므로 공백으로 구분한다. (0<=각 칸의 비용<=9)
+
+__출력 조건__  
++ 각 테스트 케이스마다 0,0에서 n-1,n-1의 위치로 이동하는 최소 비용을 한 줄에 하나씩 출력한다.
+
+```
+입력 예시
+3
+3
+5 5 4
+3 9 1
+3 2 7
+5
+3 7 2 0 1
+2 8 0 9 1
+1 2 1 8 1
+9 8 9 2 0
+3 6 5 1 5
+7
+9 0 5 1 1 5 3
+4 1 2 1 6 5 3
+0 7 6 1 6 8 5
+1 1 7 8 3 2 3
+9 4 0 7 6 4 1
+5 8 3 2 4 8 3
+7 4 8 4 8 3 4
+
+출력 예시
+20
+19
+36
+```
 ### 내가 작성한 코드
 ```python
+import sys
+import heapq
 
+input = sys.stdin.readline
+
+# 시계방향
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+
+def dijkstra(cost, start, n):
+    INF = int(1e9)
+    distance = [[INF] * n for _ in range(n)]
+    distance[0][0]=cost[0][0]
+    q = []
+    heapq.heappush(q, (cost[0][0], start))
+    while q:
+        now_cost, now = heapq.heappop(q)
+        x, y = now
+        if now_cost > distance[x][y]:
+            continue
+        for i in range(4):
+            px = x + dx[i]
+            py = y + dy[i]
+            # 범위 내에 있으면서
+            if 0 <= px and px < n and 0 <= py and py < n:
+                # 이동후 최소거리의 변화가 있을 경우
+                if now_cost + cost[px][py]<=distance[px][py]:
+                    way = (px, py)
+                    distance[px][py]=now_cost + cost[px][py]
+                    heapq.heappush(q, (distance[px][py], way))
+    return distance
+
+
+
+t = int(input())
+
+for i in range(t):
+    n = int(input())  # 탐사 공간 크기
+    cost = []  # 비용
+
+    # 탐사 공간 비용 정보 입력
+    for j in range(n):
+        cost.append(list(map(int, input().rstrip().split())))
+    start = (0,0)
+    answer = dijkstra(cost,start,n)
+    print(answer[n-1][n-1])
 ```
 
 ### 모범 답안
+특정 위치에서 특정 위치로 이동하는 최단 거리를 계산하는 문제이므로 다익스트라 알고리즘을 사용하면 해결할 수 있다. 맵의 각 위치를 노드로 보고, 상하좌우로 모든 노드가 연결되어있다고 보면 된다. 예를 들어 위치 A와 위치 B가 서로 인접해 있다고 해보자. 이때 A -> B로 가는 비용은 B 위치의 탐사 비용이 될 것이고, B -> A로 가는 비용은 A 위치의 탐사 비용이 될 것이다.  
+n의 범위가 최대 125라 작다고 느껴서 플로이드 워셜 알고리즘을 사용하면 안 된다. 문제에서 입력 자체가 2차원 배열로 들어오기 때문에 전체 노드의 개수는 N^2으로 10,000을 넘길 수 있기 때문이다.
 ```python
+import heapq
+import sys
+input = sys.stdin.readline
+INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
 
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+# 전체 테스트 케이스(Test Case)만큼 반복
+for tc in range(int(input())):
+    # 노드의 개수를 입력받기
+    n = int(input())
+
+    # 전체 맵 정보를 입력받기
+    graph = []
+    for i in range(n):
+        graph.append(list(map(int, input().split())))
+
+    # 최단 거리 테이블을 모두 무한으로 초기화
+    distance = [[INF] * n for _ in range(n)]
+
+    x, y = 0, 0 # 시작 위치는 (0, 0)
+    # 시작 노드로 가기 위한 비용은 (0, 0) 위치의 값으로 설정하여, 큐에 삽입
+    q = [(graph[x][y], x, y)]
+    distance[x][y] = graph[x][y]
+
+    # 다익스트라 알고리즘을 수행
+    while q:
+          # 가장 최단 거리가 짧은 노드에 대한 정보를 꺼내기
+          dist, x, y = heapq.heappop(q)
+          # 현재 노드가 이미 처리된 적이 있는 노드라면 무시
+          if distance[x][y] < dist:
+              continue
+          # 현재 노드와 연결된 다른 인접한 노드들을 확인
+          for i in range(4):
+              nx = x + dx[i]
+              ny = y + dy[i]
+              # 맵의 범위를 벗어나는 경우 무시
+              if nx < 0 or nx >= n or ny < 0 or ny >= n:
+                  continue
+              cost = dist + graph[nx][ny]
+              # 현재 노드를 거쳐서, 다른 노드로 이동하는 거리가 더 짧은 경우
+              if cost < distance[nx][ny]:
+                  distance[nx][ny] = cost
+                  heapq.heappush(q, (cost, nx, ny))
+
+    print(distance[n - 1][n - 1])
 ```
 
 <br>
 
 ## 5. 숨바꼭질
 ---
+주인공은 술래로부터 잡히지 않도록 숨을 곳을 찾고 있다. 동빈이는 1 ~ N번까지의 헛간 중에서 하나를 골라 숨을 수 있으며, 술래는 항상 1번 헛간에서 출발한다. 전체 맵에는 총 M개의 양방향 통로가 존재하며, 하나의 통로는 서로 다른 두 헛간을 연결한다. 또한 전체 맵은 항상 어떤 헛간에서 다른 어떤 헛간으로 도달이 가능한 형태로 주어진다.  
+주인공은 1번 헛간으로부터 최단 거리가 가장 먼 헛간이 가장 안전하다고 판단하고 있다. 이때 최단 거리의 의미는 지나야 하는 길의 최소 개수를 의미한다. 주인공이 숨을 헛간의 번호를 출력하는 프로그램을 작성하시오.  
+__입력 조건__  
++ 첫째 줄에는 N과 M이 주어지며, 공백으로 구분한다. (2<=N<=20,000), (1<=M<=50,000)
++ 이후 M개의 줄에 걸쳐서 서로 연결된 두 헛간 A와 B의 번호가 공백으로 구분되어 주어진다.
+
+__출력 조건__  
++ 첫 번째는 숨어야 하는 헛간 번호를(만약 거리가 같은 헛간이 여러 개면 가장 작은 헛간 번호를 출력한다.), 두 번째는 그 헛간까지의 거리를, 세 번째는 그 헛간과 같은 거리를 갖은 헛간의 개수를 출력한다.
+
+```
+입력 예시
+6 7
+3 6
+4 3
+3 2
+1 3
+1 2
+2 4
+5 2
+
+출력 예시
+4 2 3
+```
+
+
 ### 내가 작성한 코드
 ```python
+import heapq
 
+n, m = map(int,input().split())
+INF = int(1e9)
+graph = [[] for _ in range(n+1)]
+
+# 간선 정보
+for i in range(m):
+    a,b = map(int,input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+
+# 다익스트라
+def dijkstra(start):
+    distance =[INF]*(n+1)
+    distance[start]=0 # 항상 시작 지점 처리 우선 생각
+    distance[0]=0 # 인덱스랑 노드 번호를 맞추기 위해 n+1했으므로
+    q=[]
+    heapq.heappush(q,(0,start))
+    while q:
+        now_cost, now = heapq.heappop(q)
+        if now_cost >distance[now]:
+            continue
+        for next in graph[now]:
+            if now_cost+1<=distance[next]:
+                distance[next]=now_cost+1
+                heapq.heappush(q,(distance[next],next))
+    return distance
+
+
+
+answer = dijkstra(1)
+dis = max(answer)
+num = answer.index(dis)
+cnt = answer.count(dis)
+print(num, dis, cnt)
 ```
+잘 사용하지 않았던 리스트의 함수 index()를 사용했는데 사용법을 익혀두자.  
+다익스트라이든 플로이드이든 코딩할 때 계속 처음 시작 지점 처리를 우선적으로 코딩하는 것을 습관화하자.
 
 ### 모범 답안
+이 문제는 다익스트라 알고리즘을 이용하여 1번 노드부터 다른 모든 노드로의 최단 거리를 계산한 뒤, 가장 최단 거리가 긴 노드를 찾는 문제이다. 문제 조건에서 어느 헛간이든 도달이 가능한 형태로 주어진다고 했기 때문에 최종적인 리스트에는 INF가 없을 것이기에 추가적인 처리 없이 간단하게 해결할 수 있다.
 ```python
+import heapq
+import sys
+input = sys.stdin.readline
+INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
 
+# 노드의 개수, 간선의 개수를 입력받기
+n, m = map(int, input().split())
+# 시작 노드를 1번 헛간으로 설정
+start = 1
+# 각 노드에 연결되어 있는 노드에 대한 정보를 담는 리스트를 만들기
+graph = [[] for i in range(n + 1)]
+# 최단 거리 테이블을 모두 무한으로 초기화
+distance = [INF] * (n + 1)
+
+# 모든 간선 정보를 입력받기
+for _ in range(m):
+    a, b = map(int, input().split())
+    # a번 노드와 b번 노드의 이동 비용이 1이라는 의미(양방향)
+    graph[a].append((b, 1))
+    graph[b].append((a, 1))
+
+def dijkstra(start):
+    q = []
+    # 시작 노드로 가기 위한 최단 경로는 0으로 설정하여, 큐에 삽입
+    heapq.heappush(q, (0, start))
+    distance[start] = 0
+    while q: # 큐가 비어있지 않다면
+        # 가장 최단 거리가 짧은 노드에 대한 정보를 꺼내기
+        dist, now = heapq.heappop(q)
+        # 현재 노드가 이미 처리된 적이 있는 노드라면 무시
+        if distance[now] < dist:
+            continue
+        # 현재 노드와 연결된 다른 인접한 노드들을 확인
+        for i in graph[now]:
+            cost = dist + i[1]
+            # 현재 노드를 거쳐서, 다른 노드로 이동하는 거리가 더 짧은 경우
+            if cost < distance[i[0]]:
+                distance[i[0]] = cost
+                heapq.heappush(q, (cost, i[0]))
+
+# 다익스트라 알고리즘을 수행
+dijkstra(start)
+
+# 가장 최단 거리가 먼 노드 번호(동빈이가 숨을 헛간의 번호)
+max_node = 0
+# 도달할 수 있는 노드 중에서, 가장 최단 거리가 먼 노드와의 최단 거리
+max_distance = 0
+# 가장 최단 거리가 먼 노드와의 최단 거리와 동일한 최단 거리를 가지는 노드들의 리스트
+result = []
+
+for i in range(1, n + 1):
+    if max_distance < distance[i]:
+        max_node = i
+        max_distance = distance[i]
+        result = [max_node]
+    elif max_distance == distance[i]:
+        result.append(i)
+
+print(max_node, max_distance, len(result))
 ```
 
+
+
+__cf) 최단경로 문제 풀면서 기억해야할 점__  
++ 항상 처음 시작 지점 처리 우선적으로 코딩할 것
++ 문제에서 특별히 0,0의 위치부터 시작하는 것이 아니라면 인덱스와 노드번호를 맞추기 위해서 n+1만큼 초기화하고 사용은 for에서 range(1,n+1)로 사용
 <br>
 
 
