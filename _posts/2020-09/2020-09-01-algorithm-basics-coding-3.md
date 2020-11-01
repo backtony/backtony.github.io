@@ -53,7 +53,7 @@ for i in range(2,n+1):
     if arr[i]==True:
         print(i,end=" ")
 ```
-에라토스테네스의 체 알고리즘의 복잡도는 O(NloglogN)으로 사실상 선형 시간에 동작할 정도로 빠르다. 하지만 알고리즘을 수행할 때 N의 크기만큼 리스트를 할당해야 하기 때문에 메모리가 많이 필요하다. 따라서 에라토스테네스의 체를 이용해야 하는 문제는 N이 1,000,000 이내로 주어지는 경우가 많다. 이보다 큰 경우는 이 알고리즘을 사용하기 어렵다.  
+에라토스테네스의 체 __알고리즘의 복잡도는 O(NloglogN)으로 사실상 선형 시간에 동작할 정도로 빠르다.__ 하지만 알고리즘을 수행할 때 N의 크기만큼 리스트를 할당해야 하기 때문에 메모리가 많이 필요하다. 따라서 에라토스테네스의 체를 이용해야 하는 문제는 __N이 1,000,000 이내로 주어지는 경우가 많다.__ 이보다 큰 경우는 이 알고리즘을 사용하기 어렵다.  
 <br>
 
 ## 2. 투 포인터
@@ -233,22 +233,25 @@ istw
 #### 풀이
 ```python
 from itertools import combinations
-# combination은 조합 -> 순서상관 X, 주어진 배열 맨 앞부터 골라서 만듦
-# 예) 4개 고르는 거면 배열 맨 앞 3개 고르고 마지막 1개는 차례차례식으로 한다는 뜻
-L,C = map(int,input().split())
-p = input().split()
-p.sort() # 사전식을 위해서 정렬
-vowels = ['a','e','i','o','u']
 
-# list(combinations(p,L)는 튜플을 원소로 하는 리스트
-for x in list(combinations(p,L)): # x에는 리스트의 원소인 튜플이 들어감
+l,c = map(int,input().split())
+alpha = input().split()
+
+# itertools의 순서는 list의 인덱스 순서대로 뽑아가므로
+# 문제에서 주어진 사전식 순서를 위해 정렬
+alpha.sort()
+vowel = ['a','e','i','o','u']
+
+for i in list(combinations(alpha,l)):
     count=0
-    for i in x: # 튜플의 원소 str문자가 i에 들어감
-        if i in vowels: 
+    for j in i:
+        if j in vowel:
             count+=1
-    if count>=1 and len(x)>=3:        
-        print(''.join(x))
-        # print(*x) 도 가능
+    if count>=1 and l-count>=2:
+        # join은 문자로 이루어진 리스트에만 사용 가능!
+        # 정수로 이루어진 리스트에는 사용 불가하니 알아둘 것!
+        print(''.join(i))
+
 ```
 
 
