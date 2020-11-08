@@ -128,29 +128,31 @@ no yes yes
 #### 풀이 : 이진 탐색
 주어진 M이 1,000만 단위를 넘어간다. 따라서 count 메서드는 순차탐색 O(N)의 시간 복잡도를 가지므로 사용할 수 없다. 이진 탐색의 복잡도는 O(logN)이므로 이진 탐색을 사용하도록 하자. 이진 탐색을 위해서는 먼저 정렬되어있어야 한다는 점을 기억하자.  
 ```python
-import sys
-def binary_search(arry,target,start,end):
+n = int(input())
+a = list(map(int,input().split()))
+
+m = int(input())
+b = list(map(int,input().split()))
+
+a.sort()
+b.sort()
+
+def binary_search(graph,target,start,end):
     while start<=end:
         mid = (start+end)//2
-        if target == arry[mid]:
-            print("yes",end=" ")
-            return 
-        elif target>arry[mid]:
+        if graph[mid]==target:
+            return mid
+        elif graph[mid]<target:
             start=mid+1
-        else :
+        else:
             end=mid-1
-    print("no",end=" ")
-    return 
+    return None
 
-
-N = int(sys.stdin.readline().rstrip())
-shop_list = list(map(int,sys.stdin.readline().rstrip().split()))
-M = int(sys.stdin.readline().rstrip())
-request_list = list(map(int,sys.stdin.readline().rstrip().split()))
-shop_list.sort()  # 이진 탐색을 위해 정렬
-
-for target in request_list:
-    binary_search(shop_list,target,0,N-1)
+for i in b:
+    if binary_search(a,i,0,n-1):
+        print('yes')
+    else:
+        print("no")
 ```
 이진 탐색을 M번 반복하므로 O(M * logN)의 연산이 필요하다. 이론상 최대 약 200만 번의 연산이 이루어진다고 할 수 있다. N개의 부품을 정렬하기 위해서는 O(NlogN)이므로 전체적인 시간 복잡도는 O((N+M) * logN)이다.  
 <br>
@@ -250,32 +252,28 @@ print(max_length-delete)
 __올바른 풀이__  
 이진 탐색을 떠올려야하는 이유는 위에서 설명했다. 이 문제는 전형적인 이진 탐색 문제이자, 파라메트릭 서치 유형의 문제이다. 파라메트릭 서치는 최적화 문제를 결정 문제(예 아니오로 답하는 문제)로 바꾸어 해결하는 기법이다. 원하는 조건을 만족하는 가장 알맞은 값을 찾는 문제에서 주로 파라메트릭 서치를 이용한다. 예를 들어 범위 내에서 조건을 만족하는 가장 큰 값을 찾으라는 최적화 문제라면 이진 탐색으로 결정 문제를 해결하면서 범위를 좁혀갈 수 있다. 코딩 테스트나 프로그래밍 대회에서는 보통 파라메트릭 서치 유형은 이진 탐색으로 해결한다.  
 ```python
-import sys
+n, m = map(int, input().split())
+dduck = list(map(int, input().split()))
 
-def binary_search(arry,target,start,end):
-    while start<=end:
-        total = 0
-        mid = (start+end)//2
-        for i in arry:
-            if i-mid >0:
-                total += i-mid
-        # 찾으면 반복이 종료될 것이고
-        if target == total:
+
+def binary(graph, target, start, end):
+    while start <= end:
+        ans = 0
+        mid = (start + end) // 2
+        for i in dduck:
+            if i - mid > 0:
+                ans += i - mid
+        if ans == target:
             return mid
-        
-        # 아래 과정을 반복하다가 결국 역전이 발생하고 
-        # total이 더 작아서 end가 바뀌거나 total이 더 커서 start가 바뀐 상태로 
-        # 마무리가 될텐데 결국 그림을 그려보면 end 위치를 return해주면 된다.
-        if target < total:
-            start = mid+1 # 중간지점은 이미 처리했으므로 
-        else :
-            end =mid-1
-    return end        
+        if ans < target:
+            end = mid - 1
+        else:
+            start = mid + 1
+    # 항상 ans는 타켓 이상이어야 함.
+    return end
 
-N,M = map(int,sys.stdin.readline().rstrip().split())
-arry = list(map(int,sys.stdin.readline().rstrip().split()))
 
-print(binary_search(arry,M,0,max(arry)))
+print(binary(dduck, m, 0, max(dduck)))
 ```
 
 

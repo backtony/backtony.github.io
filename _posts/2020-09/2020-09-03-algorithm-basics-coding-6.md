@@ -262,30 +262,37 @@ __출력 조건__
 #### 풀이
 ```python
 # DFS 풀이
-N, M = map(int,input().split())
-# 주변을 탐색해서 0인 부분을 다 true로 만들고 끝나면 카운트 1개하고 매 인덱스마다 실행하면될거같은데
-game_map = []
-for i in range(N):
-    game_map.append(list(map(int,input())))
+n, m = map(int, input().split())
 
-def dfs(x,y):    
-    if x>=N or x<0 or y>=M or y<0: # 범위를 벗어나는 경우
-        return False
-    if game_map[x][y]==0: # 구멍이 뚫려있는 경우
-        game_map[x][y]=1                
-        dfs(x+1,y)
-        dfs(x-1,y)
-        dfs(x,y+1)
-        dfs(x,y-1)
-        return True
-    return False
+graph = []
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
 
-count = 0
-for i in range(N):
-    for j in range(M):
-        if dfs(i,j) == True:
-            count+=1
-print(count)         
+# 그래프 작성
+for i in range(n):
+    graph.append(list(map(int, input())))
+
+
+def dfs(graph, x, y):
+    graph[x][y] = 1
+
+    for i in range(4):
+        px = x + dx[i]
+        py = y + dy[i]
+        # 범위 내
+        if 0 <= px and px < n and 0 <= py and py < m:
+            # 미방문시
+            if graph[px][py] == 0:
+                dfs(graph, px, py)
+                
+cnt = 0
+for i in range(n):
+    for j in range(m):
+        if graph[i][j] == 0:
+            cnt += 1
+            dfs(graph, i, j)
+print(cnt)
+     
 
 # BFS 풀이
 import sys
@@ -358,29 +365,40 @@ __출력 조건__
 
 ### 풀이
 ```python
+import sys
 from collections import deque
-N, M = map(int,input().split()) 
-graph = []
-for _ in range(N):
-    graph.append(list(map(int,input())))
-dx = [-1,1,0,0] # 상 하 좌 우
-dy = [0,0,-1,1]
 
-def bfs(x,y):
-    queue = deque()
-    queue.append((x,y))
-    while queue: 
-        x,y = queue.popleft()       
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+graph = []
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+# 그래프 만들기
+for _ in range(n):
+    graph.append(list(map(int, input().rstrip())))
+
+
+def bfs(x, y):
+    q = deque()
+    q.append((x, y))
+    while q:
+        x, y = q.popleft()
         for i in range(4):
             px = x + dx[i]
             py = y + dy[i]
-            if px>=N or px<0 or py >=M or py <0:
-                continue            
-            if graph[px][py] == 1:
-                graph[px][py] = graph[x][y]+1
-                queue.append((px,py))
-    return graph[N-1][M-1]
-print(bfs(0,0))
+            # 범위 내
+            if 0 <= px and px < n and 0 <= py and py < m:
+                # 빈칸
+                if graph[px][py] == 1:
+                    graph[px][py] = graph[x][y] + 1
+                    q.append((px, py))
+
+
+# 주어지는 시작점은 1,1이지만 0.0으로 가정하고 인덱스와 맞추는게 편함
+bfs(0, 0)
+print(graph[n - 1][m - 1])
 ```
 이 문제는 BFS를 이용했을 때 매우 효과적으로 해결할 수 있다. BFS는 시작 지점에서 가까운 노드부터 차례대로 그래프의 모든 노드를 탐색하기 때문이다.  
 <br>
