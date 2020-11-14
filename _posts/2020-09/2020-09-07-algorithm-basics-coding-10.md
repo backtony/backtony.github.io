@@ -90,6 +90,7 @@ def dijkstra(start):
         # 처리가 안 된 경우 이제 처리
         for cost,way in graph[now]:
             # 비용이 갱신된 경우에만 push
+            # 등호가 들어가는 경우는 왜 하지 않는가? -> 어쩌피 최단 거리로 같은 곳에 도착했으니 다음부터 그곳에서 시작하는 경우는 어쩌피 거리가 같잖아.
             if distance[way]>dist+cost:
                 distance[way]=dist+cost
                 heapq.heappush(q,(cost+dist,way))
@@ -318,21 +319,21 @@ def dijkstra(start):
         # 이미 처리된 경우
         if cost > distance[now]:
             continue
-        for i in graph[now]:            
-            count+=1
+        count+=1
+        max_time = cost
+        for i in graph[now]:                        
             if distance[i[1]]>cost+i[0]:                
                 distance[i[1]]=cost+i[0]
                 heapq.heappush(q,(distance[i[1]],i[1]))
-        # 마지막 선택 노드의 주변에 연결된 곳이 없을 수도 있으므로
-        # for문 바깥에서 초기화
-        max_time = cost 
-    return count, max_time
+        # 시작점은 count에서 제외         
+    return count-1, max_time
     # 마지막으로 선택되서 for문에 들어오는 경우는 최소거리가 가장 큰 것이다.
     # 우선순위 큐의 사용으로 최소거리가 가장 작은 것부터 선택된다.
-    # 따라서 가장 마지막에 뽑혔다는 것은 다른 노드는 
-    # 최소 거리가 이미 다 결정되었다는 뜻이고 
-    # 사실상 마지막 수행되는 for문은 의미가 없다.
+    # 따라서 가장 마지막에 뽑혔다는 것은 다른 노드는 최소 거리가 이미 다 결정되었다는 뜻이고 
+    # 사실상 마지막 수행되는 for문은 의미가 없다.    
     # 즉, 마지막 for문에서의 선택된 노드의 해당 거리는 제일 먼 것이다.
+    # 또한 해당 노드가 선택되어 이미 처리된 경우가 아니라면 해당 노드까지의 거리는 다 정해진 것이고
+    # 더 이상 방문하지 않게 되므로 카운트 한다.
 a,b=dijkstra(c)
 print(a,b)
 
