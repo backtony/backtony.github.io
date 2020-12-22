@@ -133,21 +133,21 @@ a1
 
 #### 풀이
 ```python
-n = input()
-x = ord(n[0])-96
-y= int(n[1])
+a = input()
 
-# 시계방향, 왼쪽부터
-dx = [-2,-2,1,-1,2,2,1,-1]
-dy = [1,-1,2,2,1,-1,-2,-2]
+dx = [-2, -2, -1, 1, 2, 2, -1, 1]
+dy = [1, -1, 2, 2, 1, -1, -2, -2]
 
-cnt=0
-for i in range(8):
-    px = x+dx[i]
-    py = y+ dy[i]
-    if 1<=px and px<=8 and 1<=py and py<=8:
-        cnt+=1
-print(cnt)
+x = int(a[1]) - 1
+y = ord(a[0]) - ord('a')
+
+count = 0
+for i in range(len(dx)):
+    px = x + dx[i]
+    py = y + dy[i]
+    if 0 <= px and px <= 7 and 0 <= py and py <= 7:
+        count += 1
+print(count)
 ```
 이동 관련 완전 탐색의 경우 __이동에 대한 경우를 리스트__ 로 만들어 놓고 이동했을 때의 __변수를 따로 선언__ 해서 이동연산 후의 위치가 조건에 맞으면 본 위치에 대입하고 아니면 넘어가는 형식을 이용한다는 것을 기억해두자. 이렇게 활용하지 않으면 일일이 조건문으로 나눠야하므로 코딩이 매우 길어진다.  
 
