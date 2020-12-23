@@ -47,15 +47,16 @@ print(a)
 ---
 삽입 정렬은 선택 정렬에 비해 구현 난이도가 약간 높지만 실행 시간 측면에서 더 효율적인 알고리즘으로 알려져 있다. 특히 삽입 정렬은 필요할 때만 위치를 바꾸므로 __'데이터가 거의 정렬 되어 있을때'__ 매우 효율적이다. 삽입 정렬은 두 번째 데이터부터 시작한다. 왜냐하면 첫 번째 데이터는 그 자체로 정렬되어 있다고 판단하기 때문이다.  
 ```python
-a = [7,5,9,0,3,1,6,2,4,8]
-n =len(a)
-for i in range(1,n):    
-    for j in range(i-1,0-1,-1):
-        if a[j+1]<a[j]:
-            a[j+1],a[j]=a[j],a[j+1] # 스왑을 이용해서 매우 간결하게 구현
-        else :
+array = [7, 5, 9, 0, 3, 1, 6, 2, 4, 8]
+
+for i in range(1, len(array)):
+    for j in range(i, 0, -1): # 인덱스 i부터 1까지 1씩 감소하며 반복하는 문법
+        if array[j] < array[j - 1]: # 한 칸씩 왼쪽으로 이동
+            array[j], array[j - 1] = array[j - 1], array[j]
+        else: # 자기보다 작은 데이터를 만나면 그 위치에서 멈춤
             break
-print(a)
+
+print(array)
 ```
 
 ### 시간 복잡도
@@ -76,6 +77,7 @@ def quick_sort(a):
     left_side = [x for x in tail if x<=pivot]
     right_side = [x for x in tail if x>pivot]
     return quick_sort(left_side) + [pivot] + quick_sort(right_side)
+    # list(pivot) 은 불가능,, 원소가 하나인 것을 list로 형변환 불가능하다.
 
 print(quick_sort(a))
 ```
