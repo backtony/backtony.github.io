@@ -177,10 +177,12 @@ DPtable[0]=store[0]
 DPtable[1]=max(store[1],DPtable[0])
 
 for i in range(2,n):
-    DPtable[i] = max(DPtable[i-2]+store[i],DPtable[i-1])    
+    DPtable[i] = max(DPtable[i-2]+store[i],DPtable[i-1])        
 
 print(DPtable[n-1])
 ```
+점화식만 판단할 수 있으면 매우 간단하다. 보텀업 방식으로 dptable에는 현재 인덱스까지의 식량 최대값을 저장하게 된다.
+
 <br>
 
 ### 문제 : 바닥 공사
@@ -216,14 +218,17 @@ print(DPtable[n])
 #### 풀이 : 모범 답안
 ```python
 n = int(input())
-DPtable = [0]*(n+1)
-DPtable[1]=1
-DPtable[2]=3
 
-for i in range(3,n+1):       
-    DPtable[i]=DPtable[i-1]+DPtable[i-2]*2
+dptable = [0] * (n + 1)
 
-print(DPtable[n])
+dptable[1] = 1
+for i in range(2, n + 1):
+    if i == 2:
+        dptable[i] = 3
+    else:
+        dptable[i] = dptable[i - 1] + dptable[i - 2] * 2
+
+print(dptable[n])
 ```
 __점화식 설명__  
 2 * 1, 1 * 2, 2 * 2의 타일에서 2 * 2가 최대이다. 왼쪽부터 차례대로 i만큼의 바닥을 덮개로 채운다고 생각해보자. 왼쪽부터 i-1까지 길이가 덮개로 이미 덮었다고 가정한 상태라면 i까지 채우는 경우는 2 * 1의 덮개를 채우는 1가지 경우이다. i-2까지 길이가 덮개가 이미 덮었다고 가정한 상태라면 i까지 채우느 경우는 1 * 2 덮개 2개로 채우는 경우와 2 * 2의 덮개로 채우는 경우일 것이다. 여기서 i-3부터는 생각할 필요가 없다. 왜냐하면 사용할 수 있는 덮개의 형태가 2 * 2가 최대이기 때문에 더이상 해봤자 덮개의 형태는 동일하기 때문이다. 따라서 i까지 덮개로 채우는 경우는 i-1까지 채웠을 때의 경우 + i-2까지 채웠을 때의 경우인데 i-2까지 채웠을때는 서로 다른 경우가 2가지이므로 *2가 필요한 것이다.  
