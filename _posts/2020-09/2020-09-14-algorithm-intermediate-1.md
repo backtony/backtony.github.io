@@ -228,6 +228,9 @@ __출력 조건__
 8
 ```
 
+### 내가 생각한 풀이
+보텀업 방식으로 접근을 해보았는데, 테이블을 만들어서 false로 초기화하고 뽑힌 화폐는 true, 이전에 만들 수 있는 금액을 찾아 거기에 뽑힌 화폐를 더한 금액에 true로 수정하는 과정을 반복하여 최종적으로 배열을 맨 앞부터 훑어보면서 flalse가 나오는 수를 출력하는 알고리즘을 설계했으나 화폐 단위가 최대 100만이고 정수가 1000개 이기 때문에 너무 많은 연산과정이 필요해서 불가능하다고 판단했다.
+
 ### 모범 답안
 ```python
 import sys
@@ -245,9 +248,7 @@ for x in pays:
 
 print(target)
 ```
-1부터 terget -1 까지의 모든 수를 만들 수 있다고 가정해보자. 화폐 단위가 작은 순서대로 동전을 확인하며, 현재 확인하는 동전을 이용해 금액 target 또한 만들 수 있는지 확인하면 된다. 1부터 만들 수 있는지 없는지 확인해야 하므로 target은 1로 초기화한다.  
-__왜 위와 같이 하면 될까?__  
-1부터 target - 1 까지의 모든 수는 만들 수 있다고 가정했다. 그럼 pays에서 뽑은 수가 target보다 작다면 이미 만들 수 있는 수에 각각 뽑은 수를 더하여 target를 만들 수 있고 나아가 target -1 + 뽑은 수 까지 만들 수 있다. 뽑은 수가 target과 같다면 target은 뽑은 수로 바로 만들 수 있고 target-1 + 뽑은 수 까지 다 만들 수 있게 된다.
+이 알고리즘 설계에서는 다음과 같은 가정이 핵심이다. __1부터 target -1 까지의 모든 수를 만들 수 있다고 가정해보자.__ 현재 target을 1로 두게 되면 지금은 만들 수 있는 금액이 없다는 것이다. 1을 뽑게되면 target은 2로 수정되고 그럼 1까지의 금액을 만들 수 있게 된다. 이제 target 2를 만들 수 있는지 확인해야 한다. 여기서 뽑을 숫자와 과정을 생각해보면 현재 target의 금액은 만들지 못하고 이전의 금액은 만들 수 있다. target보다 작은 수를 뽑으면 target이전의 수들은 모두 만들 수 있었기 때문에 이전의 수들에 뽑은 수를 더해서 target+뽑은수 이전까지는 모두 만들 수 있게 된다. 그 후 다시 새로운 수를 뽑아 target을 비교하게 된다. 여기서 만약 뽑은 수가 tergat보다 크다면 target은 만들 수 없게되고 뽑은 수는 만들 수 있고 target이전의 화폐들에 뽑은수를 더해서 그 해당 금액들을 만들 수 있게 되는 것이다.  
 <br>
 
 __주어진 화폐로 해당 금액을 만들 수 있을까?__  
@@ -316,18 +317,19 @@ __출력 조건__
 
 ### 내가 작성한 코드
 ```python
-import sys
 from itertools import combinations
+import sys
 
 input = sys.stdin.readline
-n, m = map(int, input().split())
-ball = list(map(int, input().split()))
-pick = list(combinations(ball, 2))
-count = len(pick)
 
-for a, b in pick:
-    if a == b:
-        count -= 1
+n, m = map(int, input().split())
+
+# 볼링공의 무게
+k = list(map(int, input().split()))
+count = 0
+for a, b in list(combinations(k, 2)):
+    if a != b:
+        count += 1
 print(count)
 ```
 <br>
@@ -379,35 +381,11 @@ __제한 사항__
 1
 ```
 
-### 내가 작성한 코드
-```python
-import sys
-from collections import deque
-
-input = sys.stdin.readline
-
-def solution(food_times,k):
-    q = deque()
-    count =0 # 시간
-    for i in range(n):
-        if food_times[i] !=0:
-            q.append(i)
-    while q:
-        idx = q.popleft() # 남은 시간이 0이 아닌 것들의 인덱스, 리턴할때는 +1
-        food_times[idx]-=1 # 한 입 먹음
-        count+=1
-        if count == k: # 멈춤시간과 같아질때
-            if q: # 큐에 다음 먹을게 남아 있다면
-                return q.popleft()+1
-            else : # 남은게 없다면
-                return -1
-        if food_times[idx] !=0:
-            q.append(idx)
-```
-내가 작성한 코드는 정답은 나올 수 있지만 효율성이 매우 떨어진다. 범위가 매우 큰데 확인을 일일이 하고 있으니 말이다. 따라서 어떠한 자료구조를 이용해야 한다고 생각해내야 한다.
-<br>
 
 ### 모범 답안
+일반적인 노가다로 생각하면 복잡도를 충족할 수 없다. 범위가 매우 크기때문에 어떠한 자료구조를 이용할지 생각해내야 한다.  
+처음에는 테이블의 최소값으로 한 번에 빼내고 남은 값들을 일일이 확인하는 것으로 알고리즘을 설계했었다. 하지만 리스트의 길이가 너무 크고 원소의 범위도 너무 크기때문에 복잡도를 충족할 수 없었다. 풀이를 보니 여기서 조금만 더 생각해내면 됬었다. 최소값을 한 번에 빼는 것은 좋은 선택이었고 이제 남은 값들을 일일이 확인하는 과정만 줄여주면 되었던 것이다.  
+이 과정을 우선순위 큐를 사용해서 정보들을 묶어서 저장하고 작은 것부터 빼내버리면 위에 생각한 과정에 배열 값이 0인 것들을 일일이 확인할 필요가 없어진다. __이 문제로부터 얻을 점은 문제에서 주어진 범위가 매우 크면 반드시 이를 처리할 자료구조를 생각해내야 한다는 점이다.__
 ```python
 import heapq
 
