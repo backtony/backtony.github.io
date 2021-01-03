@@ -381,6 +381,53 @@ __제한 사항__
 1
 ```
 
+### 1회차 복습시 코드
+1회차 복습시에는 풀지 못했고 답안을 확인하고 생각해서 다시 코딩했다. 답안과 비교했을 때 줄일 수 있는 코드가 좀 보인다. 나는 heappop으로 먼저 값을 빼고 while문을 돌렸는데 이럴 때는 while 루프를 나오게되면 다시 heap에 넣어줘야한다. 답안 코딩처럼 heappop을 먼저하지 말고 조건문에서 확인 후 heappop을 하면 이러한 반복을 하지 않고 효율적으로 코딩할 수 있다.
+```python
+import heapq
+
+def solution(food_times, k):
+    if sum(food_times) <= k:
+        return -1
+    q = []
+
+    # 우선순위 큐에 정보 담기
+    for i in range(len(food_times)):
+        # 소요시간, 인덱스
+        heapq.heappush(q, (food_times[i], i + 1))
+
+    # 뺄때 고민해야할점은
+    # 지금까지 소요한 시간
+    # 이전에 뺀것에 지금에 카운트 빼주고
+    # 지금 카운트 루프 돌아도 k이하인지
+    cost, idx = heapq.heappop(q)
+    prev = 0  # 이전까지 먹은 누적 소요시간
+    prev_count = 0  # 이전까지 먹은 음식 루프 횟수
+    length = len(food_times)  # 남은 음식 개수
+    # 맨위에서 걸러줬으니까 결국엔 여기서 k가 더 작아지는 경우가 생긴다.
+    while prev + (cost - prev_count) * length <= k:
+        prev += (cost - prev_count) * length
+        prev_count = cost
+        length -= 1  # 하나 빠지므로 하나씩 빼주고
+        cost, idx = heapq.heappop(q)
+
+    # while 안에서 time을 설정해버리면
+    # 만약 while문을 애초에 들어가지 않는 경우 time값이 붕뜬다.
+    time = k-prev
+    
+    # 방금 꺼낸 것에서 문제가 생겼으므로 다시 넣어주고
+    heapq.heappush(q,(cost,idx))
+    # while 루프에서 빠져나온 이상 남은 것을 루프 돌리기 전에 k가 맞춰진다는 뜻
+    # 이제 남은 것을 한 번에 처리해야함
+    # 일단 원래 음식 순서대로 풀자
+    result = sorted(q, key=lambda x: x[1])
+
+    # 1번자리에 인덱스가 들어있고,
+    answer = result[(time) % length][1]
+
+    return answer
+```
+
 
 ### 모범 답안
 일반적인 노가다로 생각하면 복잡도를 충족할 수 없다. 범위가 매우 크기때문에 어떠한 자료구조를 이용할지 생각해내야 한다.  
