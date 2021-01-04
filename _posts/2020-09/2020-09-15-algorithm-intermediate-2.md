@@ -144,55 +144,42 @@ __제한 사항__
 7
 ```
 
-### 내가 작성한 코드(시간초과)
+### 내가 작성한 코드
 ```python
 def solution(s):
-    ans = []  # 자른 문자열의 문자개수를 append
-    n = len(s)
-    for i in range(1, n//2+1):  # 자를 문자열 개수, 절반 이상 넘어가면 자르는 의미가 없음
-        j = 0
-        cnt = 1
-        zip_length=n
-        while j<=n-1-i:
-            if s[j:j+i]==s[j+i:j+2*i]:
-                cnt+=1
-                j+=i
-                if j>n-1-i:
-                    zip_length -= i * (cnt - 1) - len(str(cnt))
+    answer = len(s)
 
-            else :
-                if cnt>1:
-                    zip_length-=i*(cnt-1)-len(str(cnt))
-                j+=i
-                cnt=1
-        ans.append(zip_length)
-    return min(ans)
-```
-실행 결과는 맞으나 1가지 경우에 대해 시간 초과가 발생했다. 여기서 하나 고려해볼 점은 자른 모든 길이를 일일이 저장하고 min을 구하기 보다 자른 길이를 구할 때 마다 비교해서 저장하면 어떨까라는 생각이 들었다. 그래서 아래와 같이 수정했고 합격점을 받았다.  
-__수정한 내 코드__  
-```python
-def solution(s):
-    answer = len(s)  # 길이
-    n = len(s)
-    for i in range(1, n//2+1):  # 자를 문자열 개수, 절반 이상 넘어가면 자르는 의미가 없음
-        j = 0
-        cnt = 1
-        zip_length=n
-        while j<=n-1-i:
-            if s[j:j+i]==s[j+i:j+2*i]:
-                cnt+=1
-                j+=i
-                if j>n-1-i:
-                    zip_length -= i * (cnt - 1) - len(str(cnt))
+    # 절반 이상 넘어가면 자르는 의미가 없다.
+    for i in range(1, len(s) // 2 + 1):
+        idx = 0
+        count = 1 # 해당 문자열 카운트
+        length=0
+        # len(s)+i 의 이유는 비교과정에서 범위를 넘어버리는 경우
+        # 원래 대상의 끝 인덱스(idx+i)가 len(s)+i와 같아질때
+        # 원래 대상의 첫 인덱스는 주어진 문자열의 길이를 넘어버린다.
+        # 따라서 더이상 연산하지 않아도 된다.
 
-            else :
-                if cnt>1:
-                    zip_length-=i*(cnt-1)-len(str(cnt))
-                j+=i
-                cnt=1
-        answer = min(answer,zip_length)
+        while idx + i <= len(s)+i:
+            # 다음 글자와 같은 경우
+            if s[idx:idx + i] == s[idx + i:idx + 2 * i]:
+                count += 1
+            # 다음 문자열이 다른 경우
+            else:
+                # 압축할수 있다면
+                if count >= 2:
+                    length += len(str(count)) + len(s[idx:idx + i])
+                    count = 1
+                # 압축할 수 없다면
+                else:
+                    length +=len(s[idx:idx + i])
+            idx += i # idx 다음 문자열로 이동
+
+        # 최소값 비교
+        answer = min(answer,length)
+
     return answer
 ```
+제한사항으로 길이가 크지 않으므로 일일이 확인하는 형태로 설계했다.
 <br>
 
 ### 모범 답안
@@ -233,6 +220,66 @@ __제한 사항__
 + M은 항상 N이하
 + key와 lock의 원소는 0 또는 1이다. 이때 0은 홈, 1은 돌기를 나타낸다.
 
+### 내가 작성한 코드
+1차 복습 코드
+```python
+def rotation(key):
+    # 시계 회전
+    x = len(key)
+    y = len(key[0])
+    result = [[0] * x for _ in range(y)]
+
+    # x*y 가 y*x로 되니까
+    # result의 인덱스는 거꾸로 key와 다르게 거꾸로
+    for i in range(x):
+        for j in range(y):
+            result[j][x-i-1] = key[i][j]
+    return result
+
+def check(table,n):
+    # 성공하면 1 반환
+    # 실패하면 0반환
+    ans =1
+    for i in range(n):
+        for j in range(n):
+            if table[n+i][n+j]!=1:
+                ans=0
+                break
+    return ans
+
+def solution(key, lock):
+    m = len(key)
+    n = len(lock)
+    table = [[0]*(n*3) for _ in range(n*3)]    
+
+    # 3배 한 table 가운데에 lock 대입하기
+    for i in range(n):
+        for j in range(n):
+            table[n+i][n+j] = lock[i][j]
+
+    # key값 table에 저장하기
+    # 시작 지점만 정해주고
+    for i in range(n*2):
+        for j in range(n*2):
+            # rotate 회전 4번
+            for _ in range(4):
+                # key값 table에 복사하기
+                for a in range(m):
+                    for b in range(m):
+                        table[i+a][j+b]+=key[a][b]
+                # 성공적이면 true 반환
+                if check(table,n):
+                    return True
+                # lock 원상태 복원
+                for a in range(n):
+                    for b in range(n):
+                        table[n + a][n + b] = lock[a][b]
+                # key 회전
+                key = rotation(key)
+
+    return False
+```
+
 ### 모범 답안
 우리가 해야 할 일은 열쇠를 적당히 회전하고 이동시켜 자물쇠의 홈에 딱 맞게 끼워 넣는 것이다. 자물쇠와 열쇠의 크기는 20 * 20 보다 작다. 모든 원소에 접근할 때는 400만큼의 연산이 필요할 것이다. 코딩 테스트 채점 환경에서는 1초에 2,000만에서 1억정도의 연산을 처리할 수 있다. 즉, 범위가 매우 작으므로 복잡도를 고려하지 않아도 될 수준이다. 그렇기 때문에, 완전 탐색을 이용해서 열쇠를 이동이나 회전시켜서 자물쇠에 끼워보는 작업을 전부 시도해도는 접근 방법을 이용해 볼 수 있다. 완전 탐색을 수월하게 하기 위해서 자물쇠 리스트의 크기를 3배 이상으로 변경하면 계산이 수월해진다. 예를 들어 열쇠와 자물쇠가 3 * 3 크기라고 가정하자. 이때 가장 먼저 자물쇠를 크기가 3배인 새로운 리스트로 만들어 중앙 부분으로 옮긴다. 이제 열쇠 배열을 왼쪽 위부터 시작해서 한 칸씩 이동하는 방식으로 차례대로 자물쇠의 모든 홈을 채울 수 있는지 확인하면 된다. 자물쇠 리스트에 열쇠 리스트의 값을 더한 뒤에, 자물쇠 부분의 모든 결과값이 1이 되면 홈 모두를 채운 것이라고 볼 수 있다. 여기서 2차원 리스트의 회전 결과값을 반환하는 함수를 사용해야하는데 가끔씩 사용되므로 알아두도록 하자.
 ```python
@@ -242,7 +289,10 @@ def rotate_a_matrix_by_90_degree(a):
     y = len(a[0])  # 열의 길이 계산
 
     # 회전하는 결과 리스트는 행과 열의 길이가 바뀐다.
+    # 기존에는 x*y 였다면 회전 후에는 y*x가 된다.
     result = [[0] * x for _ in range(y)]
+
+    # 회전한 리스트의 인덱스는 거꾸로되어 y,x로 관여한다.
     for i in range(x):
         for j in range(y):
             # result[y-j-1][i] = a[i][j]# 왼쪽으로 회전
