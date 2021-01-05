@@ -362,7 +362,7 @@ __입력 조건__
 + 첫째 줄에 보드의 크기 N이 주어진다. (2<=N<=100) 다음 줄에 사과의 개수 K가 주어진다. (0<=K<=100)
 + 다음 K개의 줄에는 사과의 위치가 주어지는데, 첫 번째 정수는 행, 두번째 정수는 열 위치를 의미한다. 사과의 위치는 모두 다르며, 맨 위 맨 좌측(1행 1열)에는 사과가 없다.
 + 다음 줄에는 뱀의 방향 변환 횟수 L이 주어진다.(1<=L<=100)
-+ 다음 L개의 줄에는 뱀의 방향 변환 정보가 주어지는데, 정수 X와 문자 C로 이루어져있으며, 게임 시작시간으로부터 X초가 끝난 뒤에 왼쪽(C가 'L') 또는 오른쪽(C가 'D')으로 90도 방향을 회전시킨다는 뜻이다. X는 10,00이하의 양의 정수이며, 방향 전환 정보는 X가 증가하는 순으로 주어진다.
++ 다음 L개의 줄에는 뱀의 방향 변환 정보가 주어지는데, 정수 X와 문자 C로 이루어져있으며, 게임 시작시간으로부터 X초가 끝난 뒤에 왼쪽(C가 'L') 또는 오른쪽(C가 'D')으로 90도 방향을 회전시킨다는 뜻이다. X는 10,000이하의 양의 정수이며, 방향 전환 정보는 X가 증가하는 순으로 주어진다.
 
 __출력 조건__  
 + 첫째 줄에 게임이 몇 초에 끝나는지 출력
@@ -381,76 +381,147 @@ __출력 조건__
 
 출력 예시
 9
+
+입력 예시
+10
+4
+1 2
+1 3
+1 4
+1 5
+4
+8 D
+10 D
+11 D
+13 L
+
+출력 예시
+21
+
+입력 예시
+10
+5
+1 5
+1 3
+1 2
+1 6
+1 7
+4
+8 D
+10 D
+11 D
+13 L
+
+출력 예시
+13
 ```
 
 ### 내가 작성한 코드
 ```python
-import sys
-from collections import deque
+def solution():
+    n = int(input())
+    k = int(input())
 
-input = sys.stdin.readline
+    # 시작이 1,1이므로 맞추기 위해 n+1
+    graph = [[0]*(n+1) for _ in range(n+1)]
+    move =[]
+    route =[] # 뱀의 꼬리 위치 감소를 위해 경로 저장이 필요함
+    
+    # 시계방향 0 1 2 3
+    dx=[-1,0,1,0]
+    dy=[0,1,0,-1]
+    
+    # 사과 위치 삽입
+    for _ in range(k):
+        x,y = map(int,input().split())
+        graph[x][y] = 1
+    
+    
+    l = int(input())
+    # 방향 변환정보 삽입
+    for _ in range(l):
+        x,c = input().split()
+        move.append((int(x),c))
 
-n = int(input())  # 보드 크기
-k = int(input())  # 사과의 개수
+    # 뱀 이동 시작
+    # 뱀이 밟고있으면 2
+    # 비어있으면 0
+    # 사과는 1
+    way = 1 # 뱀은 처음에 오른쪽 방향을 향함
+    x=y=1 # 첫 시작 위치
+    route.append((x,y)) # 시작위치 경로 삽입
+    graph[x][y]=2 # 시작 위치 뱀이 밟고 있음
+    cnt = 0 # 누적 시간
+    time,c = move.pop(0) # 방향 조건 가져오기
+    
+    while 1:
+        px = x + dx[way]
+        py = y + dy[way]
+        cnt+=1
+        # 주어진 보드 위에
+        if 1<=px and px<=n and 1<=py and py<=n:
+            # 사과인경우
+            if graph[px][py]==1:
+                # x,y 값 수정, 그래프 수정, 이동 경로 저장
+                x=px
+                y=py
+                graph[x][y]=2
+                route.append((x, y))
+            # 비어있는 경우
+            elif graph[px][py]==0:
+                # x,y 값 수정, 그래프 수정, 이동 경로 저장 및 꼬리 위치 삭제
+                graph[px][py] = 2
+                x = px
+                y = py
+                route.append((x, y))
+                a,b = route.pop(0)
+                graph[a][b]=0
 
-# 첫 위치가 1행 1열이므로 맞추기 위해 n+1
-graph = [[0] * (n + 1) for _ in range(n + 1)]
-for _ in range(k):
-    x, y = map(int, input().split())
-    graph[x][y] = 1  # 사과가 있으면 1
+            # 자기 자신 몸과 만난경우
+            else:
+                return cnt
+        # 보드 위가 아닌 경우
+        else:
+            return cnt
 
-l = int(input())  # 방향 변환 횟수
-direction_l = []
-for _ in range(l):
-    x, c = input().split()  # x초후 c로 방향변환
-    direction_l.append((x, c))
+        # 방향 변화
+        if cnt==time:
+            if c == 'D':
+                way = (way+1)%4
+            elif c == 'L':
+                way = (way - 1) % 4
+            # 새로운 조건 가져오기
+            # 비어 있지 않다면
+            if move:
+                time, c = move.pop(0)
 
-direction = ['U', 'R', 'D', 'L']
-da = [-1, 0, 1, 0]
-db = [0, 1, 0, -1]
+print(solution())
+```
+위의 코드는 1차 리뷰코드이다. 처음 공부할 때는 deque를 사용했었는데 굳이 사용안해도 __pop(인덱스) 를 사용해서 리스트의 맨 앞의 값을 꺼낼 수 있으므로__ deque 사용 없이 해결할 수 있다는 점을 기억하자.
+파이썬 음수 나눗셈에서 주의해야할 점이 있다. 파이썬은 유클리드 나눗셈 방식을 따르는데 쉽게 생각하면 내림을 한다고 생각하면 된다. 위에서 사용한 것으로 예시를 들어보면 만약 way가 -1로 된다면 원래 의도대로라면 서쪽 3의 값을 가져야 한다. -1//4의 값은 -0.25로 -1의 몫을 가지게 되고 이에따라 나머지는 -1을 만들기 위해서는 4*-1 + 3이므로 나머지는 3이된다.
+```python
+-2018/5 == -403.6 
 
-a = b = 1  # 첫 시작 위치
-graph[1][1] = 2  # 시작 위치 자리 차지 표시
-cnt = 0  # 경과시간
-prevd = 'R'  # 시작 방향
-j = 0  # direction_l 카운트
-x, d = direction_l[j] # 첫 x초후 방향에 대한 정보
-q = deque()  # 방문하는 순서를 기록
-q.append((a, b))
+# 여기서 몫의 나눗셈을 하면 파이썬은 내림하여 계산한다.
+# 따라서 음수의 경우 정수부가 바뀐다.
+-2018 // 5  == -404
 
+# 나머지 연산
+# -8//3 은 -3이다 따라서 3*-3 -> -9 에서
+# -8을 만들려면 1을 더해주면 되므로 나머지는 1이다
+-8 % 3 == 1
 
-while True:
-    if cnt == int(x):  # 시간이 끝나면 새로운 시간,방향 정보를 받아야함
-        if d == 'D':
-            prevd = direction[(i+1)%4]
-        else :
-            prevd = direction[(i-1)%4]
+# -7//3 은 -3이다 따라서 -3*3 -> 9에서
+# -7을 만들려면 2를 더해줘야하므로 나머지는 2이다
+-7 % 3 == 2
 
-        j += 1
-        if j<len(direction_l):
-            x, d = direction_l[j]
+# -7 // -3 == 2이다 따라서 -3*2 -> -6
+# -7을 만들려면 -1을 더하면 되므로 나머지는 -1이다
+-7 % -3 == -1
 
-    for i in range(4):
-        if direction[i] == prevd:
-            break
-    pa = a + da[i]
-    pb = b + db[i]
-    cnt += 1
-
-    if pa <=0 or pa >=n+1 or pb<=0 or pb >=n+1 or graph[pa][pb]==2: # 먼저 머리 움직이고 확인 후 꼬리 거둠
-        break
-
-    if graph[pa][pb] == 0:  # 사과가 없다면
-        tail_a, tail_b = q.popleft()
-        graph[tail_a][tail_b] = 0  # 꼬리 방문 지우기
-
-    graph[pa][pb] = 2  # 사과가 없으나 있으나 현재 방문위치 처리
-    a = pa
-    b = pb
-    q.append((a, b))
-
-
-print(cnt)
+# -8 // -3 == 2이다 따라서 -3*2 -> -6
+# -8을 만드려면 -2를 더하면 되므로 나머지는 -2이다
+-8 % -3 == -2
 ```
 
 ### 모범 답안
