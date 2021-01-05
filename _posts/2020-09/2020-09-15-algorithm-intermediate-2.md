@@ -426,17 +426,17 @@ def solution():
     graph = [[0]*(n+1) for _ in range(n+1)]
     move =[]
     route =[] # 뱀의 꼬리 위치 감소를 위해 경로 저장이 필요함
-    
+
     # 시계방향 0 1 2 3
     dx=[-1,0,1,0]
     dy=[0,1,0,-1]
-    
+
     # 사과 위치 삽입
     for _ in range(k):
         x,y = map(int,input().split())
         graph[x][y] = 1
-    
-    
+
+
     l = int(input())
     # 방향 변환정보 삽입
     for _ in range(l):
@@ -453,7 +453,7 @@ def solution():
     graph[x][y]=2 # 시작 위치 뱀이 밟고 있음
     cnt = 0 # 누적 시간
     time,c = move.pop(0) # 방향 조건 가져오기
-    
+
     while 1:
         px = x + dx[way]
         py = y + dy[way]
@@ -462,24 +462,25 @@ def solution():
         if 1<=px and px<=n and 1<=py and py<=n:
             # 사과인경우
             if graph[px][py]==1:
-                # x,y 값 수정, 그래프 수정, 이동 경로 저장
-                x=px
-                y=py
-                graph[x][y]=2
-                route.append((x, y))
+                # 그래프 수정, 이동 경로 저장
+                graph[px][py]=2
+                route.append((px, py))
             # 비어있는 경우
             elif graph[px][py]==0:
-                # x,y 값 수정, 그래프 수정, 이동 경로 저장 및 꼬리 위치 삭제
+                # 그래프 수정, 이동 경로 저장 및 꼬리 위치 삭제
                 graph[px][py] = 2
-                x = px
-                y = py
-                route.append((x, y))
+                route.append((px, py))
                 a,b = route.pop(0)
                 graph[a][b]=0
 
             # 자기 자신 몸과 만난경우
             else:
                 return cnt
+
+            # if elif 문에서 모두 x,y를 수정해야 하므로
+            # 아래로 빼서 한번에 수정
+            x = px
+            y = py
         # 보드 위가 아닌 경우
         else:
             return cnt
