@@ -598,6 +598,69 @@ print(simulate())
 ---
 [문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60061){: target="_blank"}  
 
+
+### 내가 작성한 코드
+```python
+def check(answer):
+    # 제거한 상태로 들어왔다
+    # 형태를 유지할 수 있는지 확인해주면 된다
+    for x,y,a in answer:
+        # 기둥
+        if a==0:
+            # 설치조건에 부합하면
+            if y == 0 or [x, y - 1, 0] in answer or [x - 1, y, 1] in answer or [x, y, 1] in answer:
+                continue
+            # 문제 발생
+            return False
+        # 보
+        else :
+            # 설치 조건에 부합하면
+            if [x,y-1,0] in answer or [x+1,y-1,0] in answer or ([x-1,y,1] in answer and [x+1,y,1] in answer):
+                continue
+            return False
+    return True
+
+def solution(n, build_frame):
+    answer = []
+    # 보와 기둥의 설치 조건
+    # a에서 0기둥 1보
+    # b에서 0삭제 1설치
+    for x,y,a,b in build_frame:
+
+        # 삭제의 과정은 같으니 차라리 설치와 삭제를 기준으로 먼저 나누는게 더 깔끔하지 않을까?
+
+        # 설치
+        if b==1 :
+            # 기둥
+            if a==0:
+                # 바닥이면, 아래 기둥이 있다면 , 아래 보가 있다면 설치 가능
+                if y == 0 or [x, y - 1, 0] in answer or [x - 1, y, 1] in answer or [x, y, 1] in answer:
+                    answer.append([x,y,a])
+
+            # 보
+            else:
+                # 기둥이 받쳐주거나, 양옆에 보가 있거나
+                if [x,y-1,0] in answer or [x+1,y-1,0] in answer or ([x-1,y,1] in answer and [x+1,y,1] in answer):
+                    answer.append([x, y, a])
+
+        # 삭제
+        # 우선 삭제를 하고 형태 유지를 확인한 뒤에
+        # 형태 유지가 불가능하면 다시 삽입
+        else:
+            answer.remove([x, y, a])
+            # 삭제후 형태 유지 불가능
+            if check(answer) == False:
+                # 삭제 무시
+                answer.append([x, y, a])
+
+        # 정렬
+        answer.sort()
+
+    return answer
+```
+처음 코딩했을 때는 기둥과 보를 우선적으로 나눴다. 하지만 코딩해보니 삭제의 과정은 기둥과 보가 같은 형태로 동작하기에 다시 설치와 삭제를 기준으로 나눴다. 결과적으로 전부 코딩하고 보니 solution 함수와 check함수에서 중복되는 부분이 있었다. 생각해보면 설치하는 내용도 check함수에서 설치가 가능할 경우 continue가 아니라 return True를 사용하면 중복되는 코드를 줄일 수 있을 것 같다. 모범답안이 그렇게 코딩한 결과이다.
+
+
 ### 모범 답안
 전체 명령의 개수는 총 1,000개 이하이다. 따라서 O(N^2)으로 해결하는 것이 이상적이나 시간제한이 5초로 넉넉하기 때문에 O(N^3)의 알고리즘을 이용해도 정답판정을 받을 수 있다. 따라서 후자로 해결하는 가장 간단한 방법은, 설치 및 삭제 연산을 요구할 때마다 일일이 전체 구조물을 확인하며 규칙을 확인하는 것이다. 이렇게 복잡한 문제의 경우 해결에 따른 함수를 따로 만들어 사용하는 것이 좋다.
 ```python
@@ -612,8 +675,7 @@ def possible(answer):
             return False
         else:  # 설치된 것이 보인 경우
             # 한쪽 끝부분이 기둥 위, 양쪽 끝 부분이 다른 보와 동시에 연결
-            if [x, y - 1, 0] in answer or [x + 1, y - 1, 0] in answer or ([x - 1, y, 1] in answer and [x + 1, y,
-                                                                                                      1] in answer):
+            if [x, y - 1, 0] in answer or [x + 1, y - 1, 0] in answer or ([x - 1, y, 1] in answer and [x + 1, y, 1] in answer):
                 continue
             return False
     return True
