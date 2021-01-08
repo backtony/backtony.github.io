@@ -25,7 +25,7 @@ comments: true
 + 자료구조 : 데이터를 표현하고 처리하는 방법
 + 스택 : 선입후출, 후입선출구조이며 박스 쌓기에 비유 가능
 + 큐 : 선입선출구조로 공정한 자료구조라고도 한다. 대기 줄에 비유 가능
-+ DFS : Depth-First Search, 깊이 우선 탐색 알고리즘이며 그래프를 탐색하는 알고리즘이다. 최대한 얼리 있는 노드를 우선으로 탐색하는 방식으로 동작하며 스택자료구조를 이용
++ DFS : Depth-First Search, 깊이 우선 탐색 알고리즘이며 그래프를 탐색하는 알고리즘이다. 최대한 멀리 있는 노드를 우선으로 탐색하는 방식으로 동작하며 스택자료구조를 이용
 + BFS : 너비우선 탐색으로 가까운 노드부터 탐색하는 알고리즘이다. 큐를 이용하면 효과적으로 구현 가능
 
 <br>
@@ -124,17 +124,90 @@ if cnt == False:
 ---
 [문제 클릭](https://www.acmicpc.net/problem/14502){: target="_blank"}  
 
+### 내가 작성한 코드
+모범답안 코드는 python3로 제출시 시간초과가 뜨는데 내 코드는 python3로 해도 시간초과가 뜨지 않는다. 그래도 답안 코드도 배울점이 있다.   
+import sys를 이용할 경우에도 시간초과가 뜨는데 엄청나게 입력이 많은 경우가 아니면 sys를 안쓰는게 좋은 것 같다.   
+__설계 과정__  
+범위가 매우 적으니 모든 경우를 고려해도 될 것이라고 생각했다. 그러면 그래프를 입력받고 칸막이를 세웠다가 지웠다가를 반복해야 하므로 또 다른 그래프를 복사해서 사용하는게 좋을 것 같다고 생각했다. itertools의 combinations를 이용해서 칸막이를 세울 칸을 정했고, dfs를 이용해서 바이러스 전파를 진행했다.
+```python
+from itertools import combinations
+import copy
+
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+# 함수 안에 n,m을 따로 선언 안해도 함수 안에 n,m이 없으면 바깥 것으로 처리해준다
+# 함수 안에서 수정은 못해도 사용은 가능
+n, m = map(int, input().split())
+graph = [] # 그래프
+empty = [] # 빈칸 저장소
+
+# 주어진 그래프
+for _ in range(n):
+    graph.append(list(map(int, input().split())))
+
+# 안전 영역 카운트
+def count(graph):
+    cnt = 0
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 0:
+                cnt += 1
+    return cnt
+
+
+def check(graph, spots):
+    # 그래프 카피해주고
+    tmp = copy.deepcopy(graph)
+    # 스팟 위치에 벽설치
+    for spot in spots:
+        x, y = spot
+        tmp[x][y] = 1
+
+    # 바이러스 위치 찾기
+    for i in range(n):
+        for j in range(m):
+            if tmp[i][j] == 2:
+                # 바이러스 퍼지게 하기
+                dfs(tmp, i, j)
+
+    return count(tmp)
+
+
+def dfs(graph, x, y):
+    for i in range(4):
+        px = x + dx[i]
+        py = y + dy[i]
+        # 범위 내이면서 빈칸이면
+        if px >= 0 and px < n and py >= 0 and py < m and graph[px][py] == 0:
+            graph[px][py] = 2
+            dfs(graph, px, py)
+
+
+def solution():
+    answer = 0
+    # 빈칸 저장
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 0:
+                empty.append((i, j))
+
+    # 빈칸 3개 선택
+    for spots in combinations(empty, 3):
+        answer = max(answer, check(graph, spots))
+
+    return answer
+
+print(solution())
+```
+
 ### 모범 답안
 이 문제는 벽을 3개 설치하는 모든 경우의 수를 다 계산해야 한다. 간단하게 생각해보면 전체 맵의 크기가 8 * 8 이므로, 벽을 설치할 수 있는 모든 조합의 수는 최악의 경우 (바이러스가 하나도 존재하지 않는 경우) 64C3이 될 것이다. 이는 100,000보다도 작은 수이므로, 대략 선형 로그 시간의 알고리즘을 설계하면 되는데 주요 풀이 알고리즘이 BFS/DFS 이므로 인접 리스트를 사용하면 선형 시간 알고리즘으로 풀이할 수 있다. 따라서 모든 경우의 수를 고려해도 제한 시간 안에 문제를 해결할 수 있다는 것을 알 수 있다.  
 또한 모든 조합을 계산할 때는 파이썬의 조합 라이브러리를 사용하거나, DFS 혹은 BFS를 이용하여 해결할 수 있다. 따라서 벽의 개수가 3개가 되는 모든 조합을 찾은 뒤에 그러한 조합에 대해서 안전 영역의 크기를 계산하면 된다. 안전영역의 크기를 구하는 것 또한 DFS나 BFS를 이용하여 계산할 수 있다. 결과적으로 여기서는 가능한 모든 경우의 수를 계산하되, 안전 영역을 계산할 때 DFS나 BFS를 적절히 사용해야 된다는 것이다.  
 문제 풀이 아이디어를 간략히 설명함현, 초기에 비어 있는 모든 공간 중에서 3개를 골라 벽을 설치하는 것이다. 매번 벽을 설치할 때마다, 각 바이러스가 사방으로 퍼지는 것을 BFS/DFS로 계산하여 안전 영역을 구해야 한다.  
 python3 로 제출시 시간초과가 발생하고 pypy3로 하면 합격점을 받을 수 있다.
 ```python
-import sys
 
-input = sys.stdin.readline
-
-n, m = map(int, input().rstrip().split())
+n, m = map(int, input().split())
 
 # 주어진 그래프와 벽 세우고 난 후의 그래프
 graph = []
@@ -146,7 +219,7 @@ dy = [0, 1, 0, -1]
 
 # 그래프 입력
 for _ in range(n):
-    graph.append(list(map(int, input().rstrip().split())))
+    graph.append(list(map(int, input().split())))
 
 
 # dfs형식을 통한 바이러스 전염
@@ -203,6 +276,9 @@ def dfs(count):
 dfs(0)
 print(result)
 ```
+__배운 점__  
+처음 설계할 때 for문으로 울타리를 세우면 되겠다고는 생각했지만 해결이되지 않아 itertools를 사용했었다. 하지만 답안에서는 재귀적 사고를 통해 for문으로 울타리를 세웠다. 저런 방식도 기억해두는게 좋을 것 같다.
+
 <br>
 
 ## 4. 경쟁적 전염
