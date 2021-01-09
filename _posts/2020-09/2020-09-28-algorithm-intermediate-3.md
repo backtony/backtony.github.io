@@ -287,57 +287,54 @@ __배운 점__
 
 ### 내가 작성한 코드
 ```python
-import sys
-from collections import deque
-input = sys.stdin.readline
+def solution():
+    cnt = 0
+    # 현재 virus에 들어있는 길이만큼을 미리 저장하고
+    # 그 만큼만 돌리고 cnt해주고 다시 길이를 구하는 식으로 반복
+    while cnt != s:
+        length = len(virus)
+        # while로 virus꺼내면 virus에 계속 추가되서 카운트를 할 수 없으므로 for문사용
+        for _ in range(length):
+            num, x, y = virus.pop(0)
+            for i in range(4):
+                px = x + dx[i]
+                py = y + dy[i]
+                # 범위내고 비어있다면 전염시키고 해당 위치 삽입
+                if 0 <= px and px < n and 0 <= py and py < n and graph[px][py] == 0:
+                    graph[px][py] = num
+                    virus.append((num, px, py))
+        cnt += 1
 
-# 시험관 크기 n, 바이러스 종류 k
+
+# N시험관크기, K바이러스 종류개수
 n, k = map(int, input().split())
-graph = [[] for _ in range(n)]
-cnt = 0  # 시간초
 
-# U R D L 시계방향
+graph = []
+virus = []
+
+# 시계방향
 dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 
-# 시험관 정보
-for i in range(n):
-    graph[i] = list(map(int, input().rstrip().split()))
+# 맵 입력
+for _ in range(n):
+    graph.append(list(map(int, input().split())))
 
-# s초후 x,y 위치의 값
-s, x, y = map(int, input().split())
-
-next =[]
+# 바이러스 위치 저장
 for i in range(n):
     for j in range(n):
         if graph[i][j] != 0:
-            next.append((graph[i][j], i, j))  # (바이러스 종류, 좌표)
-next.sort()  # 바이러스 번호순 정렬
+            # 바이러스 번호, 위치
+            virus.append((graph[i][j], i, j))
 
-# 입력된 시간 까지
-while cnt < s:
-    if not next : # 전염 시작 위치가 없는 경우
-        break
-    q = deque(next)  # 큐에 삽입
-    next.clear()  # 이후 사용을 위해 비우기
-    # 큐가 빌때까지 반복
-    while q:
-        num, i, j = q.popleft()
-        # 4방향
-        for z in range(4):
-            pi = i + dx[z]
-            pj = j + dy[z]
-            # 범위 내에 있으면서 빈칸인 경우만
-            # 따로 해주는게 더 빨리 끝남 
-            if 0 <= pi and pi < n and 0 <= pj and pj < n and graph[pi][pj] == 0:
-                graph[pi][pj] = num  # 바이러스 전염
-                next.append((num, pi, pj))  # 다음 전염 시작의 기준 위치
-    cnt +=1 # 큐가 다 비게 되면 1초 카운트
+virus.sort()  # 바이러스 번호순 정렬
 
-
-print(graph[x-1][y-1])
+# s초후, x,y위치
+s, x, y = map(int, input().split())
+solution()
+print(graph[x - 1][y - 1])
 ```
-하나씩 옆에 있는 것부터 처리하는 과정을 통해 BFS를 생각해냈다. 바이러스 번호가 작은 것부터 전염을 시작해야 하기 때문에 큐를 바로 사용하기 전에 먼저 전염 번호 순으로 정렬시키고 큐에 대입하는 방법으로 설계했다.
+정렬을 해야하는데 deque에는 sort기능이 없어서 그냥 리스트를 사용했고 pop(인덱스)로 꺼냈다.  
 
 ### 모범 답안
 낮은 번호부터 증식하므로, 초기에 큐에 원소를 삽입할 때는 낮은 바이러스의 번호부터 삽입해야 한다. 이후 BFS를 수행하며 방문하지 않은 위치를 차례대로 방문하도록 하면 된다.
@@ -387,11 +384,74 @@ while q:
 
 print(graph[target_x - 1][target_y - 1])
 ```
+__배울 점__  
++ 내가 작성한 코드는 for문으로 정보를 입력 받고 다시 for문을 돌려 바이러스의 위치를 찾았는데 답안 코드에서는 입력과 동시에 바로 아래 for문을 이용해서 바이러스의 위치를 찾았다. 코드를 좀 더 줄일 수 있는 좋은 방법인 것 같다.
++ deque에는 sort가 없어서 그냥 리스트를 이용했는데 답안은 리스트로 받아서 sort한 뒤에 deque(정렬한리스트)를 넣어서 사용했다. deque의 활용법을 좀 더 기억해야겠다.
++ 큐에 넣을 때 시간의 정보를 추가로 넣어줬다면 for문을 줄일 수 있었다.
+
 <br>
 
 ## 5. 괄호 변환
 ---
 [문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60058){: target="_blank"}  
+
+### 내가 작성한 코드
+재귀부분에서 약간의 생각이 필요했지만 문제에서 거의 모든 내용이 주어졌기때문에 그대로 따라가면 쉽게 해결할 수 있다.
+```python
+# 옳바른 문자열인지 확인
+def check(u):
+    if u[0]==')':
+        return False
+    left_cnt=0
+    right_cnt=0
+    for i in range(len(u)):
+        if u[i] == '(':
+            left_cnt+=1
+        else:
+            right_cnt+=1
+        # )이 더 많아지는 순간 옳바르지않음
+        if right_cnt>left_cnt:
+            return False
+    return True
+
+def solution(p):
+    length = len(p)
+    # 빈문자열이면 빈문자열 반환
+    if length==0:
+        return p
+    left_cnt=0
+    right_cnt=0
+    for i in range(length):
+        # 카운트
+        if p[i] == '(':
+            left_cnt+=1
+        else:
+            right_cnt+=1
+        # 카운트가 1이상이고 양 방향의 갯수가 같으면 균형잡힌괄호문자열임
+        if left_cnt>0 and left_cnt==right_cnt:
+            break
+    # for문에서 break된 인덱스 i로 u,v 나누기
+    u = p[:i+1]
+    v = p[i + 1:]
+    # u가 옳바른 문자열이라면 v를 인자로 재귀 호출
+    if check(u):
+        return u + solution(v)
+    # u가 옳바른 문자열이 아니면
+    else:
+    # list가 아니고 문자열이므로 append,pop 없이 연산으로 해결
+        tmp="(" + solution(v) + ")"
+        ans=""
+        for i in range(len(u)):
+            if u[i]=="(":
+                ans+=")"
+            else:
+                ans+="("
+
+        tmp = tmp + ans[1:-1]
+        return tmp
+```
+
+
 
 ### 모범  답안
 구현을 위한 알고리즘 자체는 문제에 그대로 제시되어 있기 때문에, 재귀 함수를 이용하여 문제에 기재되어 있는 알고리즘을 안정적으로 구현할 수 있으면 해결할 수 있다.  
