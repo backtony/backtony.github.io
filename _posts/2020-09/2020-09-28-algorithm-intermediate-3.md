@@ -452,7 +452,6 @@ def solution(p):
 ```
 
 
-
 ### 모범  답안
 구현을 위한 알고리즘 자체는 문제에 그대로 제시되어 있기 때문에, 재귀 함수를 이용하여 문제에 기재되어 있는 알고리즘을 안정적으로 구현할 수 있으면 해결할 수 있다.  
 실수 없이 풀려면 소스코드를 최대한 단순화하는 것이 좋다. 따라서 특정 문자열에서 '균형잡힌 괄호 문자열'의 인덱스를 반환하는 함수와 특정한 '균형잡힌 괄호 문자열'이 '올바른 괄호 문자열'인지 판단하는 함수를 별도로 구현하고 재귀 함수에서 이 두 함수를 불러오도록 소스코드를 작성하자.  
@@ -523,109 +522,93 @@ def solution(p):
 ### 내가 작성한 코드
 연산자 갯수가 n-1개 이므로 n-1!하면 모든 경우의수가 나온다. 3백만 정도의 연산 횟수가 되므로 완전 탐색을 해도 될 것 같아서 다음과 같이 설계했다. 
 ```python
-import sys
+# 최소 최대값을 구해야하므로 연산 다 해봐야함
+# 연산자 순서가 상관있으므로 permutations
+
 from itertools import permutations
 
-input = sys.stdin.readline
-minus_INF = -int(1e9)
-INF = int(1e9)
-
 n = int(input())
-a = list(map(int, input().rstrip().split()))
-# 덧 뺄 곱 나눗
-operators = list(map(int, input().rstrip().split()))
-# 실제 문자로 연산자를 넣을 리스트
-operator = []
+num = list(map(int, input().split()))
+table = list(map(int, input().split()))
+units = ['+'] * table[0] + ['-'] * table[1] + ['*'] * table[2] + ['/'] * table[3]
 
-# 연산자 넣기
-for _ in range(operators[0]):
-    operator.append('+')
-for _ in range(operators[1]):
-    operator.append('-')
-for _ in range(operators[2]):
-    operator.append('*')
-for _ in range(operators[3]):
-    operator.append('//')
 
-# 순열
-operators = list(permutations(operator, n - 1))
+def solution():
+    min_ans = int(1e9)
+    max_ans = -int(1e9)
 
-ans_max = minus_INF
-ans_min = INF
-
-# 비교 시작
-for operator in operators:
-    tmp = a[0]
-    # 인덱스 n-1까지 정수 있고 연산자는 n-2까지 있다.
-    for i in range(1, n):  # 연산자 인덱스는 -1 해주자
-        if operator[i - 1] == '+':
-            tmp += a[i]
-        elif operator[i - 1] == '*':
-            tmp *= a[i]
-        elif operator[i - 1] == '-':
-            tmp -= a[i]
-        else:
-            # 음의 경우
-            if tmp < 0:
-                tmp = -tmp
-                tmp //= a[i]
-                tmp = -tmp
+    for unit in permutations(units, n - 1):
+        tmp = num[0]
+        for i in range(n - 1):
+            if unit[i] == '+':
+                tmp += num[i + 1]
+            elif unit[i] == '-':
+                tmp -= num[i + 1]
+            elif unit[i] == '*':
+                tmp *= num[i + 1]
             else:
-                tmp //= a[i]
-    ans_max = max(ans_max, tmp)
-    ans_min = min(ans_min, tmp)
+                tmp= int(tmp/num[i+1])
+        max_ans = max(max_ans, tmp)
+        min_ans = min(min_ans, tmp)
+    return max_ans, min_ans
 
-print(ans_max)
-print(ans_min)
+
+max_ans, min_ans = solution()
+
+print(max_ans)
+print(min_ans)
 ```
+pypy3는 가능한데 python3에서는 시간초과가 나온다. 아직 이유는 모르겠으나 순열, 조합문제를 itertools로 풀었을 때 시간초과가 나온다면 재귀함수로 풀면 시간초과가 나오지 않는다. 
 
 ### 모범 답안
 최대 11개의 수가 주어졌을 때, 각 수와 수 사이에 사칙연산 중 하나를 삽입하는 모든 경우에 대하여 만들어질 수 있는 결과의 최댓값 및 최솟값을 구하면 된다. 따라서 모든 경우의 수를 계산하기 위하여 완전탐색(DFS / BFS)를 이용하여 해결할 수 있다.  
 이 문제에서는 각 사칙연산을 중복하여 사용할 수 있기 때문에, 중복 순열을 이용해 풀 수도 있다. 하지만 DFS를 이용하여 풀 수도 있다.  
 __여기서 기억해야 할 점은 중복 순열을 DFS로 나타낼 수 있다는 것이다.__  
 ```python
-import sys
-
-input = sys.stdin.readline
-
 n = int(input())
-num = list(map(int, input().rstrip().split()))
+num = list(map(int, input().split()))
+plus, minus, time, divide = map(int, input().split())
 
-plus, minus, mul, div = map(int, input().rstrip().split())
+min_ans = int(1e9)
+max_ans = -int(1e9)
 
-max_value = int(-1e9)
-min_value = int(1e9)
+def solution(cnt, tot):
+    global plus, minus, time, divide, min_ans, max_ans
 
-
-def dfs(cnt, now):
-    global plus, minus, mul, div, max_value, min_value
-    # 주어진 연산자 다 사용했을때
+    # n번째 인덱스까지 도달시 max, min 수정하고 다른 경우로 돌아가기
     if cnt == n:
-        max_value = max(max_value, now)
-        min_value = min(min_value, now)
-    else:
-        if plus > 0:
-            plus -= 1
-            dfs(cnt + 1, now + num[cnt])
-            plus += 1
-        if minus > 0:
-            minus -= 1
-            dfs(cnt + 1, now - num[cnt])
-            minus += 1
-        if mul > 0:
-            mul -= 1
-            dfs(cnt + 1, now * num[cnt])
-            mul += 1
-        if div > 0:
-            div -= 1
-            dfs(cnt + 1, int(now / num[cnt]))
-            div += 1
+        max_ans = max(max_ans, tot)
+        min_ans = min(min_ans, tot)
+        return
+    
+    # 재귀적 사고
+    if plus > 0:
+        plus -= 1
+        solution(cnt + 1, tot + num[cnt])
+        plus += 1
+
+    if minus > 0:
+        minus -= 1
+        solution(cnt + 1, tot - num[cnt])
+        minus += 1
+
+    if time > 0:
+        time -= 1
+        solution(cnt + 1, tot * num[cnt])
+        time += 1
+
+    if divide > 0:
+        divide -= 1
+        solution(cnt + 1, int(tot / num[cnt]))
+        divide += 1
 
 
-dfs(1, num[0])
-print(max_value)
-print(min_value)
+solution(1, num[0])
+print(max_ans)
+print(min_ans)
 ```
+c++의 나눗셈 몫은 파이썬에서 나눗셈에 int를 씌운것과 같다.
+
 __python 음수 나눗셈__  
 [![그림1](https://backtony.github.io/assets/img/post/python/intermediate/intermediate-3.PNG)](https://kj-said.tistory.com/entry/Python-%EB%82%98%EB%88%97%EC%85%88%EC%97%90-%EA%B4%80%ED%95%9C-%EA%B3%A0%EC%B0%B0-%EC%9D%8C%EC%88%98-%EB%82%98%EB%88%84%EA%B8%B0-divmod){: target="_blank"}  
 
@@ -650,7 +633,9 @@ count -= 1
 ```
 dfs는 위와 같은 형태로 대부분 인자를 탈출조건에 사용했으며, 간단히 정리하자면 아래와 같다.  
 + 만약 3개를 선택했다고 가정하면, 먼저 선택한 2개는 유지하면서 나중에 선택한 1개를 다른 것으로 바꾸기.. 이후에 남은 것들을 다 선택했다면 2번째 선택했던 것을 바꾸고 마지막 선택한 것을 다시 처음부터 바꾸기 이 과정을 반복하는데 사용되었다.
-+ 특정한 개수를 모두 선택한 뒤 서로의 순서를 바꾸는, 즉, 중복순열을 나타낼 때도 사용할 수 있었다.
++ 특정한 개수를 모두 선택한 뒤 서로의 순서를 바꾸는, 즉, 중복순열을 나타낼 때도 사용할 수 있었다. 재귀를 통해 구현되기 때문에 __최종 결과값을 저장할 변수는 global 키워드가 필요하다.__
+    - permutations와 논리는 같은데 어떤 문제는 permutations일때 더 빠르고 어떤 문제는 dfs 재귀로 구현하는게 더 빠르다. 아직까지는 뭐가 문제인지 모르겠다.
++ __중복순열, 순열에서 DFS를 사용할 수 있다는 것을 기억하자__
 
 ## 7. 감시 피하기
 ---
