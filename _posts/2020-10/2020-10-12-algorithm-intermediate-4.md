@@ -9,10 +9,10 @@ comments: true
 ---
 + __목차__
   - [1. 간단 정리](#1-간단-정리)
-  - [2. 국영수](#2-특정한-거리의-도시-찾기)
-  - [3. 안테나](#3-연구소) 
-  - [4. 실패율](#4-경쟁적-전염)
-  - [5. 카드 정렬하기](#5-괄호-변환)
+  - [2. 국영수](#2-국영수)
+  - [3. 안테나](#3-안테나) 
+  - [4. 실패율](#4-실패율)
+  - [5. 카드 정렬하기](#5-카드-정렬하기)
 
 ## 1. 간단 정리
 ---
@@ -43,26 +43,19 @@ comments: true
 
 ### 내가 작성한 코드
 ```python
-import sys
-
-input = sys.stdin.readline
-
 n = int(input())
-students = []
+table = []
+
+for _ in range(n):
+    table.append(input().split())
+
+table.sort(key = lambda x:(-int(x[1]),int(x[2]),-int(x[3]),x[0]))
+
 for i in range(n):
-    name, kor, eng, math = input().rstrip().split()
-    students.append([name,int(kor),int(eng),int(math)])
-
-students.sort(key = lambda x: (-x[1],x[2],-x[3],x[0]))
-for student in students:
-    print(student[0])
-
+    print(table[i][0])
 ```
-내장함수를 사용했다. 모범답안과 매우 유사하다. 모범답안은 문자열을 그대로 저장하고 아래와 같이 정렬했다.
-```python
+파이썬의 정렬 내장함수는 최악의 경우에도 NlogN을 보장하기 때문에 주어진 범위 내에서 충분히 사용할 수 있다.
 
-students.sort(key=lambda x: (-int(x[1]), int(x[2]), -int(x[3]), x[0]))
-```
 
 
 <br>
@@ -73,37 +66,13 @@ students.sort(key=lambda x: (-int(x[1]), int(x[2]), -int(x[3]), x[0]))
 
 ### 내가 작성한 코드
 ```python
-import sys
-
-input = sys.stdin.readline
-
-# 집 개수와 위치
-n = int(input())
-location = list(map(int,input().rstrip().split()))
-
-# 정렬하고 가운데 위치가 가장 적절한 위치
-location.sort()
-
-# n은 개수라 1부터 카운트하지만 인덱스는 0부터이므로 조정이 필요함
-# 짝수개수면 인덱스는 전체 길이 나누기2 -1
-if n%2==0 :
-    print(location[len(location)//2-1])
-# 홀수면 나누기2
-else :
-    print(location(len(location)//2))
+n = int(input()) # 집의수
+table = list(map(int,input().split())) # 집의 위치
+table.sort() # 정렬
+print(table[(n-1)//2]) # 정렬후 가장 가운데 있는 곳에 설치해야 최소
 ```
-범위가 200,000만 이므로 적어도 선형 로그 시간 알고리즘으로 설계해야한다. 따라서 받은 위치를 일일이 뺀 값을 정리해서 정렬하는 풀이는 시간초과하게 된다. 내장함수 정렬을 이용하면 쉽게 풀 수 있다.
+범위가 200,000만 이므로 적어도 선형 로그 시간 알고리즘으로 설계해야한다. 따라서 각각의 위치에 설치하고 일일이 비교하는 설계는 시간초과가 발생할 것이다. 내장함수를 이용해서 정렬하고 결국 집들의 가운데 있는 집에 설치하는 것이 최소거리를 만족할 것이므로 집들 중에서 가운데 있는 곳에 설치하면 된다. 홀수는 상관없으나 짝수의 경우 인덱스때문에 -1을 해주고 나눗셈을 해줘야 제일 먼저 나오는 최소거리 집의 위치가 된다.
 
-### 모범답안
-```python
-n = int(input())
-a = list(map(int, input().split()))
-a.sort()
-
-# 중간값(median)을 출력
-print(a[(n - 1) // 2])
-```
-홀수는 -1한 뒤 몫 나눗셈을 해도 결과값이 같다. 따라서 n-1한 값에 나누기2를 하면 짝 홀 구분없이 한번에 코드를 작성할 수 있다.
 <br>
 
 ## 4. 실패율
@@ -112,29 +81,38 @@ print(a[(n - 1) // 2])
 
 ### 내가 작성한 코드
 ```python
-def solution(N, stages):
-    temp = []
+def solution(n,stages):
     answer=[]
-    count = [0] * (N + 2) # N+1은 마지막 스테이지 클리어한 사용자
-    approach_people = len(stages) # 스테이지에 도달한 플레이어 수
-    # 각 스테이지에 있는 인원을 count에 정리
-    for i in stages:
-        count[i] += 1
-    # 실패율
-    for stage in range(1, N + 1):
-        # 도달한 사람이 없으면
-        if count[stage] == 0:
-            temp.append((0, stage))
-            continue
+    table=[0]*(n+2)# 해당 스테이지에 도달했으나 클리어 못한 플레이어 리스트
+    passer=[0]*(n+2) # 스테이지에 도달한 플레이어수
+    fail=[0]*(n)
 
-        fail_percent = count[stage] / approach_people
-        approach_people-=count[stage]
-        temp.append((fail_percent, stage))
-    temp.sort(key = lambda x:(-x[0],x[1]))
-    for i in temp:
-        answer.append(i[1])
+    # 스테이지에 도달했으나 클리어 못한 플레이어수 처리
+    for i in stages:
+        table[i]+=1
+
+    # 해당 스테이지를 클리어한 플레이어수
+    for i in range(n,0,-1):
+        passer[i]=passer[i+1] + table[i+1]
+
+    print(passer)
+    # 실패율
+    for i in range(n):
+        # 도달한 유저가 없는 경우
+        if passer[i+1]+table[i+1]==0:
+            fail[i] = (0,i+1)
+        else:
+            fail[i] = (table[i+1]/(passer[i+1]+table[i+1]),i+1)
+
+    fail.sort(key = lambda x:(-x[0],x[1]))
+
+    for i in range(n):
+        answer.append(fail[i][1])
+
     return answer
 ```
+실패율을 처리할 때 모범답안과 같이 length를 이용해서 하는 것이 더 좋아보인다. 코딩 기술보다 뭔가 사고적인것을 요구하는 문제인 것 같다. 앞으로 단계별 퍼센트를 구하는 문제의 경우 전체길이를 생각하고 처음부터 구하면서 길이를 이용하는 방법을 먼저 생각해보도록 하자.
+
 
 ### 모범답안
 ```python
@@ -148,7 +126,7 @@ def solution(N, stages):
         count = stages.count(i)
         
         # 실패율 계산
-        if length == 0:
+        if count == 0:
             fail = 0
         else:
             fail = count / length
@@ -166,7 +144,7 @@ def solution(N, stages):
     answer = [i[0] for i in answer]
     return answer
 ```
-내가 작성한 코드와 비슷하지만 좀 더 간결하게 작성할 수 있다는 점을 볼 수 있다.
+
 
 <br>
 
