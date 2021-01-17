@@ -277,42 +277,42 @@ __내가 왜 답안처럼 접근을 못 했을까?__
 [문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60060){: target="_blank"}  
 
 ### 내가 작성한 코드 (시간초과)
+처음 공부와 1차 리뷰에서 둘 다 풀지 못했다. 둘 다 시간 초과가 나왔고 작성한 코드도 거의 비슷했다. 생각을 다르게 해야할 필요가 있다.
 ```python
 from bisect import bisect_left, bisect_right
 
-
 def solution(words, queries):
     answer = []
-    for queiry in queries:
-        count = 0
-        # ?가 접두사에 있나 접미사에 있나 판단
-        # ?가 접두사에 있는 경우
-        if queiry[0] == '?':
-            idx = bisect_right(queiry, '?')
-            # 단어별 확인작업
+    for query in queries:
+        n = len(query)  # 쿼리의 길이
+        tmp_query = sorted(query)
+        length = bisect_right(tmp_query, '?') - bisect_left(tmp_query, '?')  # ? 갯수
+        # 물음표가 뒤에서 부터 있음
+        if query[0] != '?':
+            cnt = 0
             for word in words:
-                if queiry[idx:] == word[idx:] and len(queiry) == len(word):
-                    count += 1
-        # 접미사에 있는 경우
+                # 길이가 같고 문자가 같으면
+                if n == len(word) and query[:n - length] == word[:n - length]:
+                    cnt += 1
+            answer.append(cnt)
+        # ?가 맨 앞에서부터 있는 경우
         else:
-            # 이진탐색은 정렬이 된 경우에만 사용 가능
-            # 정렬해서 ? 개수 카운트
-            pre_queiry = list(queiry)
-            pre_queiry.sort()
-            idx = bisect_right(pre_queiry, '?')
-
-            # 단어별 확인작업
+            cnt = 0
             for word in words:
-                if queiry[:-idx] == word[:-idx] and len(queiry) == len(word):
-                    count += 1
-        answer.append(count)
+                # 길이가 같고 문자가 같으면
+                if n == len(word) and query[length:] == word[length:]:
+                    cnt += 1
+            answer.append(cnt)
+
     return answer
 ```
-실행결과는 맞지만 효율성 테스트에서 시간 초과 판정을 받았다. 모든 갯수를 일일이 확인했기 때문이다. 일일이 count하는 것이 아니라 조건 범위에 딱 맞게 끝에서 처음을 빼주는 형식으로 코드를 작성해야했다.
+범위가 매우 크고 특정 위치를 찾는다는 점에서 이진탐색을 생각해냈고, 이진탐색의 조건은 이미 정렬이 완료된 상태여야 한다는 점을 고려해서 '?'의 개수를 카운트 하는 부분에서 이진탐색을 활용할 수 있다고 생각했다. 하지만 문자열을 비교하느 부분에서는 딱히 효율적인 풀이가 생각나지 않았다. 풀이를 보니 내가 생각한 접근방식이 잘못되었다. 결론적으로 ?의 개수를 구하고 남은 부분을 비교한다는 설계자체가 일일이 비교한다는 가정에 작성된 설계라 시간을 너무 많이 소요하게 되는 것이었다. 따라서 다른 접근 방식을 생각해내야만 했다. 복잡도를 고려할 때 주어진 쿼리단어에 만족하는 단어들을 한 번에 묶어서 만족하는 개수를 구해내야했다.
+
 
 ### 모범 답안
-bisect로 갯수 차이 확인할 때는 관례적으로 함수 이름을 count_by_range 로 한다. bisect는 sort와 다르게 문자열의 개수 상관없이 각 자리끼리의 우선순위를 판단해서 인덱스 값을 반환한다. 예를 들어 a=[frodo, frozen]와 같이 정렬된 리스트가 있을 때 bisect_right(a,'frozz')를 사용하면 1이 아니라 2를 반환한다. 따라서 __bisect를 사용하는데 문자열의 개수에 대한 고려가 필요하다면 bisect를 사용하기 전에 우선 문자열의 길이를 기준으로 리스트를 따로 선언한 후 사용해야 한다는 점을 반드시 기억하자.__  
-자주 사용되진 않지만 풀이에 사용된 replace 함수의 사용법도 기억해두고, 리스트를 뒤집어서 풀이할 수 있다는 접근도 기억해두자.  
+bisect는 각 자리끼리의 우선순위를 판단해서 인덱스 값을 반환한다. 예를 들어 a=[frodo, frozen]와 같이 정렬된 리스트가 있을 때 bisect_right(a,'frozz')를 사용하면 1이 아니라 2를 반환한다. 즉, 문자열의 길이를 고려하지 않고 사전순으로 찾아간다는 뜻이다. 따라서 이 문제와 같이 __넓은 범위 내에서 특정위치를 찾아가야하는데 문자열의 길이를 고려해야 한다면 bisect를 사용하기 전에 우선 문자열의 길이를 기준으로 리스트를 따로 선언한 후 사용해야 한다는 점을 반드시 기억하자.__  
+'?'이 뒤쪽에 있는 경우는 '?'을 'a'와 'z'로 교체하고 비교하면 쉽게 구할 수 있다. 하지만 '?'가 맨 앞에 있는 경우는 다른 방법을 생각해내야 한다. 왜냐하면 앞에 있는 '?'를 'a'와 'z'로 바꾸게 되면 당연히 맨 앞과 맨 뒤를 차지하게되어 모든 단어를 포함하게 되기 때문이다. 그렇다면 '?'를 뒤로 옮기기위해서 뒤집으면 어떨까? 괜찮다. 왜냐하면 구하는 것은 각 인덱스에 해당하는 문자가 같은지 판단하는 것이기 때문이다.
+자주 사용되진 않지만 풀이에 사용된 replace 함수의 사용법도 기억해두고, 리스트를 [::-1]로 뒤집는 방법도 기억해두자.  
 ```python
 from bisect import bisect_left,bisect_right
 def count_by_range(words,start,end):
@@ -327,22 +327,26 @@ def solution(words, queries):
     reverse_array=[[] for _ in range(10001)]
     for word in words:
         array[len(word)].append(word)
-        reverse_array[len(word)].append(word[::-1]) # 접두사의 경우 처리를 위해
+        reverse_array[len(word)].append(word[::-1]) # 앞에 ?가 나오는 경우를 위해
 
-    # 정렬
+    # 정렬 내장함수는 최악의 경우도 nlogn을 만족하므로 10001범위도 괜찮다.
     for i in range(1,10001):
         array[i].sort()
         reverse_array[i].sort()
 
     for query in queries:
-        # 접미사
+        # 뒤에 ?가 있는 경우
         if query[0] !='?':
             answer.append(count_by_range(array[len(query)],query.replace('?','a'),query.replace('?','z')))
-        # 접두사
+        # 앞에 ?가 있는 경우
         else:
             answer.append(count_by_range(reverse_array[len(query)], query[::-1].replace('?', 'a'), query[::-1].replace('?', 'z')))
     return answer
 ```
+
+__이 문제에서 배울점__  
+사실 문자열 비교는 일일이 비교하거나, c언어의 strcmp밖에 생각나지 않았다. __파이썬에서는 위 문제와 같이 앞이나 뒤에 문자열이 같은지를 확인하는 경우 문자열 길이별로 저장, 정렬한 뒤에 문자를 수정하거나 추가해 이진탐색을 이용하여 일치하는 문자열을 찾을 수 있다는 점을 반드시 기억해두자. 하지만 앞,뒤가 아닌 중간에서 일치하는 여부는 다른 방법을 생각해야한다.__
+
 <br>
 
 
