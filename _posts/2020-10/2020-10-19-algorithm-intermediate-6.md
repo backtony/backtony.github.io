@@ -55,58 +55,45 @@ __출력 조건__
 ```
 
 ### 내가 작성한 코드
+범위가 매우 적고 모든 경우의 수를 확인해야 하므로 완전 탐색을 생각해냈다. 계산을 최대한 줄이기 위해서 계산 결과를 따로 저장할 리스트를 만들었다. 즉, 완전 탐색에서 계산 결과를 줄이기 위해 처음부터(아래서부터)계산 결과를 저장해서 사용했으므로 보텀업 방식을 이용한 것이다. 내 코드도 괜찮은 것 같지만, 여기서는 답안처럼 하는 것이 복잡도를 더 줄일 수 있는 방법인 것 같다. 나는 한 위치에 값을 구하기 위해 max비교를 2~3번 해야하지만, 답안은 1번만에 끝내기 때문이다.
 ```python
-import sys
+import copy
 
-input = sys.stdin.readline
-
-# 테스트 케이스 횟수
 t = int(input())
 
-# 위 오른쪽 아래
 dx = [-1, 0, 1]
 dy = [1, 1, 1]
+
 for _ in range(t):
     n, m = map(int, input().split())
-    answer = 0  # 총 캔 금광
-    # 금광 그래프와 정보
     graph = [[] for _ in range(n)]
-    golds = list(map(int, input().rstrip().split()))
-    cnt = 0
-    # 금광 그래프 완성시키기
-    for i in range(n):
-        for _ in range(m):
-            graph[i].append(golds[cnt])
-            cnt += 1
+    golds = list(map(int, input().split())) # 금광 정보
 
-    # max를 못쓰는게 max인 위치의 좌표를 알아야해
-    # 금광 그래프의 범위가 매우 작으므로 그냥 완전 탐색해도 될듯
-    x = y = 0
-    max_gold = graph[0][0]
-    # 첫 시작 위치
-    for i in range(1, n):
-        if max_gold < graph[i][0]:
+    idx = 0
+    # 금광 그래프 완성
+    for i in range(n):
+        graph[i] = golds[idx:idx + m]
+        idx += m
+
+    # 누적 리스트 - 금광 그래프 복사
+    ans = copy.deepcopy(graph)
+
+    for j in range(m - 1):
+        for i in range(n):
             x = i
-            max_gold = graph[i][0]
-    answer += max_gold
-    # 이동 과정
-    while x < n and y < m:
-        max_gold = 0
-        for i in range(3):
-            px = x + dx[i]
-            py = y + dy[i]
-            # 범위 내일 경우
-            if px < n and py < m:
-                if max_gold < graph[px][py]:
-                    ans_x = px
-                    ans_y = py
-                    max_gold = graph[px][py]
-        x=ans_x
-        y=ans_y
-        answer += max_gold
-        if y == m - 1:
-            break
-    print(answer)    
+            y = j
+            for k in range(3):
+                px = x + dx[k]
+                py = y + dy[k]
+                # 범위 내
+                if 0 <= px and px < n and 0 <= py and py < m:
+                    ans[px][py] = max(ans[px][py], ans[x][y] + graph[px][py])
+
+    # 어쩌피 누적이라 오른쪽 열이 제일 큰 수들이 저장됨
+    tot = ans[0][m - 1]
+    for i in range(1, n):
+        tot = max(tot, ans[i][m - 1])
+    print(tot)
 ```
 
 ### 모범답안
@@ -158,32 +145,18 @@ for tc in range(int(input())):
 
 ### 내가 작성한 코드
 ```python
-import sys
-input = sys.stdin.readline
-
 n = int(input())
-graph = [[] for _ in range(n)]
-table = [[] for _ in range(n)]
-
-# 그래프 대입
+tower = [[] for _ in range(n)]
+# 타워 정보 삽입
 for i in range(n):
-    graph[i]=list(map(int,input().rstrip().split()))
+    tower[i] = list(map(int, input().split()))
 
-# 탑다운 방식
-table[0]=graph[0]
-for i in range(1,n):
-    for j in range(i+1):
-        if j-1<0:
-            ans = graph[i][j] + table[i - 1][j]
-            table[i].append(ans)
-        elif j==i:
-            ans = graph[i][j] + table[i - 1][j-1]
-            table[i].append(ans)
-        else:
-            ans = graph[i][j] + max(table[i - 1][j - 1], table[i - 1][j])
-            table[i].append(ans)
+# 보텀업 방식
+for i in range(n - 2, 0 - 1, -1): # 마지막에서 한 줄 위부터 시작
+    for j in range(i + 1):
+        tower[i][j] += max(tower[i + 1][j], tower[i + 1][j + 1])
 
-print(max(table[n-1]))
+print(tower[0][0])
 ```
 
 ### 모범답안
@@ -214,6 +187,11 @@ for i in range(1, n):
 
 print(max(dp[n - 1]))
 ```
+<br>
+
+__cf) 2,3번에서 배운점__  
+계산 결과를 누적해서 사용하는 다이나믹 프로그래밍, 보텀업 방식을 사용할 때는 생각의 시작을 시작점이 아니라 시작점 바로 하나 위에서 생각을 시작하는 것이 설계에 도움이 되는 것 같다.  
+
 <br>
 
 ## 4. 퇴사
