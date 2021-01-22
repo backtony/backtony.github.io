@@ -81,8 +81,8 @@ public class HelloController {
 
     @GetMapping("hello-string")
     @ResponseBody // http에서 헤더부와 바디부가 있는데 바디부에 이 데이터를 직접 넣어주겠다.
-    // @RequestParam에 의해서 ?p=spring으로 받으면 name에는 spring이 들어간다.
-    // 키값을 수정하지 않으면 key값는 name으로 고정
+    // @RequestParam에 의해서 ?p=spring으로 받으면 code에는 spring이 들어간다.
+    // 키값을 수정하지 않으면 key값는 "name"으로 고정
     public String helloString(@RequestParam("p") String code) {
         return "hello " + code; // name에 spring으로 넣으면 "hello spring"
         // 템플릿 엔진과 차이는 뷰 이런게 없고 그냥 이 문자가 그대로 내려간다.
