@@ -277,58 +277,99 @@ __출력 조건__
 ```
 ### 내가 작성한 코드
 ```python
-import sys
 import heapq
+t = int(input())
 
-input = sys.stdin.readline
+dx = [-1,0,1,0]
+dy = [0,1,0,-1]
+INF = int(1e9)
 
-# 시계방향
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
+def dijkstra():
+    graph = []
 
+    # 그래프 크기
+    n = int(input())
 
-def dijkstra(cost, start, n):
-    INF = int(1e9)
-    distance = [[INF] * n for _ in range(n)]
-    distance[0][0]=cost[0][0]
+    # 최단거리 담을 그래프
+    ans = [[INF] * n for _ in range(n)]
+
+    # 그래프 정보
+    for i in range(n):
+        graph.append(list(map(int, input().split())))
+
     q = []
-    heapq.heappush(q, (cost[0][0], start))
+    heapq.heappush(q, (graph[0][0], 0, 0))  # 비용, 시작좌표
+    ans[0][0] = graph[0][0] # 첫 시작 비용
     while q:
-        now_cost, now = heapq.heappop(q)
-        x, y = now
-        if now_cost > distance[x][y]:
+        cost, x, y = heapq.heappop(q)
+        # 뽑힌 순간 이미 그 자리는 최소값으로 구해져있음
+        if x == n - 1 and y == n - 1:
+            break
+        # 갱신이 필요없는 경우 무시
+        if ans[x][y] < cost:
             continue
         for i in range(4):
             px = x + dx[i]
             py = y + dy[i]
-            # 범위 내에 있으면서
+            # 범위 내 이동 가능
             if 0 <= px and px < n and 0 <= py and py < n:
-                # 이동후 최소거리의 변화가 있을 경우
-                if now_cost + cost[px][py]<=distance[px][py]:
-                    way = (px, py)
-                    distance[px][py]=now_cost + cost[px][py]
-                    heapq.heappush(q, (distance[px][py], way))
-    return distance
+                if cost + graph[px][py] < ans[px][py]:
+                    ans[px][py] = cost + graph[px][py]
+                    heapq.heappush(q, (ans[px][py], px, py))
+    return ans[x][y]
 
 
-
-t = int(input())
-
-for i in range(t):
-    n = int(input())  # 탐사 공간 크기
-    cost = []  # 비용
-
-    # 탐사 공간 비용 정보 입력
-    for j in range(n):
-        cost.append(list(map(int, input().rstrip().split())))
-    start = (0,0)
-    answer = dijkstra(cost,start,n)
-    print(answer[n-1][n-1])
+for k in range(t):
+    print(dijkstra())
 ```
+
+### 1차 리뷰 코드
+```python
+from collections import deque
+import sys
+
+input = sys.stdin.readline
+dx=[-1,0,1,0]
+dy = [0,1,0,-1]
+
+# 이동거리 비용이 1이니까 bfs로 해도 될듯
+def bfs():
+    n, m = map(int, input().split())
+
+    graph = [[] for _ in range(n + 1)]  # 그래프 연결저장소
+    ans =[-1]*(n+1) # 누적 저장소
+
+    # 그래프 정보 입력
+    for _ in range(m):
+        a, b = map(int, input().split())
+        graph[a].append(b)
+        graph[b].append(a)
+
+    q = deque()
+    q.append((0,1)) # 현재비용,위치
+
+    # bfs는 꺼내서 제일 먼저나온게 최소거리임
+    while q:
+        cost,pos = q.popleft()
+        # 갱신 안되있으면 이제 바꾸고, 그게 최소거리임
+        if ans[pos]==-1:
+            ans[pos] = cost
+            for i in graph[pos]:
+                    q.append((ans[pos]+1,i))
+    # 헛간 번호(가장작은 번호), 헛간 거리, 같은 거리 개수
+    dis = max(ans)
+    num = ans.index(dis)
+    cnt = ans.count(dis)
+    return num,dis,cnt;
+
+num, dis, cnt = bfs()
+print(num,dis,cnt)
+```
+모든 비용이 1이므로 bfs로 풀어보았다. bfs는 꺼낸 순간 그 자리가 전에 방문하지 않았던 곳이라면 꺼낸 순간의 값이 최소값이다. 범위를 보면 매우 여러번 입력 받으므로 sys를 사용했다.
 
 ### 모범 답안
 특정 위치에서 특정 위치로 이동하는 최단 거리를 계산하는 문제이므로 다익스트라 알고리즘을 사용하면 해결할 수 있다. 맵의 각 위치를 노드로 보고, 상하좌우로 모든 노드가 연결되어있다고 보면 된다. 예를 들어 위치 A와 위치 B가 서로 인접해 있다고 해보자. 이때 A -> B로 가는 비용은 B 위치의 탐사 비용이 될 것이고, B -> A로 가는 비용은 A 위치의 탐사 비용이 될 것이다.  
-n의 범위가 최대 125라 작다고 느껴서 플로이드 워셜 알고리즘을 사용하면 안 된다. 문제에서 입력 자체가 2차원 배열로 들어오기 때문에 전체 노드의 개수는 N^2으로 10,000을 넘길 수 있기 때문이다.
+__n의 범위가 최대 125라 작다고 느껴서 플로이드 워셜 알고리즘을 사용하면 안 된다. 문제에서 입력 자체가 2차원 배열로 들어오기 때문에 전체 노드의 개수는 N^2으로 10,000을 넘길 수 있기 때문이다.__
 ```python
 import heapq
 import sys
