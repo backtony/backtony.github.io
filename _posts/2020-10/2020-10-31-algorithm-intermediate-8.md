@@ -64,59 +64,109 @@ yes
 
 ### 내가 작성한 코드
 ```python
-import sys
-input = sys.stdin.readline
-
-# 여행지 수, 계획에 속한 도시 수
-n,m = map(int,input().split())
-graph=[]
-
-# 연결 정보 입력
-for _ in range(n):
-    graph.append(list(map(int,input().rstrip().split())))
-
-plan = list(map(int,input().rstrip().split()))
-
-# 서로소 집합 알고리즘을 사용하자
+# 인자로 받은 배열은 C언어의 주소로 받은 것과 같음 -> 서로 영향을 준다
+# 파이썬의 경우는 인자로 받지 않아도 밖에 있는 배열 사용 가능
 
 def find_parent(x):
-    if parent[x]!=x:
-        parent[x]=find_parent(parent[x])
+    if parent[x] != x:
+        parent[x] = find_parent(parent[x])
     return parent[x]
 
-def union(x,y):
+
+def union(x, y):
     a = find_parent(x)
     b = find_parent(y)
-    if a>b:
-        parent[a]=b
-    else :
-        parent[b]=a
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
 
-# 0인덱스부터 시작했으므로 1번 도시를 0번 인덱스로 인지
-parent = [0]*n
-# 처음 parent는 자기 자신으로 초기화
-for i in range(0,n):
-    parent[i]=i
 
+n, m = map(int, input().split())
+
+graph = []
+
+# 그래프 입력
+for _ in range(n):
+    graph.append(list(map(int, input().split())))
+
+# 계획 여행지 정보
+plan = list(map(int, input().split()))
+
+# 부모노드 저장
+parent = [0] * (n + 1)
+for i in range(1, n + 1):
+    parent[i] = i  # 처음에는 자기자신이 부모
+
+# 그래프 정보 입력과 동시에 union작업
 for i in range(n):
     for j in range(n):
-        # 두 도시가 연결된 경우 + 서로소 집합이 다른 경우
-        if graph[i][j]==1 and find_parent(i) != find_parent(j):
-            union(i,j)
+        if graph[i][j] == 1:
+            union(i + 1, j + 1)
 
 ans = find_parent(plan[0])
-key =1
-for i in plan:
-    # 서로소 우두머리가 다른 경우
+key = 0
+for i in plan[1:]:
     if ans != find_parent(i):
-        key =0
+        key = 1
         break
 if key:
-    print("yes")
-else :
     print("no")
+else:
+    print("yes")
+
 ```
 서로소 집합 알고리즘을 이용하여, 그래프에서 노드간의 연결성을 파악해 해결할 수 있다. 즉, 여행 계획에 해당하는 모든 노드가 같은 집합에 속하면 가능한 여행 경로 라는 것이다.
+
+### 모범 답안
+```python
+# 특정 원소가 속한 집합을 찾기
+def find_parent(parent, x):
+    # 루트 노드가 아니라면, 루트 노드를 찾을 때까지 재귀적으로 호출
+    if parent[x] != x:
+        parent[x] = find_parent(parent, parent[x])
+    return parent[x]
+
+# 두 원소가 속한 집합을 합치기
+def union_parent(parent, a, b):
+    a = find_parent(parent, a)
+    b = find_parent(parent, b)
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
+
+# 여행지의 개수와 여행 계획에 속한 여행지의 개수 입력받기
+n, m = map(int, input().split())
+parent = [0] * (n + 1) # 부모 테이블 초기화
+
+# 부모 테이블상에서, 부모를 자기 자신으로 초기화
+for i in range(1, n + 1):
+    parent[i] = i
+
+# Union 연산을 각각 수행
+for i in range(n):
+    data = list(map(int, input().split()))
+    for j in range(n):
+        if data[j] == 1: # 연결된 경우 합집합(Union) 연산 수행
+            union_parent(parent, i + 1, j + 1)
+
+# 여행 계획 입력받기
+plan = list(map(int, input().split()))
+
+result = True
+# 여행 계획에 속하는 모든 노드의 루트가 동일한지 확인
+for i in range(m - 1):
+    if find_parent(parent, plan[i]) != find_parent(parent, plan[i + 1]):
+        result = False
+
+# 여행 계획에 속하는 모든 노드가 서로 연결되어 있는지(루트가 동일한지) 확인
+if result:
+    print("YES")
+else:
+    print("NO")
+```
+union한 이후에는 그래프의 정보를 저장해야할 필요가 없기 때문에 한 줄씩 그래프 정보를 받고 처리한 후에 다시 다음 그래프 정보로 덮어씌운다는 점이 내 코드랑 다른 점이다. 이렇게 하면 메모리를 조금이나마 아낄 수 있다.
 
 <br>
 
@@ -155,6 +205,50 @@ __출력 조건__
 
 출력 예시
 3
+```
+
+### 내가 작성한 코드
+첫 공부, 1차 리뷰에서 풀지 못했다. 주어진 도커 범위에서 제일 마지막 번호에 연결해야한다는 점은 눈치챘다. 그럼 다음에 들어올 것이 번호가 같으면 그 번호 앞에 연결시켜야한다. 그럼 처음 도커에 연결했을 때 연결하고 이후에는 바로 앞쪽에 연결하도록 조치를 취해줘야 한다. 여기서 사용해야할 것이 서로소 집합 알고리즘의 union이다. union을 통해 다음 연결 도커를 지정해주고, 만약 부모를 찾았을 때 0이 나오게 된다면 더이상 도커에 연결 할 수 없는 것이다.
+```python
+g = int(input())
+p = int(input())
+
+
+def find_parent(parent, x):
+    if parent[x] != x:
+        parent[x] = find_parent(parent, parent[x])
+    return parent[x]
+
+
+def union(parent, x, y):
+    a = find_parent(parent, x)
+    b = find_parent(parent, y)
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
+
+
+# 부모는 자기 자신
+parent = [0] * (g + 1)
+for i in range(g + 1):
+    parent[i] = i
+
+# 도커 정보
+docks=[]
+for i in range(p):
+    docks.append(int(input()))
+
+
+cnt = 0
+for dock in docks:
+    pos_dock = find_parent(parent, dock)
+    if pos_dock==0:
+        break
+    union(parent, pos_dock, pos_dock - 1)
+    cnt += 1
+
+print(cnt)
 ```
 
 ### 모범 답안
