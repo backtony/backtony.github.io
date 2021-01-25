@@ -334,50 +334,53 @@ __출력 조건__
 51
 ```
 ### 내가 작성한 코드
-전형적인 최소 신장 트리 문제이므로 크루스칼 알고리즘을 사용해 해결했다.
+전형적인 최소 신장 트리 문제이므로 크루스칼 알고리즘을 사용해 해결했다.  
+비용을 기준으로 좌표와 함께 정렬하고 union작업을 했다. 부모가 같다면 이미 연결되어있으므로 union작업을 하지 않고 절약 비용에 추가했다. 
 ```python
 import sys
+input = sys.stdin.readline  # 입력 횟수가 매우 많으므로
 
-input = sys.stdin.readline
 
-def find_parent(x):
+def find_parent(parent, x):
     if parent[x] != x:
-        parent[x] = find_parent(parent[x])
+        parent[x] = find_parent(parent, parent[x])
     return parent[x]
 
 
-def union(x, y):
-    a = find_parent(x)
-    b = find_parent(y)
-    if a > b:
-        parent[a] = b
-    else:
+def union(parent, x, y):
+    a = find_parent(parent, x)
+    b = find_parent(parent, y)
+    if a < b:
         parent[b] = a
+    else:
+        parent[a] = b
 
 
+dp = []
+ans = 0  # 절약 비용
 n, m = map(int, input().split())
 
-parent = [0] * n
-# parent 자기 자신 초기화
-for i in range(n):
+parent = [0] * n  # 포함 집합의 부모
+for i in range(n):  # 처음에는 자기 자신으로 초기화
     parent[i] = i
 
-max_cost=0 # 모든 연결 비용
-graph = []
-for i in range(m):
-    a, b, c = map(int, input().split())
-    graph.append((c, a, b))
-    max_cost+=c
+# 정보 입력
+for _ in range(m):
+    x, y, z = map(int, input().split())
+    dp.append((z, x, y))
+# 정렬
+dp.sort()
 
-# 최소 비용순 정렬
-graph.sort()
-total = 0 # 최소 연결했을 때 비용
-for cost, x, y in graph:
-    # 서로소 집합에 포함하지 않는 경우만 처리
-    if find_parent(x) != find_parent(y):
-        union(x, y)
-        total += cost
-print(max_cost-total)
+for i in dp:
+    cost, x, y = i
+    # 부모가 같다면 이미 연결되어 있음
+    if find_parent(parent, x) == find_parent(parent, y):
+        ans += cost
+    # 부모가 다르면 연결이 필요함
+    else:
+        union(parent, x, y)
+
+print(ans)
 ```
 
 <br>
@@ -386,10 +389,65 @@ print(max_cost-total)
 ---
 [문제 클릭](https://www.acmicpc.net/problem/2887){: target="_blank"}  
 
+### 내가 작성한 코드
+첫 공부, 1차 리뷰에서도 풀지 못했다.  
+메모리 초과 판정을 받았다. 생각해보면 모든 행성에 대해 모든 행성으로까지의 비용을 계산해서 크루스칼 알고리즘을 실행했는데, 행성의 최대 개수가 10만개다. 크루스칼 알고리즘은 정렬에서의 복잡도 비용이 제일 크다. 그런데 모든 행성으로의 계산을 하게 되면 간선이 n-1, n-2.. 1개로 약 n^2개가 나오게 되면서 10만을 훨씬 넘어간다. 따라서 다른 방법을 생각해내야 했는데 하지 못했다.  
+답안의 코드를 참고해보면, __최소 거리를 구하는데 굳이 모든 행성까지의 거리를 구할 필요가 없었다. 최소거리 이므로 현재 행성에서 3방향(x,y,z) 방향의 최소거리만 구해서 돌리면 되는 것이다.__  
+```python
+import sys
+
+input = sys.stdin.readline  # 입력 횟수가 매우 많으므로
+
+
+def find_parent(parent, x):
+    if parent[x] != x:
+        parent[x] = find_parent(parent, parent[x])
+    return parent[x]
+
+
+def union(parent, x, y):
+    a = find_parent(parent, x)
+    b = find_parent(parent, y)
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
+
+
+n = int(input())
+# 부모 설정
+parent = [0] * n
+for i in range(n):
+    parent[i] = i
+
+# 행성 정보 입력
+planet = []
+for _ in range(n):
+    planet.append(list(map(int, input().split())))
+
+dis = []
+for i in range(n):
+    for j in range(i+1,n):
+        cost = min(abs(planet[i][0] - planet[j][0]),
+                   abs(planet[i][1] - planet[j][1]),
+                   abs(planet[i][2] - planet[j][2]))
+        dis.append((cost, i, j))
+
+dis.sort()  # 정렬
+
+ans = 0  # 거리 비용
+for i in dis:
+    if find_parent(parent, i[1]) != find_parent(parent, i[2]):
+        union(parent, i[1], i[2])
+        ans += i[0]
+
+print(ans)
+```
+
 ### 모범 답안
 이 문제는 n - 1개의 터널을 설치해서 모든 행성이 연결되도록 요구하므로, 최소 신장 트리를 만드는 문제로 이해할 수 있다. 여기서 당연히 크루스칼 알고리즘을 생각해 낼 것이다. 하지만 여기서 주의해야 한다. 크루스칼 알고리즘은 정렬하는 부분이 가장 많은 복잡도를 소요하므로 (ElogE)이다. 그런데 이 문제에서는 임의의 두 노드 사이에 터널을 연결할 수 있다고 가정하고 있다. 따라서 간선의 개수가 n-1, n-2, n-3 ... 1 개가 생성되어 간선의 총 개수가 N(N-1)/2이다. N의 범위가 100,000까지이므로 간선의 개수가 매우 커져 시간 안에 해결할 수 없다.  
 하지만 터널 비용의 정의를 이용하면 간선의 개수를 줄일 수 있다. 입력 받은 x,y,z축을 기준으로 각각 정렬을 수행한다. x축만 고려해서 예시를 들어보면, 주어진 예시를 정렬시 -1,10,11,14,19로 정렬 될 것이다. 그렇다면 차례대로 간선을 만들어 주면 n-1개가 생기게 된다.  
-여기서 살짝 이해가 안될 수 있다. 생각해보자. 지금 문제 조건은 최소 거리로 터널을 만드는 것이다. -1과 10을 간선으로 연결하지 않고 -1과 11을 연결하면 그 비용이 더 커진다. 따라서 인접한 것 끼리만 간선을 만들어 주는 것이다.  
+여기서 살짝 이해가 안될 수 있다. 생각해보자. 지금 문제 조건은 최소 거리로 터널을 만드는 것이다. 그렇다면 현재 행성에서 최소 거리에 있는 거리만 고려하면 된다는 것이다. -1과 10을 간선으로 연결하지 않고 -1과 11을 연결하면 그 비용이 더 커진다. 따라서 인접한 것 끼리만 간선을 만들어 주는 것이다.  
 결과적으로 계속 진행하면 축마다 n-1개의 간선이 생기므로 총 3 * (n-1)개의 간선이 생기고 이를 크루스칼 알고리즘을 수행하면 시간 안에 해결할 수 있다.  
 
 ```python
@@ -458,11 +516,13 @@ print(total)
 ---
 [문제 클릭](https://www.acmicpc.net/problem/3665){: target="_blank"}  
 
-
+### 내가 작성한 코드
+첫 공부, 1차리뷰에서 풀지 못했다.
+문제에서 약간 혼동되게 작성되있는 부분이 있다. 상대적 순위 변동 시, (6,13)으로 주어져 있는데 이건 6이 순위가 더 높아졌다는 뜻이 아니라, 팀6과 팀 13의 상대적 순위에 변동이 있다는 의미이고 작은 수부터 앞에 작성한다는 뜻이다.
 
 ### 모범 답안
-문제에서는 작년 순위와 상대적으로 순위가 바뀐 팀들의 목록이 주어졌을 때, 올해 순위를 만들 것을 요구하고 있다. 즉, 정해진 우선순위에 맞게 전체 팀들의 순서를 나열한다는 점에서 위상 정렬 알고리즘을 떠올릴 수 있어야 한다.  
-다시 말해 이 문제는 팀 간의 순위 정보를 그래프 정보로 표현한 뒤에, 위상 정렬 알고리즘을 이용해 해결할 수 있다. 주어진 예시를 가지고 생각해보자. 작년 순위 정보를 기준으로하여 자기보다 낮은 등수를 가진 팀을 가리키토록 방향 그래프를 만들 수 있다. 즉, 1등팀인 팀5는 1,2,3,4로 방향을 가리킬 수 있는 것이다. 이대로 위상 정렬을 수행하게 되면, 수행 결과는 5-4-3-2-1로 나온다.  
+문제에서는 작년 순위와 상대적으로 순위가 바뀐 팀들의 목록이 주어졌을 때, 올해 순위를 만들 것을 요구하고 있다. 즉, __정해진 우선순위에 맞게 전체 팀들의 순서를 나열한다(선수과목)__ 는 점에서 위상 정렬 알고리즘을 떠올릴 수 있어야 한다.  
+다시 말해 이 문제는 팀 간의 순위 정보를 그래프 정보로 표현한 뒤에, 위상 정렬 알고리즘을 이용해 해결할 수 있다. 주어진 예시를 가지고 생각해보자. 작년 순위 정보를 기준으로하여 __자기보다 낮은 등수를 가진 팀을 가리키토록 방향 그래프__ 를 만들 수 있다. 즉, 1등팀인 팀5는 1,2,3,4로 방향을 가리킬 수 있는 것이다. 이대로 위상 정렬을 수행하게 되면, 수행 결과는 5-4-3-2-1로 나온다.  
 상대적인 순위가 바뀌게 되는 경우에는 해당 간선의 방향을 반대로 변경하면 된다. 여기서 위상 정렬을 수행하게 되면 사이클이 발생하는 경우와 위상 정렬의 결과가 1개가 아니라 여러 가지인 경우로 2가지 특이 케이스가 발생한다. 이 2가지 경우에 해당하지 않는다면 위상 정렬을 수행한 결과는 오직 하나의 경우만 존재한다. 즉, 가능한 순위가 하나라는 뜻이다.  
 따라서 변경된 상대적 순위를 적용한 이후에, 위상 정렬 알고리즘을 실행하면서 사이클이 발생하는지, 혹은 결과가 여러 가지인지 확인하면 된다. 일반적인 위상 정렬의 경우, 정확히 N개의 노드가 큐에서 출력이 된다. 만약 N번 나오기 전에 큐가 비게 된다면, 사이클이 발생한 것으로 이해할 수 있다. 또한 특정 지점에 2개 이상의 노드가 큐에 한꺼번에 들어갈 때는, 가능한 정렬 결과가 여러 가지라는 의미가 된다. 그러므로 위상 정렬 수행 과정에서 큐에서 노드를 뽀을 때 큐의 원소가 항상 1개로 유지되는 경우에만 고유한 순위가 존재하는 것으로 이해할 수 있다. 따라서, 위상 정렬 코드에 매 시점마다 큐의 원소가 0개이거나 2개 이상인지 체크하는 부분을 넣어주면 된다.  
 
@@ -522,7 +582,7 @@ for _ in range(case):
     # 순위 뒤집기
     for i in range(m):
         a,b = map(int,input().split())
-        if link_graph[a][b]:
+        if link_graph[a][b]: # 이게 어떤 경우지?
             count_graph[a]+=1
             count_graph[b]-=1
             link_graph[a][b]=False
