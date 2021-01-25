@@ -23,7 +23,20 @@ comments: true
 + ctrl + alt + L : 정렬
 + ctrl+ shft + enter : ( 이후 자동완성
 + ctrl + space : 현재 작성하고 있는 것 자동완성 창 열기
++ ctrl + alt + V : 현재 작성문의 반환값을 '타입 변수 = 작성문' 으로 자동 완성, 반환타입 알고자 할 때 용이
++ ctrl + P : 매개인자에 대한 정보 , 매개인자자리에서 사용 시 (a, b) a에는 어떤값이, b에는 어떤값이 와야하는지 알려줌 
++ alt + enter : 재정의 자동으로 가져오기, 필요한 import문 자동으로 import
++ ctrl + shft + T : create new test를 누르면 테스트껍떼기를 한 번에 생성
++ sout : System.out.println() 자동 완성
++ soutv : System.out.println("최근 변수 = " + 최근 변수); 자동 완성
+
+
+## 수정
++ ctrl + alt + shft + T : Refactor 단축키, 드래그해서 단축키누르고 extract method하면 드래그 줄을 따로 메소드로 뽑아낼 수 있음
++ shft + F6 : 같은 코드 한 번에 수정
 
 ### 검색
 + ctrl + alt + S : setting창 열기
 + shft * 2 : 파일, 클래스, 성정 등 키워드에 관련된 모든 것 검색
+
+ctrl + shft + T -> create new test
