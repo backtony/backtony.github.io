@@ -519,8 +519,72 @@ print(total)
 ### 내가 작성한 코드
 첫 공부, 1차리뷰에서 풀지 못했다.
 문제에서 약간 혼동되게 작성되있는 부분이 있다. 상대적 순위 변동 시, (6,13)으로 주어져 있는데 이건 6이 순위가 더 높아졌다는 뜻이 아니라, 팀6과 팀 13의 상대적 순위에 변동이 있다는 의미이고 작은 수부터 앞에 작성한다는 뜻이다.  
-두 관계의 변화에 대해 좀 더 생각해보자. 문제에서 주어진 바로는 상대적 관계의 변화가 있는 경우가 있을 경우 주어진다고 했다. 그럼 6,13 팀의 상대적 변화가 있다면 일단 둘의 관계만 고려를 한다. 만약 두 팀 사이에 다른 팀을이 있어도 지금 고려해서는 안된다. 두 팀 사이의 팀에 대해 관계 변화가 있다면 6,13이후에 주어질 것이기 때문에 먼저 사이의 관계를 고려해서는 안된다는 뜻이다. 
+두 관계의 변화에 대해 좀 더 생각해보자. 문제에서 주어진 바로는 상대적 관계의 변화가 있는 경우가 있을 경우 주어진다고 했다. 그럼 6,13 팀의 상대적 변화가 있다면 일단 둘의 관계만 고려를 한다. 만약 두 팀 사이에 다른 팀들이 있어도 지금 고려해서는 안된다. 두 팀 사이의 팀에 대해 관계 변화가 있다면 6,13이후에 주어질 것이기 때문에 먼저 사이의 관계를 고려해서는 안된다는 뜻이다. 
 전에 풀었던 [위상정렬 문제 커리큘럼](https://backtony.github.io/algorithm/2020/09/09/algorithm-basics-coding-11/)에서는 인접리스트 방법을 사용했다. 주어진 문제는 커리큘럼 관련 문제인데 커리큘럼은 고정되있고, 순서의 변화가 없었다. 순차적으로 진행 시 해당 리스트에 연결된 모든 값에 접근해 차수를 수정해야했기 때문에 굳이 특정 위치만 빠르게 찾는 인접 행렬 방식을 사용하지 않아도 되었던 것이다. 하지만 이 경우에는 순서가 변한다. 즉, 인접리스트를 사용할 경우 리스트 맨 앞에서부터 변화한 값을 찾아서 수정해줘야 하기에 시간이 너무 많이 소요된다는 것이다. 따라서, 해당 위치만 빠르게 찾아서 수정하는 인접 행렬을 사용해야 한다.
+```python
+from collections import deque
+
+
+def topology_sort(graph, degree, n):
+    q = deque()
+    cnt = 0
+    ans = []
+    while cnt < n:
+        cnt += 1
+        for i in range(1, n + 1):
+            # 진입차수 0이면 삽입
+            if degree[i] == 0:
+                degree[i] = -1
+                q.append(i)
+        # 큐 길이가 1보다 크면 확실한 순위 찾기 불가
+        if len(q) > 1:
+            print("?")
+            return -1
+        # n번 전에 큐가 비어있으면 순위 정할수 없음
+        if cnt <= n and len(q) == 0:
+            print("IMPOSSIBLE")
+            return -1
+        # 확실한 순위 찾기 가능한 경우
+        rank = q.popleft()
+        ans.append(rank)
+        # pop한 것(진입차수가 0)과 연결이 되어있으면 진입차수 수정
+        for i in range(1, n + 1):
+            if graph[rank][i] == True:
+                degree[i] -= 1
+    print(*ans)
+
+
+k = int(input())
+
+for _ in range(k):
+    n = int(input()) 
+    prev = list(map(int, input().split())) # 이전 랭킹
+    degree = [0] * (n + 1)  # 진입차수
+    graph = [[False] * (n + 1) for _ in range(n + 1)]  # 인접행렬
+    
+    # 진입차수와 인접행렬 만들기
+    for i in range(1, n + 1):
+        for j in prev[i:]:
+            degree[j] += 1  # 진입차수 수정
+            graph[prev[i - 1]][j] = True  # 연결관계 수정
+
+    m = int(input())
+    # 상대적 순위 변경사항
+    for _ in range(m):
+        a, b = map(int, input().split())
+        if graph[a][b]:
+            graph[a][b] = False
+            graph[b][a] = True
+            degree[b] -= 1
+            degree[a] += 1
+        else:
+            graph[a][b] = True
+            graph[b][a] = False
+            degree[b] += 1
+            degree[a] -= 1
+    # 위상정렬
+    topology_sort(graph, degree, n)
+```
 
 ### 모범 답안
 문제에서는 작년 순위와 상대적으로 순위가 바뀐 팀들의 목록이 주어졌을 때, 올해 순위를 만들 것을 요구하고 있다. 즉, __정해진 우선순위에 맞게 전체 팀들의 순서를 나열한다(선수과목)__ 는 점에서 위상 정렬 알고리즘을 떠올릴 수 있어야 한다.  
