@@ -41,7 +41,8 @@ comments: true
 
 ![그림3](https://backtony.github.io/assets/img/post/spring/start/2-3.PNG)
 
-외부에서 받을 때 @RequestParam를 사용했다. 사실 String code만으로도 받을 수 있으나 시스템에 따라 자바 컴파일러 최적화 옵션을 적용할 수 있는데, 이 경우 컴파일 시점에 code이라는 변수가 사라지게 되어 받을 수가 없게된다. 예를 들면 String code 였던 변수가 String x01이 되고, 바로 아래 model. 코드에서도 code가 x01이 될 수도 있다는 뜻이다. 따라서 먼저 @RequestParam("문자"), 위 그림에서는 p로 먼저 받은 뒤에 변수 code에 넣어주는 것이다.
+외부에서 받을 때 @RequestParam를 사용했다. 사실 String code만으로도 받을 수 있는데 시스템에 따라 컴파일러 최적화 옵션 적용시 문제가 생긴다.  이 경우 컴파일 시점에 code이라는 변수가 다른 간단한 이름으로 바뀔 수가 있다. 예를 들면 String code 였던 변수가 String x01이 되고, 바로 아래 model. 코드에서도 code가 x01이 바뀌어 컴파일 될 수 있다는 뜻이다. 그럼 변수명이 바뀐 상태에서 code=hello라고 url에 값을 주면 전혀 엉뚱한 곳에 값을 주게 되는 상황이 발생한다. 이러한 상황을 방지하기 위해 @RequestParam을 사용하는 것이다.  
+예를 들어 @RequestParam("country") String temp 이렇게 코딩하고, url에서 country=spring으로 값을 줬다고 해보자. 이 의미는 country라는 key에 담긴 value는 spring이고, value값인 spring을 temp에 복사한다는 의미이다.
 
 <br>
 
@@ -81,24 +82,28 @@ public class HelloController {
 
     @GetMapping("hello-string")
     @ResponseBody // http에서 헤더부와 바디부가 있는데 바디부에 이 데이터를 직접 넣어주겠다.
-    // @RequestParam에 의해서 ?p=spring으로 받으면 code에는 spring이 들어간다.
-    // 키값을 수정하지 않으면 key값는 "name"으로 고정
+    // @RequestParam에 의해서 ?p=spring으로 받으면
+    // key:p, value:spring, -> value값을 code에 복사
     public String helloString(@RequestParam("p") String code) {
         return "hello " + code; // name에 spring으로 넣으면 "hello spring"
         // 템플릿 엔진과 차이는 뷰 이런게 없고 그냥 이 문자가 그대로 내려간다.
-        // 페이지에서 소스코드를 보면 html이 없고 그냥 hello + name 그대로만 있다.
+        // 페이지에서 소스코드를 보면 html이 없고 그냥 hello + code 그대로만 있다.
     }
 
 
     // 사실 위에서 문자열 넘긴거는 거의 안쓰고 아래가 주된 사용 목적    
     @GetMapping("hello-api")
-    @ResponseBody
-    // RequestParam에서 key값을 model.addAttribute로 지정하지 않으면 자동으로 key값은 name
+    @ResponseBody    
     public Hello helloApi(@RequestParam("p") String code) {
-        // 객체 생성하고 받은 인자로 set해주고 이 객체를 반환
+        // 객체 생성하고 받은 인자로 set해주고 이 객체를 반환하는 작업
+
         Hello hello = new Hello(); // (까지 쓰고 ctrl+shft+enter 치면 자동 완성
         hello.setName(code);
-        return hello; // 키 , 벨류 값으로 반환된다.
+        return hello; // 키 , 벨류 값으로 반환된다. {"key":"value"} 형식
+        
+        // spring을 받아서 나는 {"abc":"spring"} 이 될거라고 예상했는데 {"name":"spring"}이 나온다.
+        // 이것에 대해 질문 남겼다가 다시 포스팅 수정
+
         // 예전에는 XML 방식과 json방식이 있었는데 요즘에는 json방식이 거의 표준화되어서
         // 스프링도 객체를 반환하고 responsebody로 해놓으면 json으로 반환하는게 기본이다.
     }
