@@ -101,8 +101,11 @@ public class HelloController {
         hello.setName(code);
         return hello; // 키 , 벨류 값으로 반환된다. {"key":"value"} 형식
         
-        // spring을 받아서 나는 {"abc":"spring"} 이 될거라고 예상했는데 {"name":"spring"}이 나온다.
-        // 이것에 대해 질문 남겼다가 다시 포스팅 수정
+        // {"abc":"spring"}이 나온다.
+        // 이유는 JSON을 생성할 때 자바빈 프로퍼티 규약이라는 것 때문이다.
+        // getXXX, setXXX 규칙의 메소드를 사용하는 것인데 여기서
+        // get,set을 제거하고 첫글자를 소문자로 바꾸면 그것이 
+        // setXXX의 XXX가 프로퍼티(키값)이 되고, getXXX의 리턴값이 value값이된다.        
 
         // 예전에는 XML 방식과 json방식이 있었는데 요즘에는 json방식이 거의 표준화되어서
         // 스프링도 객체를 반환하고 responsebody로 해놓으면 json으로 반환하는게 기본이다.
@@ -113,11 +116,11 @@ public class HelloController {
         // 이게 자바빔 표준방식, property 접근방식이라고도함
         private String abc;
         // alt+insert 후 getter and setter 찾으면 자동 완성된다.
-        public String getName() {
+        public String getAbc() {
             return abc;
         }
 
-        public void setName(String abc) {
+        public void setAbc(String abc) {
             this.abc = abc;
         }
     }
