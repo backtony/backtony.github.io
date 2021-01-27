@@ -3,10 +3,10 @@
 기계공학과 학생이지만 코딩에 흥미를 느껴 독학으로 공부해 내가는 과정을 기록하는 곳
 
 ### 목차
-+ [Algorithm](https://backtony.github.io/category/algorithm/){: target="_blank"}
++ [Algorithm](https://backtony.github.io/category/algorithm/)
     - 코드업 기초 100제
     - '이것이 코딩 테스트다'를 읽고 정리
-+ [Data Structure](https://backtony.github.io/category/data/){:target="_blank"}
++ [Data Structure](https://backtony.github.io/category/data/)
     - ‘윤성우의 열혈 자료구조’를 읽고 정리
 + [MySQL](https://backtony.github.io/category/mysql/)
     - ‘이것이 MySQL이다’ 를 읽고 정리
@@ -23,8 +23,6 @@
     - ‘지옥에서 온 문서 관리자 깃 & 깃허브’ 를 읽고 정리
 + [TIL(Today I Learned)](https://backtony.github.io/category/til/)
     - 하루 공부 내용 정리하는 곳
-
-+  [[강의 링크](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EC%9E%85%EB%AC%B8-%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8){:target="_blank"}]
 
 
 ### About me
