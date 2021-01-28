@@ -3,7 +3,7 @@ layout: post
 title:  Ajax
 subtitle:   Ajax
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

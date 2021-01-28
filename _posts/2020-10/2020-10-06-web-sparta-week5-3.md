@@ -3,7 +3,7 @@ layout: post
 title:  파이참 단축키
 subtitle:  파이참 단축키
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

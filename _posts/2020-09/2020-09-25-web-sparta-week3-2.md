@@ -3,7 +3,7 @@ layout: post
 title:  웹스크래핑(크롤링)
 subtitle:   웹스크래핑(크롤링)
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

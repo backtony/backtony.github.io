@@ -3,7 +3,7 @@ layout: post
 title:  API 실습1 - 모두의책리뷰
 subtitle:   API 실습1 - 모두의책리뷰
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

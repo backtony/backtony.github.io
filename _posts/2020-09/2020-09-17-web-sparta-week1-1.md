@@ -3,7 +3,7 @@ layout: post
 title:  HTML, CSS 기초
 subtitle:   HTML, CSS 기초
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

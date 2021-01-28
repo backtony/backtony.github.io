@@ -3,7 +3,7 @@ layout: post
 title:  Flask
 subtitle:   Flask
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

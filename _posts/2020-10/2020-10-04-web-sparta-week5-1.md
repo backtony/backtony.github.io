@@ -3,7 +3,7 @@ layout: post
 title:  API 실습4 - 무비스타
 subtitle:   API 실습4 - 무비스타
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

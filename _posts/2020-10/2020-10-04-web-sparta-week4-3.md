@@ -3,7 +3,7 @@ layout: post
 title:  API 실습2 - 나홀로메모장
 subtitle:   API 실습2 - 나홀로메모장
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

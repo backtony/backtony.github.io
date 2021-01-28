@@ -3,7 +3,7 @@ layout: post
 title:  API로 메모장 만들기
 subtitle:   API로 메모장 만들기
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

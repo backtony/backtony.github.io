@@ -3,7 +3,7 @@ layout: list
 title: Web Programming
 slug: web
 menu: true
-submenu : False
+submenu : true
 order: 6
 # description: >
   

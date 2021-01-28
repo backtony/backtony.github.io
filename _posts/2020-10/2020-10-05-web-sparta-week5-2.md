@@ -3,7 +3,7 @@ layout: post
 title:  내 프로젝트 서버에 올리기
 subtitle:  내 프로젝트 서버에 올리기
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---

@@ -3,7 +3,7 @@ layout: post
 title:  파이썬 패키지
 subtitle:   파이썬 패키지
 categories: web
-tags: web webprogramming spartacodingclub
+tags: sparta web webprogramming spartacodingclub
 comments: true
 # header-img:
 ---
