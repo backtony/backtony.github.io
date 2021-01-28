@@ -146,25 +146,18 @@ __출력 조건__
 ```
 
 #### 풀이 : 내가 푼 풀이
+2차 리뷰 코드로 수정
 ```python
 n = int(input())
 store = list(map(int,input().split()))
-DPtable = [0]*(n)
 
+dp=[0]*n
+dp[0]=store[0]
+dp[1] = max(store[0],store[1])
 for i in range(2,n):
-    DPtable[0]=store[0]
-    DPtable[1]=store[1]
-    if i%2==0: # 한 칸씩 띄어서 
-        DPtable[i]=DPtable[i-2]+store[i]
-        # 1 2 3 4 인덱스에서 2랑 4가 더해져야하는데 인덱스 1과 4의 값 합이 더 큰 경우
-        if store[i]+DPtable[i-3]>DPtable[i]: 
-            DPtable[i]=store[i]+DPtable[i-3]
-    else :
-        DPtable[i]=DPtable[i-2]+store[i]
-        if store[i]+DPtable[i-3]>DPtable[i]:
-            DPtable[i]=store[i]+DPtable[i-3]
+    dp[i]= max(dp[i-1],dp[i-2]+store[i])
 
-print(max(DPtable[n-1],DPtable[n-2]))
+print(dp[n-1])
 ```
 
 #### 모법 답안
@@ -201,19 +194,21 @@ __출력 조건__
 ```
 
 #### 풀이 : 내가 푼 풀이
+2차 리뷰 코드로 수정, 중간을 보고 먼저 점화식 세우고 첫 부분만 따로 수정하는 방식
 ```python
 n = int(input())
-DPtable = [0]*(n+1)
-DPtable[1]=1
-DPtable[2]=3
-for i in range(3,n+1):
-    if i%2==1: # 홀수        
-        DPtable[i]=DPtable[i-1]*(i//2+1)-i//2
-    else : # 짝수
-        DPtable[i]=DPtable[i-2]*3        
 
-print(DPtable[n])
+dp = [0] * (n + 1)
+
+dp[1] = 1
+dp[2] = 3
+
+for i in range(3, n + 1):
+    dp[i] = dp[i - 1] + dp[i - 2] * 2
+
+print(dp[n])
 ```
+
 
 #### 풀이 : 모범 답안
 ```python
@@ -252,26 +247,53 @@ __출력 조건__
 출력 예시
 5
 ```
-
-#### 풀이
+### 내가 작성한 코드
 ```python
-# n은 화폐 종류 개수, 주어진 금액
-n,m = map(int,input().split())
-pays =[]
-dptable = [10001] * (m+1) # 10001은 거스름이 불가능한 경우
-dptable[0]=0
+n, m = map(int, input().split())
 
+INF = int(1e9)
+units = []
+dp = [INF] * (m + 1)
 for i in range(n):
-    pays.append(int(input()))
+    units.append(int(input()))
 
-for pay in pays:
-    for i in range(pay,m+1):
-        dptable[i] = min(dptable[i],dptable[i-pay]+1)
+for unit in units:
+    dp[unit] = 1
+    for i in range(1, m - unit + 1):
+        if dp[i] != INF:
+            dp[i + unit] = min(dp[i + unit], dp[i] + 1)
 
-if dptable[m]==10001:
-    print("-1")
-else :
-    print(dptable[m])
+if dp[m] == INF:
+    print(-1)
+else:
+    print(dp[m])
+```
+
+
+#### 답안
+```python
+# 정수 N, M을 입력 받기
+n, m = map(int, input().split())
+# N개의 화폐 단위 정보를 입력 받기
+array = []
+for i in range(n):
+    array.append(int(input()))
+
+# 한 번 계산된 결과를 저장하기 위한 DP 테이블 초기화
+d = [10001] * (m + 1)
+
+# 다이나믹 프로그래밍(Dynamic Programming) 진행(보텀업)
+d[0] = 0
+for i in range(n):
+    for j in range(array[i], m + 1):
+        if d[j - array[i]] != 10001: # (i - k)원을 만드는 방법이 존재하는 경우
+            d[j] = min(d[j], d[j - array[i]] + 1)
+
+# 계산된 결과 출력
+if d[m] == 10001: # 최종적으로 M원을 만드는 방법이 없는 경우
+    print(-1)
+else:
+    print(d[m])
 ```
 보텀업 방식으로 처음부터 차례차례진행한다. 먼저 dptable을 모두 거스름이 불가능한 경우 10001로 저장하고, 0은 거스를 것이 없으므로 0으로 따로 저장한다. 따라서 dptable은 0인덱스를 제외하고는 10001로 채워진다.  
 핵심이 되는 min(dptable[i],dptable[i-pay]+1)를 살펴보자. 처음에는 dptable[i]에는 10001이 있을 것이다. dptable[i-pay]+1과 비교하는 이유는 금액 (i-pay)에서 pay를 더하면 금액 i 즉, d[i-pay]에 저장된 화폐 개수에다가 pay 화폐 1개를 더한 것과 기존에 dptable[i]에 있던 것(처음이라면 10001이 저장되어 있을 것이고 어느 정도 진행된 후라면 다른 pay값에 의해 화폐의 개수가 저장되어 있을 것  )과 비교하여 min을 통해 작은 것을 저장하기 위해서이다.  
