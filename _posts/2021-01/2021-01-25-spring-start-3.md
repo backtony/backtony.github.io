@@ -259,7 +259,10 @@ Assertions.asserThat에서 일치하지 않으면 다음과 같은 화면이 나
 
 ![그림6](https://backtony.github.io/assets/img/post/spring/start/3-6.PNG)
 
-하나의 메소드만 또는 클래스 전체를 테스트할 수 있다. 
+하나의 메소드만 또는 클래스 전체를 테스트할 수 있다.  
+또는 만든 전체 테스트 코드를 실행하고 싶다면 상위 패키지 우클릭으로 Run 시키면 된다.
+
+![그림10](https://backtony.github.io/assets/img/post/spring/start/3-10.PNG)
 
 <br>
 
