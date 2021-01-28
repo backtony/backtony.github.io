@@ -37,6 +37,6 @@ comments: true
 
 ### 검색
 + ctrl + alt + S : setting창 열기
-+ shft * 2 : 파일, 클래스, 성정 등 키워드에 관련된 모든 것 검색
++ shft 2번 : 파일, 클래스, 성정 등 키워드에 관련된 모든 것 검색
++ ctrl + E : Recent file로 작업했던 것들을 검색
 
-ctrl + shft + T -> create new test
