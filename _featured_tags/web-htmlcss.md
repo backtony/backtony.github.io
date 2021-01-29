@@ -1,8 +1,8 @@
 ---
 layout: tag-blog
-title: Sparta coding
-slug: sparta
+title: HTML & CSS
+slug: htmlcss
 category: web
 menu: false
-order: 3
+order: 1
 ---
