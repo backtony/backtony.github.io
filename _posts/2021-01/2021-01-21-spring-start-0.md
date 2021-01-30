@@ -32,7 +32,8 @@ comments: true
 
 
 ## 수정
-+ ctrl + alt + shft + T : Refactor 단축키, 드래그해서 단축키누르고 extract method하면 드래그 줄을 따로 메소드로 뽑아낼 수 있음
++ ctrl + alt + shft + T : Refactor 단축키
++ ctrl + alt + M : extract method
 + shft + F6 : 같은 코드 한 번에 수정
 
 ### 검색
