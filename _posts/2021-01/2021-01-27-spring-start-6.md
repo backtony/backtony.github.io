@@ -171,6 +171,27 @@ class MemberServiceIntegrationTest {
 ```
 <Br>
 
+__Cf) Autowired가 아닌 직접 꺼내기__  
+스프링은 모든게 ApplicationCentext로 시작한다. 이걸 스프링 컨테이너라고 생각하면 된다. AnnotationConfigApplicationContext의 파라미터로 Configuration 어노테이션 있는 클래스를 넣어준다. @Bean이 붙은 것들을 객체생성해서 스프링 컨테이너에 넣어서 관리해준다. 그럼 거기서 이제 getBrean으로 꺼내서 사용하면 된다. getBean의 파라미터는 메소드이름, 반환타입이다.
+```java
+public class MemberApp {
+
+
+    public static void main(String[] args) {
+
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        MemberService memberService = applicationContext.getBean("memberService",MemberService.class);
+
+        Member member = new Member(1L, "memberA", Grade.VIP);
+        memberService.join(member);
+
+        Member findMember = memberService.findMember(1L);
+        System.out.println("newMember = " + member.getName());
+        System.out.println("findMember = " + findMember.getName());
+    }
+}
+```
+
 ## 2. JPA
 ---
 JPA는 기존의 반복 코드, SQL을 직접 만들어서 실행해주기 때문에 생산성을 크게 높일 수 있고, 사용시 SQL과 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환할 수 있다. JPA는 인터페이스만 제공되는 것이고, 이에 대한 구현체로 hiberante 등등 여러 가지가 있다. JPA는 객체랑 ORM이라는 기술이다. (O:Ojbect, R:Relational, M:Mapping )  
