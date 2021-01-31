@@ -3,7 +3,7 @@ layout: post
 title:  Intellij 단축키 메모장
 subtitle:   Intellij 단축키 메모장
 categories: spring
-tags: start
+tags: spring
 comments: true
 # header-img:
 ---
@@ -29,7 +29,7 @@ comments: true
 + ctrl + shft + T : create new test를 누르면 테스트껍떼기를 한 번에 생성
 + sout : System.out.println() 자동 완성
 + soutv : System.out.println("최근 변수 = " + 최근 변수); 자동 완성
-
++ iter : 향상된 for문 자동 입력
 
 ## 수정
 + ctrl + alt + shft + T : Refactor 단축키
@@ -40,4 +40,3 @@ comments: true
 + ctrl + alt + S : setting창 열기
 + shft 2번 : 파일, 클래스, 성정 등 키워드에 관련된 모든 것 검색
 + ctrl + E : Recent file로 작업했던 것들을 검색
-
