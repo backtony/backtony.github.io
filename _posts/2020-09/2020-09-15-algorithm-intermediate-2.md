@@ -47,11 +47,7 @@ LUCKY
 
 ### 내가 작성한 코드
 ```python
-import sys
-
-input = sys.stdin.readline
-
-n = list(map(int,input().rstrip()))
+n = list(map(int,input())
 mid =len(n)//2
 left = n[:mid]
 right = n[mid:]
@@ -182,6 +178,29 @@ def solution(s):
 제한사항으로 길이가 크지 않으므로 일일이 확인하는 형태로 설계했다.
 <br>
 
+2차 리뷰 코드
+```python
+def solution(s):
+    n = len(s)  # 길이
+    result = n
+    
+    # 자르는 길이가 절반 이상이면 무의미
+    for i in range(1, n // 2 + 1):  # 자를 길이
+        cnt = 1
+        answer = "" # 자른 문자열 담을 곳
+        j = 0
+        # 비교시작점이 길이를 넘어설때까지 해야 남은 것들을 다 처리가능
+        while j < n:
+            if s[j:j + i] == s[j + i:j + 2 * i]:
+                cnt += 1
+            else:
+                if cnt > 1:
+                    answer += str(cnt)
+                answer += s[j:j + i]
+                cnt = 1
+            j += i
+```
+
 ### 모범 답안
 입력으로 주어지는 문자열의 길이가 1,000 이하이기 때문에 가능한 모든 경우의 수를 탐색하는 완전 탐색을 수행할 수 있다. 예를 들어 길이가 N인 문자열이 입력되었다면 1부터 N/2까지의 모든 수를 단위로 하여 문자열을 압축하는 방법을 모두 확인하고, 가장 짧게 압축되는 길이를 출력하면 된다.
 ```python
@@ -278,6 +297,68 @@ def solution(key, lock):
                 key = rotation(key)
 
     return False
+```
+<br>
+
+2차 리뷰 코드  
+lock을 일일이 복원하는 것보다 새것으로 덮어씌우는게 더 편할 것 같아서 덮어씌웠다.
+```python
+import copy
+
+# 키 넣기
+def put(new_lock,key,n,m):
+
+    # 4회전
+    for i in range(4):
+        # 키 넣을 시작점 잡아주기
+        for i in range(2*n):
+            for j in range(2 * n):
+                # 키를 넣다가 빼었다가 할때 new_lock수정이 필요하므로 만들고 버리기
+                temp = copy.deepcopy(new_lock)
+                # 키 넣기
+                for a in range(m):
+                    for b in range(m):
+                        temp[i+a][j+b]=key[a][b]+ temp[i+a][j+b]
+                if check(temp,n):
+                    return True
+        # 키 회전
+        key = rotation(key)
+    return False
+
+def check(temp,n):
+    for i in range(n,2*n):
+        for j in range(n,2*n):
+            if temp[i][j]!= 1:
+                return False
+    return True
+
+def rotation(key):
+    n = len(key)
+    m = len(key[0])
+
+    new_key= [[0]*n for i in range(m)]
+
+    # 오른쪽 90도 회전
+    for i in range(n):
+        for j in range(m):
+            new_key[j][n-i-1]= key[i][j]
+    return new_key
+
+
+
+def solution(key, lock):
+    n = len(lock)
+    m = len(key)
+
+    new_lock = [[0] * n * 3 for _ in range(3 * n)]
+
+    # 3배수 판으로 자물쇠 옮기기
+    for i in range(n):
+        for j in range(n):
+            new_lock[i+n][j+n] =lock[i][j]
+
+    # 키 넣기
+    return put(new_lock,key,n,m)
 ```
 
 ### 모범 답안
@@ -524,6 +605,61 @@ print(solution())
 # -8을 만드려면 -2를 더하면 되므로 나머지는 -2이다
 -8 % -3 == -2
 ```
+<br>
+
+2차 리뷰 코드
+```python
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+n = int(input())
+k = int(input())
+
+graph = [[0] * n for _ in range(n)]
+# 사과 위치 처리
+for _ in range(k):
+    a, b = map(int, input().split())
+    graph[a - 1][b - 1] = 1  # 사과
+
+l = int(input())
+ways = []
+# 방향 전환 위치 저장
+for _ in range(l):
+    ways.append(input().split())
+
+visited = [(0, 0)]  # 첫 위치방문처리
+d = 1  # 시작방향
+
+cnt = 0  # 정답 시간
+x = y = 0
+l_cnt = 0  # 방향 전환 횟수 카운트
+graph[x][y] = 2  # 첫 위치 처리
+while 1:
+    cnt += 1
+    x += dx[d]
+    y += dy[d]
+    # 보드 벗어나거나, 몸에 부딪히면
+    if x < 0 or x >= n or y < 0 or y >= n or graph[x][y] == 2:
+        break
+    # 사과가 없다면
+    if graph[x][y] != 1:
+        # 꼬리 자르기
+        px, py = visited.pop(0)
+        graph[px][py] = 0
+    # 현재 방문 위치 처리
+    visited.append((x, y))
+    graph[x][y] = 2
+
+    # 방향 전환 처리
+    if l_cnt < l and cnt == int(ways[0][0]):
+        l_cnt += 1
+        way = ways.pop(0)[1]
+        if way == 'D':
+            d = (d + 1) % 4
+        else:
+            d = (d - 1) % 4
+print(cnt)
+```
 
 ### 모범 답안
 2차원 배열상의 특정 위치에서 동,남,서,북의 위치로 이동하는 기능을 구현해야 한다. 이 문제의 경우, 뱀이 처음에 오른쪽(동쪽)을 바라보고 있다는 점을 고려하자. 더불어 뱀의 머리가 뱀의 몸에 닿는 경우 종료해야 하므로, 매 시점마다 뱀이 존재하는 위치를 항상 2차원 리스트에 기록해야 한다.  
@@ -659,7 +795,53 @@ def solution(n, build_frame):
     return answer
 ```
 처음 코딩했을 때는 기둥과 보를 우선적으로 나눴다. 하지만 코딩해보니 삭제의 과정은 기둥과 보가 같은 형태로 동작하기에 다시 설치와 삭제를 기준으로 나눴다. 결과적으로 전부 코딩하고 보니 solution 함수와 check함수에서 중복되는 부분이 있었다. 생각해보면 설치하는 내용도 check함수에서 설치가 가능할 경우 continue가 아니라 return True를 사용하면 중복되는 코드를 줄일 수 있을 것 같다. 모범답안이 그렇게 코딩한 결과이다.
+<br>
 
+2차 리뷰 코드  
++ 기둥 보를 우선으로 나눌지, 설치 삭제를 우선으로 나눌지 -> 삭제는 어느 경우나 같음 -> 설치 삭제로 나누기
++ 설치 가능한 경우 설치, 삭제 가능한 경우 삭제 -> 우선 설치하고 유지 가능한지 확인, 우선 삭제하고 유지 가능한지 확인 -> 결국 우선 실행 후 유지 가능한지 확인하고 후에 처리
+```python
+def check(answer):
+    for x, y, a in answer:
+        # 기둥
+        if a == 0:
+            if y == 0 or [x, y - 1, 0] in answer or [x, y, 1] in answer or [x - 1, y, 1] in answer:
+                continue
+            else:
+                return False
+        # 보
+        else:
+            if [x, y - 1, 0] in answer or [x + 1, y - 1, 0] in answer or (
+                    [x - 1, y, 1] in answer and [x + 1, y, 1] in answer):
+                continue
+            else:
+                return False
+    return True
+
+
+def solution(n, build_frame):
+    answer = []
+    # x y a b
+    # 0기둥 1보 - a
+    # 0삭제 1설치 - b
+    # 설치 가능이면 설치, 삭제후 유지 가능이면 삭제
+    # 일단 다 넣어버리고 체크로 넘겨
+    for x, y, a, b in build_frame:
+        # 삭제
+        if b == 0:
+            # 제거한뒤 유지 불가능이면 다시 넣기
+            answer.remove([x, y, a])
+            if not check(answer):
+                answer.append([x, y, a])
+        # 추가
+        else:
+            # 추가하고 유지 불가능이면 빼기
+            answer.append([x, y, a])
+            if not check(answer):
+                answer.remove([x, y, a])
+    answer.sort()
+    return answer
+```
 
 ### 모범 답안
 전체 명령의 개수는 총 1,000개 이하이다. 따라서 O(N^2)으로 해결하는 것이 이상적이나 시간제한이 5초로 넉넉하기 때문에 O(N^3)의 알고리즘을 이용해도 정답판정을 받을 수 있다. 따라서 후자로 해결하는 가장 간단한 방법은, 설치 및 삭제 연산을 요구할 때마다 일일이 전체 구조물을 확인하며 규칙을 확인하는 것이다. 이렇게 복잡한 문제의 경우 해결에 따른 함수를 따로 만들어 사용하는 것이 좋다.
