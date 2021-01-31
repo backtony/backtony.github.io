@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  Spring 핵심 - 스프링 빈 테스트와 스프링 빈 상속관계
-subtitle:   Spring 핵심 - 스프링 빈 테스트와 스프링 빈 상속관계
+title:  Spring 핵심 - 스프링 빈 테스트, 스프링 빈 상속관계, 메타 정보
+subtitle:   Spring 핵심 - 스프링 빈 테스트, 스프링 빈 상속관계, 메타 정보
 categories: spring
 tags: basic
 comments: true
@@ -13,6 +13,7 @@ comments: true
   - [2. 개별적 조회](#2-개별적-조회)    
   - [3. 스프링 빈 상속관계 조회](#3-스프링-빈-상속관계-조회)    
   - [4. 스프링 빈 상속관계](#4-스프링-빈-상속관계)    
+  - [5. 스프링 빈 설정 메타 정보](#5-스프링-빈-설정-메타-정보)    
 
 
 ## 1. 전체 조회
@@ -64,6 +65,7 @@ public class ApplicationContextInfoTest {
 + getBean : 빈 이름으로 빈 객체(인스턴스) 조회
 + getBeanDefinition : 빈에 대한 메타데이터 정보
 
+AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class); 에서 ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class); 를 사용하지 않은 이유는 ApplicationContext에는 getBeanDefinition이 없다. 왜냐하면 실제로 beanDefinition 정보를 뽑아쓸 필요가 없기 때문에 이런 복잡한 메소드들은 ApplicationContext에 구현되어있지 않다. 여기서는 저 메소드가 필요했기 때문에 AnnotationConfigApplicationContext로 받았다고 생각하면 된다. 보통은 ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class); 이렇게 사용한다고 생각하면 된다.
 
 <Br>
 
@@ -173,7 +175,14 @@ public DiscountPolicy fixDiscountPolicy() {
 
 ApplicationContext나 BeanFactory를 스프링 컨테이너라고 한다.
 
+<br>
 
+## 5. 스프링 빈 설정 메타 정보
+---
+![그림2](https://backtony.github.io/assets/img/post/spring/basic/2-2.PNG)
+
+@Configuration 으로 사용되었던 자바 파일을 다른 확장자의 파일로(xml) 코딩해서 제공해도 같은 기능을 수행할 수 있다. 이유는 이것 또한 BeanDefination이라는 추상화 때문이다. 결국 어떤 파일이 BeanDefination을 만드는지는 상관없고 스프링 컨테이너는 만들어진 BeanDefination에만 의존한다. @bean당 각각 하나씩 메타 정보가 생성되고, 이것들을 묶어서 BeanDefination로 빈 설정 메타정보가 만들어진다. 결론은 스프링은 BeanDefination으로 스프링 빈 설정 메타정보를 추상화한다 정도로 알아두면 된다.  
+참고로 스프링 빈을 만들 때는 직접적으로 등록하는 방법과 factoryBean을 통해 등록하는 방법이 있고 일반적으로 지금까지 해왔던 @Configuration을 통해 등록하는 것이 factoryBean을 통한 방법이다. 직접등록하는 경우는 거의 없다.
 
 
 <br>
