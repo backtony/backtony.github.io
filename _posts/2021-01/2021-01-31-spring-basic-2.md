@@ -181,7 +181,7 @@ ApplicationContext나 BeanFactory를 스프링 컨테이너라고 한다.
 ---
 ![그림2](https://backtony.github.io/assets/img/post/spring/basic/2-2.PNG)
 
-@Configuration 으로 사용되었던 자바 파일을 다른 확장자의 파일로(xml) 코딩해서 제공해도 같은 기능을 수행할 수 있다. 이유는 이것 또한 BeanDefination이라는 추상화 때문이다. 결국 어떤 파일이 BeanDefination을 만드는지는 상관없고 스프링 컨테이너는 만들어진 BeanDefination에만 의존한다. @bean당 각각 하나씩 메타 정보가 생성되고, 이것들을 묶어서 BeanDefination로 빈 설정 메타정보가 만들어진다. 결론은 스프링은 BeanDefination으로 스프링 빈 설정 메타정보를 추상화한다 정도로 알아두면 된다.  
+@Configuration 으로 사용되었던 자바 파일을 다른 확장자의 파일로(xml) 코딩해서 제공해도 같은 기능을 수행할 수 있다. 이유는 이것 또한 BeanDefination이라는 추상화 때문이다. 결국 어떤 파일이 BeanDefination을 만드는지는 상관없고 스프링 컨테이너는 만들어진 BeanDefination에만 의존한다. @bean당 각각 하나씩 메타 정보가 생성되고, 이것들을 묶어서 BeanDefination로 빈 설정 메타정보가 만들어진다. 조금 깊이 들어가보자면, ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class) 했을 때 AnnotatedBeanDefinitionReader란 것이 AppConfig.class를 읽어서 BeanDifinition을 생성한다. __결론은 스프링은 BeanDefination으로 스프링 빈 설정 메타정보를 추상화한다 정도로 알아두면 된다.__  
 참고로 스프링 빈을 만들 때는 직접적으로 등록하는 방법과 factoryBean을 통해 등록하는 방법이 있고 일반적으로 지금까지 해왔던 @Configuration을 통해 등록하는 것이 factoryBean을 통한 방법이다. 직접등록하는 경우는 거의 없다.
 
 
