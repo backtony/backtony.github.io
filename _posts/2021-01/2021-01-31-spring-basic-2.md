@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  Spring 핵심 - 스프링 빈 테스트
-subtitle:   Spring 핵심 - 스프링 빈 테스트
+title:  Spring 핵심 - 스프링 빈 테스트와 스프링 빈 상속관계
+subtitle:   Spring 핵심 - 스프링 빈 테스트와 스프링 빈 상속관계
 categories: spring
 tags: basic
 comments: true
@@ -12,6 +12,8 @@ comments: true
   - [1. 전체 조회](#1-전체-조회)    
   - [2. 개별적 조회](#2-개별적-조회)    
   - [3. 스프링 빈 상속관계 조회](#3-스프링-빈-상속관계-조회)    
+  - [4. 스프링 빈 상속관계](#4-스프링-빈-상속관계)    
+
 
 ## 1. 전체 조회
 ---
@@ -158,8 +160,18 @@ public DiscountPolicy fixDiscountPolicy() {
 2번에서 설명했듯이 부모 타입을 모두 조회하려면 beansOfType을 사용하면 되고, java의 최고 부모는 Object이므로 Object.class로 꺼내면 전부 다 조회할 수 있다.  
 <br>
 
+## 4. 스프링 빈 상속 관계
+---
+![그림1](https://backtony.github.io/assets/img/post/spring/basic/2-1.PNG)
 
++ BeanFactory : 스프링 컨테이너의 최상위 인터페이스이고, 스프링 빈을 관리하고 조회하는 역할을 담당한다.
++ ApplicationContext : BeanFactory 기능을 모두 상속받아 제공하며, 위 그림과 같이 다른 인터페이스도 상속받아서 기능을 제공한다. 
+    - 메시지소스 활용한 국제화 기능
+    - 환경변수
+    - 애플리케이션 이벤트
+    - 편리한 리소스 조회
 
+ApplicationContext나 BeanFactory를 스프링 컨테이너라고 한다.
 
 
 
