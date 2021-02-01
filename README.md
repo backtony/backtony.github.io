@@ -10,11 +10,13 @@
     - ‘윤성우의 열혈 자료구조’를 읽고 정리
 + [MySQL](https://backtony.github.io/category/mysql/)
     - ‘이것이 MySQL이다’ 를 읽고 정리
+    - 프로그래머스 mysql 문제 풀이
 + [Spring](https://backtony.github.io/category/spring/)
     - 인프런 김영한님의 Spring 강의를 듣고 정리
 + [Java](https://backtony.github.io/category/java/)
     - ‘혼자 공부하는 자바’를 읽고 정리
 + [Web Programming](https://backtony.github.io/category/web/)
+    - 생활 코딩 공부 기록
     - 스파르타 코딩 웹코딩 공부 기록
 + [Python](https://backtony.github.io/category/python/)
     - '혼자 공부하는 파이썬' 읽고 정리
