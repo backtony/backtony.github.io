@@ -937,48 +937,37 @@ __출력 조건__
 ### 내가 작성한 코드
 주어진 제한 조건에서 복잡도를 신경안써도 될정도로 범위가 작다. 처음에는 최소거리치킨집을 카운트할 리스트를 선언하고 각각 집에서 최소거리에 해당하는 치킨집 개수를 카운트해서 가장 적게나온 치킨집을 빼주려고 했다. 하지만 이렇게 할 경우 3번째 예시 같은 경우를 해결할 수 없다. 따라서 범위가 매우 작다는 점을 생각하여 combinations를 이용해 각 경우마다 최소거리를 구해준 뒤 min으로 비교해가는 알고리즘을 설계했다.
 ```python
-import sys
 from itertools import combinations
 
-input = sys.stdin.readline
-
-# 칸, 최대치킨집
 n, m = map(int, input().split())
 
 INF = int(1e9)
-graph = []
-home = []
-chick = []
-distance = INF
+chicks = []
+homes = []
+answer = INF
 
-# 0빈칸 1집 2치킨집
-for _ in range(n):
-    graph.append(list(map(int, input().rstrip().split())))
-
-# 리스트 훑으면서 집,치킨집 위치 저장
+# 집과 치킨집 위치 찾기
 for i in range(n):
+    graph = list(map(int, input().split()))
     for j in range(n):
-        # 집이면 집 주소 저장
-        if graph[i][j] == 1:
-            home.append((i, j))
-        # 치킨집이면 치킨집 주소 저장
-        elif graph[i][j] == 2:
-            chick.append((i, j))
+        if graph[j] == 1:
+            homes.append((i + 1, j + 1))
+        elif graph[j] == 2:
+            chicks.append((i + 1, j + 1))
 
-# 치킨집 뽑기
-for spots in combinations(chick, m):
-    tot = 0
-    # 각각의 집들에서 뽑힌 치킨집 중 최소 거리 각각 구하기
-    for a, b in home:
-        low_cost = INF
-        for x, y in spots:
-                low_cost = min(low_cost, abs(x - a) + abs(y - b))
-        # 다음 집으로 넘어가기 전에 지금 집의 최소 치킨거리값 저장
-        tot+=low_cost
-    # 다음 치킨집들을 뽑기 전에 치킨거리 최소값 비교하고 수정
-    distance=min(distance,tot)
+# 치킨m개 뽑기
+for poses in combinations(chicks, m):
+    tot = 0 # 뽑은 m개의 최소 치킨 거리 저장소
+    # 각 집에 대해 최소 치킨거리 찾기
+    for home in homes:
+        dis = INF
+        for pos in poses:
+            temp = abs(home[0] - pos[0]) + abs(home[1] - pos[1])
+            dis = min(dis, temp)
+        tot += dis
+    answer = min(answer, tot)
 
-print(distance)
+print(answer)
 ```
 
 
@@ -1036,6 +1025,48 @@ print(tmp)
 ---
 [문제 클릭](https://programmers.co.kr/learn/courses/30/lessons/60062){: target="_blank"}  
 
+### 내가 작성한 코드
+2차 리뷰 코드  
+if friend > len(dist) 코드를 position 수정 뒤쪽에 넣었다가 오류가 어딘지 몰라서 한참 찾았다. friend가 len(dist)보다 커졌을 때 바로 break안하고 position을 수정해버리면 poses[friend-1] 인덱스는 존재하지 않으므로 오류가 터진다.
+
+```python
+import copy
+from itertools import permutations
+
+
+def solution(n, weak, dist):
+    length = len(weak)
+    # 원형을 일자로 펴기
+    new_weak = copy.deepcopy(weak)
+    for i in weak:
+        new_weak.append(i + n)
+    answer = len(dist) + 1
+
+    # 투입친구 순열 선택
+    for poses in permutations(dist, len(dist)):
+        # 모든 취약점부터 시작해서 최소찾기
+        for start in range(length):
+            friend = 1  # 친구 투입수
+            # 현재 위치
+            position = new_weak[start] + poses[friend - 1]
+            # 확인해야하는 지점
+            for spot in new_weak[start + 1:start + length]:
+
+                # 현재위치가 점검지점보다 뒤에 있다면
+                if position < spot:
+                    friend += 1 # 친구 투입
+                    if friend > len(dist):
+                        break
+                    position = spot + poses[friend - 1] # 현재위치 수정
+
+            answer = min(answer, friend)
+
+    if answer > len(dist):
+        return -1
+    return answer
+```
+
+
 ### 모범답안
 제한 조건을 보았을 때, weak 리스트와 dist 리스트의 길이가 매우 작은 것을 알 수 있다. 따라서 주어지는 데이터의 개수가 적을 때는 모든 경우를 일일이 확인하는 완전 탐색으로 접근해볼 수 있다.  
 친구를 나열하는 모든 경우의 수를 각각 확인하여 친구를 최소 몇 명 배치하면 되는지 계산하면 문제를 해결할 수 있다. (문제에서 찾고자 하는 값은 투입해야 하는 친구 수의 최솟값이다. 이때 전체 친구의 수 최대는 8이다. 모든 친구를 무작위로 나열하는 모든 순열의 개수는 8!=40,320으로 충분히 계산 가능한 경우의 수이다.)
@@ -1082,6 +1113,9 @@ def solution(n, weak, dist):
 __구현 기출 느낀점__  
 구현 문제는 대부분 특별한 자료구조를 사용하지 않았다. 대부분 주어진 범위가 작기때문에 모든 경우를 탐색해야했고 경우에 따라 itertools를 활용해야했다. 또한, 리스트의 함수들 기억만 할 수 있다면 해결할 수 있는 문제들이 많은 것 같다.
 
+<br>
+
+9번문제는 다시 풀어볼 필요가 있다.
 
 <br>
 ---
