@@ -328,7 +328,111 @@ id 선택자 > class 선택자 > 태그 선택자
 <br>
 
 ### 그리드
+```html
+<!DOCTYPE html>
+<html>
 
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    #grid {
+      border:5px solid pink;
+      display: grid;
+      grid-template-columns: 150px 1fr;
+    }
+    div {
+      border: 5px solid gray;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="grid">
+    <div>navigation</div>
+    <div>article</div>
+  </div>
+</body>
+
+</html>
+```
+![그림3](https://backtony.github.io/assets/img/post/web/htmlcssjs/1-3.PNG)
+
+grid-template-columns: 150px 1fr; 에서 px은 첫번째로 묶인 navigation의 열크기를 150px로 고정시켜준 것이고 fr은 화면전체를 쓰게 자동으로 조정되는 단위로 나머지 전부 사용한다.  
+
+아무런 의미없이 디자인의 용도로만 묶어주기 위해 사용하는 태그
++ div : block level element
++ span : inline element
+
+
+<br>
+
+### 반응형 디자인
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            border:10px solid green;
+            font-size: 50px;
+        }
+        @media(min-width: 800px){
+            div{
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        responsive
+    </div>
+</body>
+</html>
+```
++ @media(min-width: 800px) : 최소 800px부터 다음을 작동
++ @media(max-width: 800px) : 최대 800px까지 다음을 작동
+
+<br>
+
+### 코드의 재사용
+모든 파일마다 style태그를 주면서 사용하면 수정할 때 매우 번거롭게 된다. 따라서 한 파일에 css파일을 정리해두고 link태그를 통해 css파일을 가져와서 사용한다. grid 실습 파일을 가지고 만들어보자.
+```css
+/* style.css */
+#grid {
+    border:5px solid pink;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+  }
+  div {
+    border: 5px solid gray;
+  }
+```
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">  
+</head>
+
+<body>
+  <div id="grid">
+    <div>navigation</div>
+    <div>article</div>
+  </div>
+</body>
+
+</html>
+```
+이렇게 따로 css파일을 만들어주고 link로 가져와서 사용하면 된다.  
+하나의 웹페이지에서 여러 개의 파일을 별도로 바깥에 두고 다운로드 받는 것과 웹페이지 안에 css코드를 내장하는 것 중에서 후자가 네트워크 측면에서는 효율적이다. 하지만 캐싱이라는 테크닉 때문에 그렇지 않다. 캐싱은 저장하다라는 뜻인데 한 번 style.css라는 파일을 받았다면 파일이 변경되기 전까지 웹브라우저는 이 파일을 컴퓨터에 저장해놨다가 style.css 파일을 요청하면 저장된 결과를 가져와서 사용하기에 네트워크를 안 쓰게 되어 속도를 높일 수 있다.
 
 
 <br>
