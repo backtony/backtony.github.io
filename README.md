@@ -2,6 +2,8 @@
 ### 소개
 기계공학과 학생이지만 코딩에 흥미를 느껴 독학으로 공부해 내가는 과정을 기록하는 곳
 
+<br>
+
 ### 목차
 + [Algorithm](https://backtony.github.io/category/algorithm/)
     - 코드업 기초 100제
@@ -26,6 +28,7 @@
 + [TIL(Today I Learned)](https://backtony.github.io/category/til/)
     - 하루 공부 내용 정리하는 곳
 
+<br>
 
 ### About me
 #### 2016년
@@ -44,3 +47,6 @@
 + 2학년 1학기 학과 수석
 + 2학년 2학기 학과 수석
 + 제 7회 세종대학교 SW 경시대회 3등 
+
+#### 2021년
++ 기계공학과 -> 컴퓨터공학과 전과
