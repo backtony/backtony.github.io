@@ -1,7 +1,7 @@
 ---
 layout: tag-blog
-title: HTML & CSS
-slug: htmlcss
+title: HTML & CSS & JS
+slug: htmlcssjs
 category: web
 menu: false
 order: 1
