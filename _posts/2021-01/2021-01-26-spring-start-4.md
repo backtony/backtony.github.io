@@ -88,6 +88,7 @@ public class MemoryMemberRepository implements MemberRepository{
 <Br>
 
 cf) 스프링 컨테이너에 스프링 빈을 등록할 때, 유일하게 하나만 등록해서 공유하는 싱글톤으로 등록된다. 따라서 만약에 memberService와 orderService 모두 Autowired로 memberRepository로 연결되어 있다면 memberRepository 하나의 인스턴스로 연결되어 있는 것이다. 즉, 같은 인스턴스라는 뜻이다.
+![그림4](https://backtony.github.io/assets/img/post/spring/start/4-4.PNG)
 
 
 
