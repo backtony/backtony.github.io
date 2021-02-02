@@ -217,7 +217,9 @@ public class MemoryMemberRepositoryTest {
         // Assertions에서 alt + enter로 add로 import해주면 앞으로 asserThat 바로 사용 가능
         // 맞은 경우에는 아무런 창 없음, 틀린 경우에만
 
-        // 다른지 확인은 Assertions.assertThat().isNotSameAs();
+        // isEqualTo : 내용물이 같은지
+        // isNotSameAs() : 다른 주소값을 가지는지
+        // SameAs() : 같은 주소값을 가지는지
     }
 
     @Test
