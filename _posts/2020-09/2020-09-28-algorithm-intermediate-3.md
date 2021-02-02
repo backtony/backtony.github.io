@@ -80,6 +80,45 @@ if cnt == 0:
 한 가지 출발지점이 정해진 경우에 대해서 각 지점에 대해 최소 거리를 구하는 다익스트라 알고리즘을 사용했다. 다익스트라 알고리즘의 복잡도는 선형로그시간 O(ElogV)이므로 주어진 큰 범위에 적합한 알고리즘이다. (V는 노드, E는 간선, 우선순위 큐로 인해 logV)
 <br>
 
+2차 리뷰 코드
+```python
+from collections import deque
+
+n, m, k, x = map(int, input().split())
+
+INF = int(1e9)
+graph = [[] for _ in range(n+1)]
+dis = [INF] * (n + 1)
+dis[x] = 0
+# 그래프 정보 입력
+for _ in range(m):
+    a, b = map(int, input().split())
+    graph[a].append(b)
+
+q = deque()
+q.append(x)
+
+
+# bfs는 처음 꺼낸 것이 최소 거리
+while q:
+    pos = q.popleft()
+    for i in graph[pos]:
+        if dis[i] == INF:
+            dis[i]=dis[pos]+1
+            q.append(i)
+
+
+key = 1
+for i in range(1, n + 1):
+    if dis[i] == k:
+        key = 0
+        print(i)
+
+if key:
+    print(-1)
+```
+답안과 같이 bfs로 풀었는데 한 번 시간초과가 떴다. 확인해보니 큐를 안쓰고 그냥 리스트의 pop(0)을 사용한 것이 문제였다. pop(0)도 당연히 복잡도가 O(1)일 것이라 생각했는데 pop은 맨 뒤에 것을 뽑아주기때문에 pop(0)을 하면 맨 앞으로까지 와서 빼주는 것이라 O(N)의 복잡도를 가진다는 것을 처음 알았다. 큐를 사용하면 O(1)의 복잡도가 소요된다.
+
 ### 모범 답안
 그래프에서 __간선비용이 모두 동일할 때는 BFS__ 를 이용하여 최단 거리를 찾을 수 있다.  
 문제 조건에서 노드의 개수 N은 최대 300,000개이며 간선의 개수 M은 최대 1,000,000개이다. 따라서 BFS를 이용해 O(N+M)으로 동작하는 소스 코드를 작성하여 시간 초과 없이 해결할 수 있다.(선형 시간 알고리즘에서는 천만까지 범위가 가능하다.) 먼저 특정한 도시 X를 시작점으로 BFS를 수행하여 모든 도시까지의 최단 거리를 계산한 뒤, 각 최단 거리를 하나씩 확인하며 그 값이 K인 경우에 해당 도시의 번호를 출력하면 된다.  
@@ -335,6 +374,41 @@ solution()
 print(graph[x - 1][y - 1])
 ```
 정렬을 해야하는데 deque에는 sort기능이 없어서 그냥 리스트를 사용했고 pop(인덱스)로 꺼냈다.  
+<br>
+
+2차 리뷰 코드  
+우선순위 큐를 이용해서 코딩했다. 시간,넘버,위치,저장 순으로 저장하면 순서대로 오름차순으로 정렬되어 뽑아지므로 따로 작업할 필요가 없이 시간만 고려하면 되기에 좀 더 짧게 코딩할 수 있었다. 지금 보니 1차 코드는 좋지 못한 코드인 것 같고 2차 코드나 답안이 좋은 코드인 것 같다.(pop을 쓴것도 그렇고)
+```python
+import heapq
+
+n, k = map(int, input().split())
+graph = []
+q = []
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+# 그래프 정보
+for i in range(n):
+    graph.append(list(map(int, input().split())))
+    for j in range(n):
+        # 바이러스가 있으면 시간,넘버, 위치 저장
+        if graph[i][j] != 0:
+            heapq.heappush(q,(0,graph[i][j], i, j))
+
+s, x, y = map(int, input().split())
+
+while q:
+    cnt,num,a,b = heapq.heappop(q)
+    if cnt == s:
+        break
+    for i in range(4):
+        pa = a + dx[i]
+        pb = b + dy[i]
+        if 0<=pa and pa<n and 0<=pb and pb<n and graph[pa][pb]==0:
+            graph[pa][pb]=num
+            heapq.heappush(q, (cnt + 1, num, pa, pb))
+
+print(graph[x-1][y-1])
+```
 
 ### 모범 답안
 낮은 번호부터 증식하므로, 초기에 큐에 원소를 삽입할 때는 낮은 바이러스의 번호부터 삽입해야 한다. 이후 BFS를 수행하며 방문하지 않은 위치를 차례대로 방문하도록 하면 된다.
