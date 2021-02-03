@@ -95,6 +95,8 @@ data.sort() # [1,4,5,8,9]
 
 ### itertools
 itertools는 파이썬에서 반복되는 데이터를 처리하는 기능을 포함하는 라이브러리이다. 제공하는 클래스는 매우 다양하지만, 코딩 테스트에서 가장 유용하게 사용할 수 있는 클래스는 permutations, combinations이다.  
+
+#### 순열
 permutations는 리스트와 같은 iterable 객체에서 r개의 데이터를 뽑아 일렬로 나열하는 모든 경우(순열)을 계산해준다. permutations는 클래스이므로 객체 초기화 이후에는 __리스트 자료형__ 으로 변환하여 사용한다. 리스트 ['A' , 'B' , 'C']에서 3개를 뽑아 나열하는 모든 경우를 출력하면 다음과 같다.  
 ```python
 from itertools import permutations
@@ -105,6 +107,7 @@ print(result)
 ```
 <br>
 
+#### 조합
 combinations는 리스트와 같은 iterable 객체에서 r개의 데이터를 뽑아 순서를 고려하지 않고 나열하는 모든 경우(조합)을 계산한다. combinations는 클래스이므로 객체 초기화 이후에는 __리스트 자료형__ 으로 변환하여 사용한다. 리스트 ['A' , 'B' , 'C']에서 2개를 뽑아 순서에 상관없이 나열하는 모든 경우를 출력하면 다음과 같다.  
 ```python
 from itertools import combinations
@@ -115,6 +118,7 @@ print(result)
 ```
 <br>
 
+#### 중복 순열
 product는 permutations와 같이 리스트와 같은 iterable 객체에서 r개의 데이터를 뽑아 일렬로 나열하는 모든 경우(순열)을 계산한다. 다만 원소를 중복하여 뽑는다. product 객체를 초기화 할 때는 뽑고자 하는 데이터의 수를 repeat 속성값으로 넣어준다. product는 클래스이므로 객체 초기화 이후에는 __리스트 자료형__ 으로 변환하여 사용한다. 리스트 ['A' , 'B' , 'C']에서 중복을 포함하여 2개를 뽑아 나열하는 모든 경우를 출력하면 다음과 같다.  
 ```python
 from itertools import product
@@ -123,8 +127,10 @@ result = list(product(data,repeat=2))
 print(result)
 # [('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'B'), ('B', 'C'), ('C', 'A'), ('C', 'B'), ('C', 'C')]
 ```
+중복 순열에서 해당하는 문자에 특정 개수만을 중복하도록 주어주려면, 리스트에 일단 모든 개수만큼 담아놓고 permutation을 이용한 뒤 set으로 중복을 제거하는 방법이 있다.
 <br>
 
+#### 중복 조합
 combinations_with_replacement는 combinations와 같이 리스트와 같은 iterable 객체에서 r개의 데이터를 뽑아 순서를 고려하지 않고 나열하는 모든 경우(조합)을 계산한다. 다만 원소를 중복해서 뽑는다. 마찬가지로 클래스이므로 초기화 후에 __리스트 자료형__ 으로 변환하여 사용해야 한다. 리스트 ['A' , 'B' , 'C']에서 중복을 포함하여 2개를 뽑아 순서에 상관없이 나열하는 모든 경우를 출력하면 다음과 같다.  
 ```python
 from itertools import combinations_with_replacement
