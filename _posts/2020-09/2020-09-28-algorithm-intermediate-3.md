@@ -608,11 +608,19 @@ table = list(map(int, input().split()))
 units = ['+'] * table[0] + ['-'] * table[1] + ['*'] * table[2] + ['/'] * table[3]
 
 
+
+# set에 관해서
+# data ={1,2,3,4,5,1,1,1} 자동 중복 제거
+# data = {(1,1),(1,1),(2,1),(1,2)} # 완전 같은 1,1은 제거 순서 다른 것은 제거 안됨
+
 def solution():
     min_ans = int(1e9)
     max_ans = -int(1e9)
 
-    for unit in permutations(units, n - 1):
+
+    # {(),(),()} 형식으로 되있고 () 하나씩 뽑아온다.
+    # set으로 중복 제거
+    for unit in set(permutations(units,n-1)):
         tmp = num[0]
         for i in range(n - 1):
             if unit[i] == '+':
@@ -633,7 +641,7 @@ max_ans, min_ans = solution()
 print(max_ans)
 print(min_ans)
 ```
-pypy3는 가능한데 python3에서는 시간초과가 나온다. 아직 이유는 모르겠으나 순열, 조합문제를 itertools로 풀었을 때 시간초과가 나온다면 재귀함수로 풀면 시간초과가 나오지 않는다. 
+set으로 중복을 제거하지 않고 permutations 그대로 사용하면 중복이 생긴다. 예를 들면, * * + 가 있다고 하면 permutations에서  *는 서로 다른 것으로 취급되어 * * +가 두 번 나오게 된다.
 
 ### 모범 답안
 최대 11개의 수가 주어졌을 때, 각 수와 수 사이에 사칙연산 중 하나를 삽입하는 모든 경우에 대하여 만들어질 수 있는 결과의 최댓값 및 최솟값을 구하면 된다. 따라서 모든 경우의 수를 계산하기 위하여 완전탐색(DFS / BFS)를 이용하여 해결할 수 있다.  
@@ -682,6 +690,7 @@ solution(1, num[0])
 print(max_ans)
 print(min_ans)
 ```
+__위와 같이 코딩하면 마지막에는 빼줬던 것을 전부다 회수하면서 if문이 끝나 solution 함수가 끝나게 된다.__  
 c++의 나눗셈 몫은 파이썬에서 나눗셈에 int를 씌운것과 같다. 재귀로 코딩할 때 elif가 아닌 if를 사용하는 이유는 elif 사용시 남아있어도 선택이 안되고 넘어가기 때문에 전부 선택하기 위해서는 if를 사용해서 모두 선택해줘야 한다.
 
 __python 음수 나눗셈__  
