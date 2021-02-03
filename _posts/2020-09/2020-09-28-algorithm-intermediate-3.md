@@ -655,6 +655,7 @@ plus, minus, time, divide = map(int, input().split())
 min_ans = int(1e9)
 max_ans = -int(1e9)
 
+# 백트래킹 -> 해를 찾는 도중에 막히면 되돌아가서 다시 해를 찾는 기법 -> 재귀를 이용한 완전 검색
 def solution(cnt, tot):
     global plus, minus, time, divide, min_ans, max_ans
 
