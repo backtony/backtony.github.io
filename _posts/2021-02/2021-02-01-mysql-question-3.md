@@ -16,7 +16,7 @@ comments: true
 
 <br>
 
-[문제 링크](https://programmers.co.kr/learn/challenges){:target="_blank"}
+[문제 링크](https://programmers.co.kr/learn/challenges?tab=all_challenges){:target="_blank"}
 
 
 ## 1. 없어진 기록 찾기

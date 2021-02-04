@@ -15,7 +15,7 @@ comments: true
   - [4. 고양이와 개는 몇 마리 있을까](#4-고양이와-개는-몇-마리-있을까)    
   - [5. NULL 처리하기](#5-null-처리하기)    
   - [6. 동명 동물 수 찾기](#6-동명-동물-수-찾기)    
-  - [7. 입양 시각 구하기](#7-입양-시각-구하기)    
+  - [7. 입양 시각 구하기1](#7-입양-시각-구하기1)    
   - [8. 루시와 엘라 찾기](#8-루시와-엘라-찾기)    
   - [9. 이름에 el이 들어가는 동물 찾기](#9-이름에-el이-들어가는-동물-찾기)    
   - [10. 중성화 여부 파악하기](#10-중성화-여부-파악하기)    
@@ -23,7 +23,7 @@ comments: true
     
 <br>
 
-[문제 링크](https://programmers.co.kr/learn/challenges){:target="_blank"}
+[문제 링크](https://programmers.co.kr/learn/challenges?tab=all_challenges){:target="_blank"}
 
 
 ## 1. 최솟값 구하기
@@ -38,7 +38,6 @@ SELECT datetime as '시간' from animal_ins order by datetime limit 1;
 ```sql
 SELECT count(*) from animal_ins;
 ```
-집계함수 count(열이름) 사용, 해당 열에 null인 경우는 카운트하지 않는다.
 <Br>
 
 ## 3. 중복 제거하기
@@ -46,7 +45,8 @@ SELECT count(*) from animal_ins;
 ```sql
 SELECT count(distinct name) as 'count' from animal_ins;
 ```
-distinct로 중복되는 것을 하나로 처리
+__집계함수 count(열이름)에서 특별히 따로 group by를 같은 조건이 없다면 해당 열의 값이 null인 경우 카운트하지 않아 null 자체가 조회 행에 없다.__  
+distinct로 중복되는 것을 하나로 처리  
 <Br>
 
 ## 4. 고양이와 개는 몇 마리 있을까
@@ -84,17 +84,18 @@ order by name;
 
 <Br>
 
-## 7. 입양 시각 구하기
+## 7. 입양 시각 구하기1
 ---
 ```sql
-SELECT hour(datetime) hour, count(datetime) count 
-from animal_outs
-where hour(datetime)>=9 and hour(datetime)<=19
-group by hour(datetime)
-order by hour(datetime);
+select hour(datetime) hour, count(*) count
+from animal_outs 
+where 9<=hour(datetime) and hour(datetime)<=19
+group by hour
+order by hour
 ```
 + hour은 집계함수고 그냥 내장 함수다. -> where 조건으로 사용 가능  
-+ group by로 묶인 순간부터 count의 인자로 묶인 열을 주면 해당하는 행 개수를 카운트해준다.
++ group by로 묶인 순간부터 count는 묶인 행을 기준으로 카운트한다.
++ __where 조건에서는 함수와 행의 풀네임을 사용해야 하지만 group by, order by에서는 별칭을 사용해도 된다.__
 
 <Br>
 
@@ -155,3 +156,6 @@ from animal_ins;
   + %s(초) 대소문자 무관
 
 
+<br>
+
+10번 11번 다시 풀어볼 필요가 있다.
