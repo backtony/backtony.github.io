@@ -209,15 +209,17 @@ print(tot)
 2차 리뷰 코드
 ```python
 import heapq
-n = int(input())
-q=[]
-for _ in range(n):
-    heapq.heappush(q,int(input()))
 
-ans =0
-while len(q)>1:
-    ans += heapq.heappop(q) + heapq.heappop(q)
-    heapq.heappush(q,ans)
+n = int(input())
+q = []
+for _ in range(n):
+    heapq.heappush(q, int(input()))
+
+ans = 0
+while len(q) > 1:
+    hap= heapq.heappop(q) + heapq.heappop(q)
+    ans +=hap
+    heapq.heappush(q, hap)
 
 print(ans)
 ```
