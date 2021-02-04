@@ -113,6 +113,33 @@ def solution(n,stages):
 ```
 실패율을 처리할 때 모범답안과 같이 length를 이용해서 하는 것이 더 좋아보인다. 코딩 기술보다 뭔가 사고적인것을 요구하는 문제인 것 같다. 앞으로 단계별 퍼센트를 구하는 문제의 경우 전체길이를 생각하고 처음부터 구하면서 길이를 이용하는 방법을 먼저 생각해보도록 하자.
 
+<br>
+
+2차 리뷰 코드
+```python
+def solution(N, stages):
+    position=[0] *(N+2)
+    people = len(stages) # 총 인원
+    temp = []
+    # 각 스테이지별 사람
+    for i in stages:
+        position[i]+=1
+
+    # 실패율
+    for i in range(1,N+1):
+        if position[i]==0:
+            rate=0
+        else :
+            rate = position[i]/people
+        temp.append((rate,i)) # 실패율, 층수
+        people-=position[i] # 스테이지 올라간 사람 수정
+
+    temp.sort(key=lambda x:(-x[0],x[1])) # 실패율 높은 순 정렬
+
+    answer = [x[1] for x in temp]
+
+    return answer
+```
 
 ### 모범답안
 ```python
@@ -154,7 +181,7 @@ def solution(N, stages):
 
 ### 내가 작성한 코드
 첫 공부때는 풀었으나 1차 리뷰때는 풀지 못했다.  
-첫 시도에서는 덧셈결과값이 작으면 되니까 정렳하고 0부터 차례대로 더하는 식으로 설계했다. 하지만 이렇게 하면 나중에 어느 순간에는 덧셈결과값이 이제 덧셈할 값보다 커지게 되는 순간이 오므로 최소값이 아니게 된다.  
+첫 시도에서는 덧셈결과값이 작으면 되니까 정렬하고 0부터 차례대로 더하는 식으로 설계했다. 하지만 이렇게 하면 나중에 어느 순간에는 덧셈결과값이 이제 덧셈할 값보다 커지게 되는 순간이 오므로 최소값이 아니게 된다.  
 문제상 결국 덧셈에서 앞서 계산한 결과값이 중복되므로 최소한의 결과를 내려면 앞서 계산값이 항상 최소값이어야 한다. 그렇다면 __항상 작은 것을 꺼내서 작은 것끼리 더애햐 한다는 점에서 우선순위 큐__ 를 생각해내야 한다. __while문의 조건으로 len(우선순위큐)로 우선순위큐의 길이또한 조건으로 사용할 수 있음을 기억해두자.__
 ```python
 import heapq
@@ -176,6 +203,23 @@ while len(card) !=1:
     heapq.heappush(card,a+b)
 
 print(tot)
+```
+<br>
+
+2차 리뷰 코드
+```python
+import heapq
+n = int(input())
+q=[]
+for _ in range(n):
+    heapq.heappush(q,int(input()))
+
+ans =0
+while len(q)>1:
+    ans += heapq.heappop(q) + heapq.heappop(q)
+    heapq.heappush(q,ans)
+
+print(ans)
 ```
 
 
