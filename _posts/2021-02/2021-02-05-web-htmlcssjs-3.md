@@ -30,7 +30,7 @@ comments: true
 </head>
 <body>
   <script>
-    var coworker={
+    let coworker={
       "programmer":"backtony",
       "designer":"backtony"
     };
@@ -62,14 +62,14 @@ comments: true
 </head>
 <body>
   <script>
-    var coworker={
+    let coworker={
       "programmer":"backtony",
       "designer":"backtony",
       "bookkeeper":"backtony",
       "data scientist" : "backtony"
     };
     
-    for (var key in coworker){      
+    for (let key in coworker){      
       document.write("key : " + key + " value : " + coworker[key] + "<br>");
     }
   </script>
@@ -93,7 +93,7 @@ comments: true
 </head>
 <body>
   <script>
-    var coworker={
+    let coworker={
       "programmer":"backtony",
       "designer":"backtony",
       "bookkeeper":"backtony",
@@ -101,7 +101,7 @@ comments: true
     };
     
     coworker.showAll = function(){
-      for (var key in this){      
+      for (let key in this){      
         if (key != 'showAll'){
           document.write("key : " + key + " value : " + this[key] + "<br>");
         }
@@ -126,8 +126,8 @@ comments: true
   <meta charset="utf-8">
   <script>
     function setColor(color) {
-      var alist = document.querySelectorAll('a')
-      var i = 0;
+      let alist = document.querySelectorAll('a')
+      let i = 0;
       while (i < alist.length) {
         alist[i].style.color = color;
         i++;
@@ -135,7 +135,7 @@ comments: true
 
     }
     function dayNightHandler(self) {
-      var target = document.querySelector('body');
+      let target = document.querySelector('body');
       if (self.value === 'night') {
         target.style.backgroundColor = 'black';
         target.style.color = 'white';
@@ -183,17 +183,17 @@ comments: true
   <title>web-html</title>
   <meta charset="utf-8">
   <script>
-    var Links = {
+    let Links = {
       setColor: function (color) {
-        var alist = document.querySelectorAll('a');
-        var i = 0;
+        let alist = document.querySelectorAll('a');
+        let i = 0;
         while (i < alist.length) {
           alist[i].style.color = color;
           i++;
         }
       }
     }
-    var Body ={
+    let Body ={
       setColor:function(color){
         document.querySelector('body').style.color = color;
       },
@@ -203,7 +203,7 @@ comments: true
     }
 
     function dayNightHandler(self) {
-      var target = document.querySelector('body');
+      let target = document.querySelector('body');
       if (self.value === 'night') {
         Body.setBackGroundColor('black') ;
         Body.setColor('white');
@@ -290,10 +290,10 @@ CSS에서 style을 파일로 따로 관리해서 사용하는 곳에 link태그�
 위 코드처럼 내가 만든 js코드를 가져오는 코드 위에 cdn을 붙여넣고, color.js 파일에서 jquery를 이용해서 코딩할 수 있다.
 ```js
 // color.js
-var Links = {
+let Links = {
     setColor: function (color) {
-        // var alist = document.querySelectorAll('a');
-        // var i = 0;
+        // let alist = document.querySelectorAll('a');
+        // let i = 0;
         // while (i < alist.length) {
         //     alist[i].style.color = color;
         //     i++;
@@ -303,7 +303,7 @@ var Links = {
         $('a').css('color',color);
     }
 }
-var Body = {
+let Body = {
     setColor: function (color) {
         //document.querySelector('body').style.color = color;
         // 모든 body태그의 css 수정
@@ -317,7 +317,7 @@ var Body = {
 }
 
 function dayNightHandler(self) {
-    var target = document.querySelector('body');
+    let target = document.querySelector('body');
     if (self.value === 'night') {
         Body.setBackGroundColor('black');
         Body.setColor('white');
