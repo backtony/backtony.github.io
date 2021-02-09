@@ -1260,7 +1260,76 @@ def solution(board):
                 q.append((cnt + 1, possible))
                 visited.append(possible)
 ```
+<br>
 
+3차 리뷰 코드
+```python
+from collections import deque
+
+
+def possible_way(new_board, spot):
+    possible = []
+    dx = [-1, 0, 1, 0]
+    dy = [0, 1, 0, -1]
+
+    x1 = spot[0][0]
+    y1 = spot[0][1]
+    x2 = spot[1][0]
+    y2 = spot[1][1]
+
+    # 4방향 움직임
+    for i in range(4):
+        px1 = x1 + dx[i]
+        py1 = y1 + dy[i]
+        px2 = x2 + dx[i]
+        py2 = y2 + dy[i]
+        if new_board[px1][py1] == 0 and new_board[px2][py2] == 0:
+            possible.append(((px1, py1), (px2, py2)))
+
+    # 회전
+    # 가로상태
+    if x1 == x2:
+        # 위쪽, 아래쪽
+        for i in [-1, 1]:
+            if new_board[x1 + i][y1] == 0 and new_board[x2 + i][y2] == 0:
+                possible.append(((x1, y1), (x2 + i, y1)))
+                possible.append(((x2, y2), (x2 + i, y2)))
+    # 세로상태
+    else:
+        # 왼쪽 오른쪽
+        for i in [-1, 1]:
+            if new_board[x1][y1 + i] == 0 and new_board[x2][y2 + i] == 0:
+                possible.append(((x1, y1), (x1, y1 + i)))
+                possible.append(((x2, y2), (x2, y2 + i)))
+
+    return possible
+
+
+def solution(board):
+    n = len(board)
+
+    # 4방향에 회전까지 고려해야하므로 범위를 넘어가는 경우를 일일이 고려하기
+    # 귀찮으므로 벽을 하나 더 세워서 1로 만들어 1로 범위나가는것과 이동불가 한번에 고려
+    new_board = [[1] * (n + 2) for _ in range(n + 2)]
+    for i in range(n):
+        for j in range(n):
+            new_board[i + 1][j + 1] = board[i][j]
+    q = deque()
+    visited = [{(1, 1), (1, 2)}]
+    q.append((0, ((1, 1), (1, 2))))  # 시작 위치
+
+    while q:
+        cnt, spot = q.popleft()
+        # bfs는 처음 나올 때가 최소거리 최소시간
+        if (n, n) in spot:
+            return cnt
+        possibles = possible_way(new_board, spot)
+
+        for possible in possibles:
+            if set(possible) not in visited:
+                visited.append(set(possible))
+                q.append((cnt + 1, possible))
+```
 
 ### 모범 답안
 다소 복잡해 보이지만 전형적인 BFS 문제 유형이다. 문제에서 로봇이 존재할 수 있는 각 위치(각 칸)을 노드로 보고, 인접한 위치와 비용이 1인 간선으로 연결되어 있다고 볼 수 있다. 좀 더 쉽게 생각한다면 현재 위치에서 모든 이동경로에 1초가 소요되는 것이다. 그렇다면 현재 위치에서 주어진 위치까지 이동하는 최소 거리 즉, 최소 시간을 구하는 것이다. 여기서 모든 이동 거리가 1(1초)인 상태에서의 최소 이동 거리라는 점에서 BFS를 이용한 풀이를 생각해내야 한다. 2번에서도 설명했듯이, __비용이 1인 경우 시작지점에서 연결되어 있는 차례대로 비용을 계산하여 그 자체가 최소거리이다.__  

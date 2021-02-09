@@ -482,6 +482,39 @@ def solution(food_times, k):
     return answer[k%len(answer)]
 ```
 
+<Br>
+
+3차 리뷰 코드
+```python
+import heapq
+
+
+def solution(food_times, k):
+    if sum(food_times) <= k:
+        return -1
+    length = len(food_times)
+
+    q = []
+    # 계속 뽑을때 최소가 나와야함
+    for i in range(length):
+        # 시간과 음식번호
+        heapq.heappush(q, (food_times[i], i + 1))
+
+    prev_loop = 0  # #이전에 한번에 뺀 루프수
+    prev = 0  # 이전 누적 시간
+
+    # 한번에 뺄수 있는거 뺐을 때 아직 시간 남았으면 계속 한번에 빼기
+    while prev + (q[0][0] - prev_loop) * length <= k:
+        prev += (q[0][0] - prev_loop) * length
+        prev_loop, idx = heapq.heappop(q)
+        length -= 1
+
+    # 이제 한번에 못뺀다.
+    k -= prev  # 남은시간
+    answer = sorted(q, key=lambda x: x[1])  # 인덱스 순 정렬
+    return answer[k % length][1]
+```
+
 ### 모범 답안
 일반적인 노가다로 생각하면 복잡도를 충족할 수 없다. 범위가 매우 크기때문에 어떠한 자료구조를 이용할지 생각해내야 한다.  
 처음에는 테이블의 최소값으로 한 번에 빼내고 남은 값들을 일일이 확인하는 것으로 알고리즘을 설계했었다. 하지만 리스트의 길이가 너무 크고 원소의 범위도 너무 크기때문에 복잡도를 충족할 수 없었다. 풀이를 보니 여기서 조금만 더 생각해내면 됬었다. 최소값을 한 번에 빼는 것은 좋은 선택이었고 이제 남은 값들을 일일이 확인하는 과정만 줄여주면 되었던 것이다.  
