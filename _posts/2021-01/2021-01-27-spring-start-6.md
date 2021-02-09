@@ -27,7 +27,7 @@ H2 데이터베이스를 사용하기 위해서 bundle.gradle에 라이브러리
 ![그림3](https://backtony.github.io/assets/img/post/spring/start/6-3.PNG)
 
 db에 붙으려면 접속 정보 같은 것을 넣어줘야한다. 경로만 넣으면 스프링 부트가 다 알아서 해준다. url은 접속할 때 url, driver은 h2 db로 접근 할 것이므로 h2 driver을 넣어준다. 처음 h2.Driver 입력하면 빨간불이 뜨는데 import가 안되었기 때문이다. bundle.gradle에 가서 화면 우측 상단에 코끼리 모양 표시를 누르면 자동으로 처리된다.  
-DB에 붙으려면 DataSource 라는 것이 필요하다. 위에서 datasource를 세팅해 두었다. 스프링 부트는 설정파일을 보고 스프링 자체적으로 그에 대한 스프링 빈을 생성해준다. 즉, db랑 연결할 수 있는 datasource를 만들어 준다는 것이다.
+DB에 붙으려면 DataSource 라는 것이 필요하다. 위에서 datasource를 세팅해 두었다. 스프링 부트는 설정파일을 보고 스프링 자체적으로 그에 대한 스프링 빈을 생성해준다. 즉, 위처럼 설정 정보만 넣어주면 db랑 연결할 수 있는 datasource 스프링 빈으로 자동 등록해준다는 것이다.
 <br>
 
 이제 db와 연결되는 새로운 MemberRepository의 구현 클래스를 작성해보자.
@@ -89,7 +89,7 @@ public class JdbcTemplateMemberRepository implements  MemberRepository{
             @Override
             // rs에 값을 받아오고  rownum만큼 반복
             public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
-                // rs값을 Member 객체에 저장
+                // rs값을 가공해서 Member 객체에 저장하고 member 객체 반환
                 Member member = new Member();
                 // rs에 있는 값중 id열을 int타입으로 가져와서 setid
                 member.setId(rs.getInt("id"));
@@ -135,7 +135,7 @@ public class SpringConfig {
     }
 }
 ```
-기존에서 추가된 것은 datasource와 memberRepository 생성자의 리턴값이 바뀐 것이다. datasource는 세팅해줬으니 스프링 빈으로 자동 등록이 되어있는 상태이다. 그런데 JdbcTemplateMemberRepository생성자의 파라미터로 DatasSource가 필요하므로 dataSource 프로퍼티를 선언하고 인젝션으로 값을 넣어주고 사용한다.
+기존에서 추가된 것은 datasource와 memberRepository 생성자의 리턴값이 바뀐 것이다. datasource는 세팅해줬으니 스프링 빈으로 자동 등록이 되어있는 상태이다. 그런데 JdbcTemplateMemberRepository생성자의 파라미터로 DatasSource가 필요하므로 dataSource 프로퍼티에 인젝션으로 값을 넣어주고 사용한다.
 
 <br>
 
@@ -172,7 +172,7 @@ class MemberServiceIntegrationTest {
 <Br>
 
 __Cf) Autowired가 아닌 직접 꺼내기__  
-스프링은 모든게 ApplicationCentext로 시작한다. 이걸 스프링 컨테이너라고 생각하면 된다. AnnotationConfigApplicationContext의 파라미터로 Configuration 어노테이션 있는 클래스를 넣어준다. @Bean이 붙은 것들을 객체생성해서 스프링 컨테이너에 넣어서 관리해준다. 그럼 거기서 이제 getBrean으로 꺼내서 사용하면 된다. getBean의 파라미터는 메소드이름, 반환타입이다.
+스프링은 모든게 ApplicationCentext로 시작한다. 이걸 스프링 컨테이너라고 생각하면 된다. AnnotationConfigApplicationContext의 파라미터로 Configuration 어노테이션 있는 클래스를 넣어준다. 이때 파라미터로 들어온 클래스는 자동으로 빈으로 등록된다. @Bean이 붙은 것들을 객체생성해서 스프링 컨테이너에 넣어서 관리해준다. 그럼 거기서 이제 getBrean으로 꺼내서 사용하면 된다. getBean의 파라미터는 메소드이름, 반환타입이다. 파라미터로 반환타입만으로도 사용 가능하다.
 ```java
 public class MemberApp {
 
@@ -299,7 +299,7 @@ public class JpaMemberRepository implements MemberRepository{
 ```
 <br>
 
-Configuration에 연결해주기전에 한 가지 작업이 더 필요하다. __JPA를 통한 모든 데이터 변경은 항상 transcational 어노테이션이 필요하다.__  앞선 테스트에서는 @Transactional은 데이터베이스에 커밋하는게 아니라 롤백을 해서 데이터베이스에 전달된 데이터를 모두 삭제한다고 했다. 이건 테스트의 경우에서 @Transactional이 사용될 경우에 해당하는 사항이고, @Transactional은 기본적으로 해당 메소드가 실행될 대 트랜잭션을 시작하고 해당 메소드가 끝날 때 커밋을 해서 데이터베이스에 전달된 내용을 확정한다. 따라서 MemberService 클래스에서 join 메소드에 @transactional을 붙여준다.  
+Configuration에 연결해주기전에 한 가지 작업이 더 필요하다. __JPA를 통한 모든 데이터 변경은 항상 transcational 어노테이션이 필요하다.__  앞선 테스트에서는 @Transactional은 데이터베이스에 커밋하는게 아니라 롤백을 해서 데이터베이스에 전달된 데이터를 모두 삭제한다고 했다. 이건 테스트의 경우에서 @Transactional이 사용될 경우에 해당하는 사항이고, @Transactional은 기본적으로 해당 메소드가 실행될 때 트랜잭션을 시작하고 해당 메소드가 끝날 때 커밋을 해서 데이터베이스에 전달된 내용을 확정한다. 따라서 MemberService 클래스에서 join 메소드에 @transactional을 붙여준다.  
 Configuration 다음과 같이 작업해준다.
 ```java
 @Configuration
@@ -369,7 +369,7 @@ public class SpringConfig {
 
 }
 ```
-앞서 말했듯이, JpaRepository을 상속받은 인터페이스JpaRepository의 구현체는 이미 자동으로 만들어져 스프링 빈에 있으므로 따로 등록할 필요가 없다. memberService의 파라미터에 memberService을 넣어줘야 하므로 memberService 프로퍼티를 선언해주고 빈에서 받아 인젝션해주고 사용하면 된다.
+앞서 말했듯이, JpaRepository을 상속받은 인터페이스JpaRepository의 구현체는 이미 자동으로 만들어져 스프링 빈에 있으므로 따로 등록할 필요가 없다. memberService의 파라미터에 memberRepository을 넣어줘야 하므로 memberService 를 빈에서 주입받아서 사용하면 된다.
 
 
 

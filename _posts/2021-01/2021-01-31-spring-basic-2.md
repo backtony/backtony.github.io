@@ -159,7 +159,7 @@ public DiscountPolicy fixDiscountPolicy() {
 }
 ```
 이렇게 2개가 빈으로 등록되어 있을 때 DiscountPolicy.class로 조회하게 되면 2개가 나와서 오류가 발생한다. 해결방법은 빈 이름을 지정해서 조회하거나, 특정 하위 타입으로 조회하면 된다. 앞서 설명했듯이 하위 타입으로 조회하는 것은 구현에 의존하는 것이기에 좋지 않다.  
-2번에서 설명했듯이 부모 타입을 모두 조회하려면 beansOfType을 사용하면 되고, java의 최고 부모는 Object이므로 Object.class로 꺼내면 전부 다 조회할 수 있다.  
+2번에서 설명했듯이 부모 타입을 모두 조회하려면 beansOfType을 사용하면 된다. java의 최고 부모는 Object이므로 Object.class로 꺼내면 전부 다 조회할 수 있다.  
 <br>
 
 ## 4. 스프링 빈 상속 관계
