@@ -68,9 +68,11 @@ static class LifeCycleConfig {
     }
 }
 ```
-빈을 수동으로 등록하는 과정에서 @Bean(initMethod = "메서드명", destroyMethod = "메서드명")으로 등록해주면 된다. 초기화할 때는 initMethod값으로 들어온 메서드가, 소멸 전에는 destroyMethod로 들어온 메서드가 실행된다.  
+빈을 수동으로 등록하는 과정에서 @Bean(initMethod = "메서드명", destroyMethod = "메서드명")으로 등록해주면 된다. 객체가 생성되고 초기화할 시점에서 initMethod값으로 들어온 메서드가, 소멸 전에는 destroyMethod로 들어온 메서드가 실행된다.  
 @Bean의 destroyMethod 속성의 기본값은 (inferred)으로 등록되어 있다. 대부분의 라이브러리는 close, shutdown이라는 이름으로 종료 메서드를 사용하는데 (inferred)는 말그대로 추론기능으로 close, shutdown이라는 이름의 메서드를 자동으로 호출해준다. 따라서 종료 메서드는 따로 적어주지 않아도 된다.
+<br>
 
+__정리하자면, 보통 @PostConstruct, @PreDestory를 사용하고, 외부 라이브러리에 초기화메서드, 소멸메서드를 성정해주어야 한다면 initMethod, destroyMethod을 사용한다.__
 
 
 
