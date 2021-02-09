@@ -72,7 +72,7 @@ public class Member {
 ```
 <br>
 
-회원들을 저장할 저장소를 만들자. hello.hellosprint에 repository라는 패키지를 만들고 repository의 기능을 선언한 MemberRepository 인터페이스부터 만든다.
+회원들을 저장할 저장소를 만들자. hello.hellospring에 repository라는 패키지를 만들고 repository의 기능을 선언한 MemberRepository 인터페이스부터 만든다.
 ```java
 package hello.hellospring.repository;
 
@@ -309,7 +309,7 @@ public class MemberService {
         result.ifPresent(m -> {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         });
-        사실 Optional을 반환해서 다시 대입하는 식은 좋지 않다. 코드가 더럽다.
+        사실 Optional을 반환해서 변수에 넣고 그 변수를 다시 사용하는 코드는 좋지 않다. 코드가 더럽다.
         따라서 아래와 같이 바로 사용한다.
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {

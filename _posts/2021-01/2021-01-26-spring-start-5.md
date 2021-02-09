@@ -92,6 +92,8 @@ public class MemberController {
     }
 
     @GetMapping("/members/new")
+    // /members/new으로 접속되면 createForm메서드가 실행되면서
+    // templates 에서 members/createMemberForm.html을 찾아서 화면에 뿌려준다.
     public String createForm(){
         return "members/createMemberForm";
     }
@@ -102,10 +104,10 @@ public class MemberController {
     @PostMapping("/members/new")
     // 지금 post로 받아오는 값은 name이라는 키에 value값을 받아오고 있다
     // 값이 넘어오면서 create 메소드가 실행되고 스프링은 파라미터인 MemberForm Form을
-    // 임의로 생성해서 넣어주는데 이때 만들어지는 객체는,
-    // 넘어온 key값과 MemberForm의 setter메소드이름이 동일하므로
-    // setName과 키값인 name 뒤에 name이 동일하므로 자동으로 세터를 호출해서 값을 세팅한 상태의 객체다.
-
+    // 하나 생성해서 넣어주는데 이때 생성된 객체의 setter메서드 이름과 key값 이름이 같다면
+    // setter로 값이 세팅된 객체를 넣어준다.
+    // MemberForm 클래스의 setter가 setName이므로 set을 제외한 XXX가 name이고
+    // 들어온 키가 name이므로 동일하다고 판단해서 객체의 setter메서드를 호출해서 값을 세팅해준 것이다.
     public String create(MemberForm Form){
         Member member = new Member();
         member.setName(Form.getName());
@@ -114,7 +116,7 @@ public class MemberController {
         return "redirect:/"; // '/'화면으로 돌려보내기
     }
 ```
-보통 조회할 때 get방식, 등록할 때는 post방식을 사용한다. 이 부분에서 이해하는데 좀 오래걸렸다. 천천히 생각해보자. members/new 화면에서 회원 이름을 받았다. html form에서 키값을 name으로 주고 있으므로 name=입력값으로 넘어오게 된다. 그리고 create 메소드를 자동으로 실행하게 되는데 스프링에서는 create의 매개인자에 해당하는 객체를 임의로 만들어준다. 이때 만들어지는 MemberForm 클래스의 Setter의 이름과 넘어온 키값의 이름과 일치하면 만들어지는 객체는 setter로 값이 세팅된 객체가 들어온다. return redirect:url 는 url로 이동한다.
+보통 조회할 때 get방식, 등록할 때는 post방식을 사용한다. 위 코드에서는 get은 /members/new url로 요청이 들어왔을 때 어떤 html을 화면에 뿌려줄지 처리하는 것이고, post는 /members/new 에 뿌려진 화면에서 입력된 값을 받아오는 것으로 사용했다. return redirect:url 는 url로 이동한다.
 
 
 <br>

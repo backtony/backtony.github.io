@@ -37,7 +37,7 @@ comments: true
 <br>
 
 ### 파라미터 외부에서 받기
-앞선 포스트에서는 직접 값을 주어 사용했었는데 이번에는 외부에서 받아서 사용해보자.
+앞선 포스트에서는 model.addAttribute로 직접 값을 주어 사용했었는데 이번에는 외부에서 받아서 사용해보자.
 
 ![그림3](https://backtony.github.io/assets/img/post/spring/start/2-3.PNG)
 
