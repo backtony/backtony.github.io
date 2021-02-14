@@ -41,3 +41,4 @@ comments: true
 + shft 2번 : 파일, 클래스, 성정 등 키워드에 관련된 모든 것 검색
 + ctrl + E : Recent file로 작업했던 것들을 검색
 + ctrl + B : 해당 클래스와 연관된 다른 것들 검색
++ ctrl + shft + F : 전체에서 찾기
