@@ -13,7 +13,7 @@ comments: true
 
 ## 1504번 특정한 최단 경로
 ---
-다이젝스트라 알고리즘을 사용했고 입력 횟수가 많으므로 sys를 사용했다.
+다익스트라 알고리즘을 사용했고 입력 횟수가 많으므로 sys를 사용했다.
 ```python
 import sys
 import heapq
@@ -34,7 +34,7 @@ for _ in range(e):
 # v1,v2 입력
 v1, v2 = map(int, input().split())
 
-# 다이젝스트라 로직
+# 다익스트라 로직
 def dijkstra(start):
     dis = [INF] * (n + 1)
     dis[start] = 0
