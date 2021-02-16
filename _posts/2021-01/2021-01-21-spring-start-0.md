@@ -35,6 +35,7 @@ comments: true
 + ctrl + alt + shft + T : Refactor 단축키
 + ctrl + alt + M : extract method
 + shft + F6 : 같은 코드 한 번에 수정
++ ctrl + alt + P : 함수 안에서 값들을 파라미터로 꺼내기
 
 ### 검색
 + ctrl + alt + S : setting창 열기
