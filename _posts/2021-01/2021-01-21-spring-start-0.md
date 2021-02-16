@@ -36,6 +36,8 @@ comments: true
 + ctrl + alt + M : extract method
 + shft + F6 : 같은 코드 한 번에 수정
 + ctrl + alt + P : 함수 안에서 값들을 파라미터로 꺼내기
++ ctrl + 방향키 : 멀티커서
++ ctrl + shft + U : 드래그 한 문자 대문자로 변환
 
 ### 검색
 + ctrl + alt + S : setting창 열기
