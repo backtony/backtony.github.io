@@ -13,7 +13,7 @@ comments: true
 
 ## 1991번 트리 순회
 ---
-ord와 chr 내장함수를 사용하여 A부터 0으로 테이블을 만들었다. 나머지는 재귀로 구현했다.
+ord와 chr 내장함수를 사용하여 A부터 0으로 테이블을 만들었다. 나머지는 재귀로 구현했다.  
 ```python
 BLANK = ord('.') - ord('A')  # 자식노드가 없는 경우
 
@@ -79,3 +79,4 @@ print(ans_front)
 print(ans_mid)
 print(ans_back)
 ```
+나중에 찾아보고 알았는데 전위 순회는 pre order, 중위 순회는 in-order, 후위 순회는 post-order라고 한다.
