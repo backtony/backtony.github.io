@@ -168,10 +168,17 @@ WHERE city REGEXP '[aeiou]$'
 ## Weather Observation Station 8
 ---
 ```sql
+-- 방법 1
 SELECT distinct city 
 FROM station
 WHERE city REGEXP '[aeiou]$' and city REGEXP '^[aeiou]';
+
+-- 방법 2
+-- 설명은 12번 참고
+select distinct city from station 
+where city regexp '^[aeiou].*[aeiou]$'
 ```
+^와 $를 같이 사용하면 오류가 뜬다. and로 따로 해줘야 한다. 정규식에서 |는 있는데 &는 없는 것 같다.
 <Br>
 
 ## Weather Observation Station 9
@@ -196,20 +203,34 @@ where city regexp '[^aeiou]$';
 ## Weather Observation Station 11
 ---
 ```sql
+-- 방법 1
 select distinct city 
 from station 
 where city regexp '^[^aeiou]|[^aeiou]$';
+
+-- 방법 2
+select distinct city from station 
+where city regexp '^[^aeiou]'
+or city regexp '[^aeiou]$'
 ```
-| -> or 을 의미하고 주의할 점은 |양쪽에 공백을 주면 안된다.
+| -> or 을 의미하고 주의할 점은 |양쪽에 공백을 주면 안된다. 그리고 ''안에 한번에 작성해야 한다.  
+|을 사용하지 않고 or로 두개를 나눠서 사용해도 된다.
 
 <Br>
 
 ## Weather Observation Station 12
 ---
 ```sql
+-- 방법 1
 select distinct city
 from station
 where city regexp '^[^aeiou].*[^aeiou]$';
+
+-- 방법 2
+select distinct city 
+from station 
+where city regexp '^[^aeiou]'
+and city regexp'[^aeiou]$';
 ```
 + .은 아무런 문자 하나를 의미한다. ...는 아무런 문자 3개를 의미한다.  
 + *는 바로 앞의 문자가 0회 이상 나타나는 문자를 찾는다.
