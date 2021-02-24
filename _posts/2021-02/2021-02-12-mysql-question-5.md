@@ -374,6 +374,7 @@ order by count(*),occupation;
 + substr(문자열,시작점,개수) : 시작점부터 개수만큼 잘라서 반환
 + lower(문자열) : 소문자로 반환
 + upper(문자열) : 대문자로 반환
++ 쿼리 두 개 이상일 경우 반드시 쿼리마다 세미콜론 ; 붙이기 -> 안붙이면 오류 발생
 <Br>
 
 
@@ -410,7 +411,7 @@ from city;
 ```
 + ceil : 올림, ceiling이랑 똑같음
 + floor : 내림
-+ round
++ round : 반올림 -> floor, ceil과 다르게 소수점 파라미터 존재
 <Br>
 
 ## Japan Population
