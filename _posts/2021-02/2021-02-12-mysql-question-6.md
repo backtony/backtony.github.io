@@ -109,11 +109,15 @@ select a.x,a.y
 
 ---
 ```sql
-select round(lat_n,4)
-from station s
-where (select count(lat_n) from station where s.lat_n<lat_n)
-=
-(select count(lat_n) from station where s.lat_n>lat_n);
+set @n =0;
+select count(*) from station into @total;
+
+select round(avg(a.lat_n),4)
+    from (select @n:=@n+1 as row_id,lat_n from station order by lat_n) a
+    where case
+        when @total%2=0 then a.row_id in (@total/2, (@total/2+1))
+        else a.row_id = (@total+1)/2
+        end;
 ```
 <br>
 
@@ -148,14 +152,30 @@ select s.name
 ## The Report
 ---
 ```sql
+-- 빙밥 1
 select if(g.grade>=8,s.name,null), g.grade, s.marks
     from students s
     join grades g
     on s.marks between g.min_mark and g.max_mark    
     order by g.grade desc, s.name, s.marks;
+
+-- 방법 2
+select name,grade,marks
+from  students s
+    join grades g
+    on s.marks between g.min_mark and g.max_mark
+    where grade>=8
+order by grade desc, name;
+
+select if(grade<8,null,name),grade,marks
+from  students s
+    join grades g
+    on s.marks between g.min_mark and g.max_mark
+    where grade<8
+order by grade desc, marks;
 ```
 + on의 조건으로 between and를 사용할 수 있다.
-+ 살짝 의문이 든게 s.name을 기준으로 정렬하고 후에 같으면 marks로 정렬인데 8보다 작은 경우에서는 이름 정렬이 아니라 marks정렬을 해야한다. 그런데 합격점을 받은 것을 보면 null로 찍었으니 null로 인식하는 것 같다.
++ 살짝 의문이 든게 s.name을 기준으로 정렬하고 후에 같으면 marks로 정렬했는데 문제 조건상 8보다 작은 경우에서는 이름 정렬이 아니라 grade와 marks로 정렬해야 한다. 근데 작성한 코드는 8보다 작은 grade에 대해서도 name으로 정렬을 하고 있는데 정답처리가 된 것을 보면 데이터가 잘 들어가 있지 않은 것 같다. 따라서 내 생각에는 방법 1은 틀린 것이고 방법 2가 맞는 것 같다.
 
 <br>
 
