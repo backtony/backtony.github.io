@@ -2,7 +2,7 @@
 layout: about
 title: About
 menu: true
-order: 10
+order: 20
 ---
 
 # 2016년
@@ -24,3 +24,4 @@ order: 10
 
 # 2021년
 + 세종대학교 컴퓨터공학과 전과
++ SW 마에스트로 1차 코딩테스트 합격
