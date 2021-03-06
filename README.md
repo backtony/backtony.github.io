@@ -21,6 +21,7 @@
     - 인프런 김영한님의 JPA 강의를 듣고 정리
 + [Java](https://backtony.github.io/category/java/)
     - ‘혼자 공부하는 자바’를 읽고 정리
+    - ‘명품 JAVA Programming’를 읽고 정리
 + [Web Programming](https://backtony.github.io/category/web/)
     - 생활 코딩 공부 기록
     - 스파르타 코딩 웹코딩 공부 기록
