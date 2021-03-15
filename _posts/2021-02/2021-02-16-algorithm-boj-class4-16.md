@@ -14,7 +14,8 @@ comments: true
 ## 2206번 벽 부수고 이동하기
 ---
 __시행 착오__  
-첫 시도에서는 일반적인 bfs에서 벽의 위치를 다 받아서 하나씩 벽을 선택해서 반복하는 과정으로 설계했더니 시간초과가 발생했다. bfs 복잡도가 O(V+E)인데 벽을 일일이 선택해서 돌리면 약 100만번을 돌리는 것이므로 당연히 시간초과가 발생한다.  
+첫 시도에서는 일반적인 bfs에서 벽의 위치를 다 받아서 하나씩 벽을 선택해서 없애고 돌리는 것을 반복하는 과정으로 설계했더니 시간초과가 발생했다. bfs 복잡도가 O(V+E)인데 벽을 일일이 선택해서 돌리면 약 100만번을 돌리는 것이므로 당연히 시간초과가 발생한다.  
+1차 복습 때 아래와 같이 코드를 설계했지만 3차원 리스트로 해결하면서 visited를 바로 수정하지 않고 cost를 큐에 넘기고 큐에서 꺼낼때 visited를 수정했더니 시간초과가 발생했다. 파이썬은 최적화가 가장 중요하다. __웬만하면 파라미터로 넘겨서 수정을 미루지 말고 가능하다면 바로바로 수정하는게 시간을 절약할 수 있는 것 같다.__
 <br>
 
 __해결__  
@@ -28,11 +29,11 @@ INF = int(1e9)
 
 
 def bfs(x, y):
-    visited[0][x][y] = 1  # 시작 지점 카운트
-    q = deque()
-    q.append((0, x, y))  # 벽뚫기전, 시작위치 삽입
     dx = [-1, 0, 1, 0]
     dy = [0, 1, 0, -1]
+    q = deque()
+    visited[0][x][y] = 1  # 시작위치 카운트
+    q.append((0, x, y))  # 벽 뚫기전, 시작위치 삽입
 
     while q:
         block, x, y = q.popleft()
@@ -41,38 +42,31 @@ def bfs(x, y):
             py = y + dy[i]
             # 범위 내
             if 0 <= px and px < n and 0 <= py and py < m:
-                # 벽이 아니고 방문한적 없는곳
-                if graph[px][py] == 0 and visited[block][px][py] == -1:
+                # 벽이 아니고 방문한적이 없다면
+                if graph[px][py] == 0 and visited[block][px][py] == INF:
                     visited[block][px][py] = visited[block][x][y] + 1
                     q.append((block, px, py))
-                # 벽인데 아직 뚫은 적이 없으면서 해당 지점이 벽을 뚫고 방문한적이 없는 경우
-                # bfs는 먼저 나온게 최소거리이므로 이미 방문한적이 있다면 다시 처리할 필요 없음
-                elif graph[px][py] == 1 and block == 0 and visited[block + 1][px][py] == -1:
-                    visited[block + 1][px][py] = visited[block][x][y] + 1
-                    q.append((block + 1, px, py))
+
+                # 벽이고 한번도 뚫은적 없고 벽이 뚫린 기록이 없다면
+                elif graph[px][py] == 1 and block == 0 and visited[1][px][py] == INF:
+                    visited[1][px][py] = visited[block][x][y] + 1
+                    q.append((1, px, py))
+
+    return min(visited[0][n - 1][m - 1], visited[1][n - 1][m - 1])
 
 
 n, m = map(int, input().split())
-
 graph = []
-# 방문 3차원 리스트
-# -1 은 미방문
-# visited[][][0] -> 벽뚫기전, [][][1] -> 벽뚫은 후
-visited = [[[-1] * m for _ in range(n)] for _ in range(2)]
+# 방문 테이블 ,  0은 벽 안부숨, 1 벽 부숨
+visited = [[[INF] * m for _ in range(n)] for _ in range(2)]
 
 # 그래프 정보
-for i in range(n):
+for _ in range(n):
     graph.append(list(map(int, input().rstrip())))
 
-bfs(0, 0)
-
-ans1, ans2 = visited[0][n - 1][m - 1], visited[1][n - 1][m - 1]
-if ans1 == -1 and ans2 != -1:
-    print(ans2)
-elif ans1 != -1 and ans2 == -1:
-    print(ans1)
-elif ans1 == -1 and ans2 == -1:
+ans = bfs(0, 0)
+if ans == INF:
     print(-1)
 else:
-    print(min(ans1, ans2))
+    print(ans)
 ```
