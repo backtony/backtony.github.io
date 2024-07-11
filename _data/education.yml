@@ -1,0 +1,19 @@
+- layout: left
+  name: 세종대학교
+  dates: 2019.02 ~ 2023.02
+  link:
+#  quote: >
+  description: | # this will include new lines to allow paragraphs
+    * 컴퓨터공학과
+    * 과학기술정보통신부 국가이공계장학생 선발
+      * 2년 전액 장학금
+    * 수석 장학생
+    * 학점 4.3 / 4.5
+- layout: left
+  name: SW 마에스트로
+  dates: 2021.03 ~ 2021.11
+  link: https://www.swmaestro.org
+#  quote: >
+  description: | # this will include new lines to allow paragraphs
+    * 12기 수료
+    

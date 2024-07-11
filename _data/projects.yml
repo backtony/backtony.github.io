@@ -1,0 +1,57 @@
+# Project template
+- layout: top-middle
+  name: 작가 계약 관리 시스템
+#  link:
+#  github:
+  quote: |
+    <a href="https://ironcladapp.com/" target="_blank">Ironclad</a>로 체결되는 작가 계약의 정산을 자동화하고, 궁극적으로는 해당 프로세스를 내제화하는 프로젝트입니다.
+  description: |
+    * DDD, Hexagonal, Event 기반의 아키텍처 설계 및 구현
+      * <a href="https://backtony.tistory.com/91" target="_blank">멀티 프로젝트 헥사고날 아키텍처로 구축</a>
+    * 계약 및 정산 도메인 설계
+      * 계약서를 기반으로 작가와 작품을 매핑하는 도메인 설계
+      * 체결된 계약 데이터를 누적하여 정산 도메인으로 변환 후 정산 플랫폼과 연동 기능 개발
+    * 원천 계약서 관리 및 보안
+      * 원본 계약서 암호화 및 복호화 기능 개발
+      * 계약서 업로드 및 다운로드 기능 개발
+
+- layout: top-middle
+  name: 작가 Connect 플랫폼 개편
+  quote: |
+    작가 Connect는 웹툰의 원고를 저장하고 글로벌 서비스를 위한 번역에 활용되는 컨텐트 협업 도구, 고료 등을 제공합니다.<br> 
+    기존에 서비스되고 있는 WCS를 운영 효율 극대화를 위해 작가 Connect라는 이름으로 새롭게 개편하는 프로젝트입니다.
+- layout: top-middle
+  description: |
+    * 기술 스택 전환
+      * 기존 Java/Spring MVC 기반의 기술 스택에서 Kotlin/Armeria 비동기 기반의 gRPC, GraphQL 기술 스택으로 전환 
+      * <a href="https://backtony.tistory.com/84" target="_blank">Armeria를 활용한 gRPC-kotlin 서버 구축</a>
+      * <a href="https://backtony.tistory.com/88" target="_blank">Spring - GraphQL 서버 구축</a>
+    * OAuth2 서버 설계 및 구축
+      * <a href="https://backtony.tistory.com/92" target="_blank">CONNECT 플랫폼 자체 OAuth2 서버 설계 및 구축</a>
+    * ITGC를 위한 배치매니저 도입 및 설계
+      * <a href="https://ghayoun.com/html/product/ezjobs.htm" target="_blank">배치매니저(ezJobs)</a> 도입 설계 및 구축
+      * 개인정보 파기 관련 배치 개발
+    * 개발 효율성 향상
+      * GraphQL 응답 Json 기반의 Spring Rest Docs 테스트코드 자동 생성기 개발
+    * 공통 모듈 개발
+      * 메일 발송 공통 모듈 개발
+    * 기존 서비스 기능 이관
+      * 언어별/작품별 즐겨찾기
+      * 검수를 위한 타서비스 작품, 회차 연동
+    
+
+- layout: top-middle
+  name: DRM 시스템
+  quote: |
+    DRM 시스템은 콘텐츠(전자책, 이미지 등)의 암호화를 제공합니다.
+
+  description: |
+    * Key Management Service 개발 : 
+      * 암호화에 사용되는 키 관리 서비스
+    * Content Packager 개발
+      * 콘텐츠 암호화 기능 제공
+    * CA 인증서 발급 로직 & 배치 개발 및 개선
+      * 인증서 발급 배치 성능 개선 : 1000개 기준 **4분 30초 -> 1분 30초로 개선**
+      * 인증서 발급 로직 성능 개선 : **20TPS -> 800TPS로 개선**
+    * Alibaba cloud k8s 배포 스크립트 개발
+      * Canary & Blue-Green 대화형 배포 스크립트 개발
