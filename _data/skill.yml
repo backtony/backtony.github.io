@@ -5,6 +5,7 @@
     * Spring Boot, Spring MVC, Spring Batch, Spring Security
     * Spring Data R2DBC / MongoDB / Redis / JPA / Elastic Search
     * Spring Kafka
+    * gRPC, GraphQL
     * Junit5, Mockito, Kotest
     * Gradle
     * IntelliJ
