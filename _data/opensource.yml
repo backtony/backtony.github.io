@@ -8,10 +8,13 @@
 
 - layout: left
   name: Spring 버그 제보
-  link: https://github.com/spring-projects/spring-framework/issues/33095
+  link:
 #  quote: >
   description: | # this will include new lines to allow paragraphs
-    * Reactive 환경에서 AOP와 Transactional을 적용하는 함께 적용하는 경우, AOP가 무시되는 버그 제보
+    * Coroutine 환경에서 AOP와 Transactional을 적용하는 함께 적용하는 경우, AOP가 무시되는 버그 제보
+      * [이슈 제보](https://github.com/spring-projects/spring-framework/issues/33095) 
+      * [관련 포스팅](https://backtony.tistory.com/93)
+    
 
 
 
