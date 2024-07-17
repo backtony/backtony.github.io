@@ -7,8 +7,15 @@
     * 컴퓨터공학과
     * 과학기술정보통신부 국가이공계장학생 선발
       * 2년 전액 장학금
-    * 수석 장학생
-    * 학점 4.3 / 4.5
+    * 수석 장학생 (학점 4.3 / 4.5)
+    * 캡스톤 은상 수상
+    * SW 알고리즘 경시대회 3등
+- layout: left
+  name: 정보처리기사
+  dates: 2022.06
+  #  quote: >
+  description: | # this will include new lines to allow paragraphs
+    * 한국산업인력공단
 - layout: left
   name: SW 마에스트로
   dates: 2021.03 ~ 2021.11
@@ -16,4 +23,4 @@
 #  quote: >
   description: | # this will include new lines to allow paragraphs
     * 12기 수료
-    
+
