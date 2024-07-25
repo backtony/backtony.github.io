@@ -3,7 +3,7 @@
   description: | # this will include new lines to allow paragraphs
     * Kotlin, Java
     * Spring Boot, Spring MVC, Spring Batch, Spring Security
-    * Spring Data R2DBC / MongoDB / Redis / JPA / Elastic Search
+    * Spring Data R2DBC / MongoDB / Redis / JPA
     * Spring Kafka
     * gRPC, GraphQL
     * Junit5, Mockito, Kotest
