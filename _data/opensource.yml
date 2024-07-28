@@ -4,7 +4,7 @@
 #  quote: >
 #    개인 기술 블로그
   description: | # this will include new lines to allow paragraphs
-    * 사내 Tech share에 공유한 내용, 업무에서 만난 문제, 회사에서 사용해야할 기술 등을 자세히 정리하여 공유하기 위한 블로그
+    * 사내 Tech share에 공유한 내용, 업무에서 해결한 이슈, 회사에서 사용해야 할 기술 등을 자세히 정리하여 공유하기 위한 블로그
 
 - layout: left
   name: Spring 버그 제보
@@ -12,8 +12,8 @@
 #  quote: >
   description: | # this will include new lines to allow paragraphs
     * Coroutine 환경에서 AOP와 Transactional을 적용하는 함께 적용하는 경우, AOP가 무시되는 버그 제보
-      * [이슈 제보](https://github.com/spring-projects/spring-framework/issues/33095) 
-      * [관련 포스팅](https://backtony.tistory.com/93)
+      * [Spring 이슈에 버그 리포팅](https://github.com/spring-projects/spring-framework/issues/33095) 
+      * [관련하여 정리한 포스팅](https://backtony.tistory.com/93)
     
 
 
