@@ -2,8 +2,8 @@
   name: Backend
   description: | # this will include new lines to allow paragraphs
     * Kotlin, Java
-    * Spring Boot, Spring MVC, Spring Batch, Spring Security
-    * Spring Data R2DBC / MongoDB / Redis / JPA
+    * Spring Boot, Spring Batch, Spring Security
+    * Spring Data R2DBC / MongoDB / JPA / Redis 
     * Spring Kafka
     * gRPC, GraphQL
     * Junit5, Mockito, Kotest
@@ -14,11 +14,11 @@
   description: | # this will include new lines to allow paragraphs
     * Nginx
     * Kubernetes
-    * Pinpoint, Grafana, Ngrinder
 - layout: left
   name: Frontend
   description: | 
-    * React, TypeScript
+    * React
+    * TypeScript
 
   
 

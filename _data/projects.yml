@@ -10,7 +10,7 @@
 
   description: |
     * 전체 프로젝트 환경 구축
-      * DDD, Hexagonal, Event 기반의 아키텍처 설계
+      * Hexagonal, Event 기반의 아키텍처 설계
         * <a href="https://backtony.tistory.com/91" target="_blank">멀티 프로젝트 헥사고날 아키텍처로 구축</a>
       * 사내 인프라 연동
     * 계약 도메인 설계
