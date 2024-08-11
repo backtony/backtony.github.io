@@ -12,13 +12,7 @@
 - layout: left
   name: DevOps
   description: | # this will include new lines to allow paragraphs
-    * Nginx
     * Kubernetes
-- layout: left
-  name: Frontend
-  description: | 
-    * React
-    * TypeScript
 
   
 
