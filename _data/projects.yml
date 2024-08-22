@@ -6,19 +6,22 @@
   quote: |
     2023.12 ~ 현재
     <br>
-    <a href="https://ironcladapp.com/" target="_blank">Ironclad</a>로 체결되는 작가 계약의 정산을 자동화하고, 궁극적으로는 해당 프로세스를 내제화하는 프로젝트입니다.
+    <a href="https://ironcladapp.com/" target="_blank">Ironclad</a>로 체결되는 작가 계약의 정산을 자동화하고, 최종적으로는 계약과 관련된 모든 프로세스의 내제화를 목표로 프로젝트입니다.
 
   description: |
-    * 전체 프로젝트 환경 구축
-      * Hexagonal, Event 기반의 아키텍처 설계
-        * <a href="https://backtony.tistory.com/91" target="_blank">멀티 프로젝트 헥사고날 아키텍처로 구축</a>
-      * 사내 인프라 연동
-    * 계약 도메인 설계
-      * 계약서를 기반으로 작가와 작품을 매핑하는 도메인 설계 및 기능 개발
-      * 체결된 계약 데이터 누적 기능 개발
-    * 정산 도메인 설계
-      * 누적된 계약 데이터를 기반으로 만들어내는 정산 도메인 설계
-      * 정산 플랫폼과 연동하여 정산 자동화 기능 개발
+    * **Hexagonal 및 Event 기반 아키텍처 설계**와 전체 프로젝트 환경 구축
+      * <a href="https://backtony.tistory.com/91" target="_blank">멀티 프로젝트 헥사고날 아키텍처로 구축</a>
+    * 계약 매핑, 누적 도메인 설계 & 개발
+      * 계약서와 작가, 파트너, 작품 그룹을 매핑하는 도메인 설계
+      * 작품 그룹을 기준으로 매핑된 다양한 계약서 데이터를 누적하는 summary 도메인 설계
+    * 정산 도메인 설계 & **정산 자동화를 위한 정산 플랫폼 연동 pipeline 구축**
+      * 다양한 계약서 매핑으로 누적된 계약 데이터를 기반으로 한 정산 도메인 설계
+      * **정산 도메인을 정산 플랫폼과 연동하는 동시성과 정합성을 고려한 exactly-once pipeline 구축**        
+        * 항상 최신 데이터를 처리하기 위한 zero-payload 방식의 메시지 설계
+        * 동일한 정산 아이템의 생성 및 수정 건이 동일 파티션에서 순차적으로 처리되도록 하는 메시지 키 구성
+        * 순서를 고려한 멱등성 카프카 프로듀서 및 멱등성 있는 컨슈머 로직으로 exactly-once 처리 
+        * 장애 발생에 대비한 브로커 파티션 복제 구성
+        * 배치를 사용한 예상치 못한 예외 상황에 대한 재시도 로직 구현          
     * 원천 계약서 관리 및 보안
       * 원본 계약서 암호화 및 복호화 기능 개발
       * 계약서 업로드 및 다운로드 기능 개발
@@ -33,24 +36,19 @@
 
 - layout: top-middle
   description: |
-    * 기술 스택 전환
-      * 기존 Java/Spring MVC 기반의 기술 스택에서 Kotlin/Armeria 비동기 기반의 gRPC, GraphQL 기술 스택으로 전환 
-      * <a href="https://backtony.tistory.com/84" target="_blank">Armeria를 활용한 gRPC-kotlin 서버 구축</a>
-      * <a href="https://backtony.tistory.com/88" target="_blank">Spring - GraphQL 서버 구축</a>
-    * CONNECT 플랫폼 자체 OAuth2 서버 설계 및 구축
+    * 기존 Java/Spring MVC 기반의 기술 스택에서 **Kotlin/Armeria 비동기 기반의 gRPC, GraphQL 기술 스택으로 전환**
+      * <a href="https://backtony.tistory.com/84" target="_blank">Armeria를 활용한 gRPC-kotlin 서버 구축</a>      
+      * Armeria/GraphQL 사용 시 발생한 개발의 불편함을 개선하기 위해 **개인적으로 Spring GraphQL을 학습하고, 팀원들에게 전환의 필요성을 발표 및 설득하여 <a href="https://backtony.tistory.com/88" target="_blank">Spring - GraphQL 서버</a>로 전환**  
+    * CONNECT 플랫폼의 자체 OAuth2 서버 설계 및 구축
       * <a href="https://backtony.tistory.com/92" target="_blank">Oauth2 Authorization 서버 구축</a>
-    * ITGC를 위한 배치매니저 도입 및 설계
-      * <a href="https://ghayoun.com/html/product/ezjobs.htm" target="_blank">배치매니저(ezJobs)</a> 도입 설계 및 구축
+    * ITGC(IT 감사)를 위한 <a href="https://ghayoun.com/html/product/ezjobs.htm" target="_blank">배치매니저(ezJobs)</a> 도입 설계 및 구축
       * 개인정보 파기 관련 배치 개발
-    * 개발 효율성 향상
-      * GraphQL 응답 Json 기반의 Spring Rest Docs 테스트코드 자동 생성기 개발
-    * 공통 모듈 개발
-      * 메일 발송 공통 모듈 개발
-    * 기존 서비스 기능 이관
+    * **팀의 개발 효율성 향상**을 위한 GraphQL 응답 Json 기반 Rest Docs 테스트 코드 자동 생성기 개발
+    * 메일 발송 공통 모듈 개발
+    * 기존 서비스에서 제공 중인 기능 이관
       * 언어별/작품별 즐겨찾기
       * 검수를 위한 타서비스 작품, 회차 연동
     
-
 - layout: top-middle
   name: Toon-Keeper (DRM 시스템)
   quote: |
@@ -59,12 +57,14 @@
     Toon-Keeper는 콘텐츠(전자책, 이미지 등)의 암복호화 기능을 제공하는 프로젝트입니다.
 
   description: |
-    * Key Management Service 개발 
-      * 암호화에 사용되는 키 관리 서비스
-    * Content Packager 개발
-      * 콘텐츠 암호화 기능 제공
-    * CA 인증서 발급 로직 & 배치 개발 및 개선
-      * 인증서 발급 로직 성능 개선 : **20TPS -> 800TPS로 개선**
-      * 인증서 발급 배치 성능 개선 : 1000개 기준 **4분 30초 -> 1분 30초로 개선**
-    * Alibaba cloud k8s 배포 스크립트 개발
+    * Device별 인증서 발급 로직 및 사전 발급 배치 개발
+      * 발급 로직 개선 및 캐싱으로 인증서 발급 성능 **40배 개선 : 20TPS -> 800TPS**
+      * 멀티스레드 방식을 사용해 인증서 발급 배치 성능 **3배 개선**
+    * Alibaba Cloud K8s 배포 스크립트 개발
       * Canary & Blue-Green 대화형 배포 스크립트 개발
+    * Server-to-Server 인증을 위한 OAuth2.0 개발
+    * 콘텐츠 암/복호화에 사용되는 Key Management Service 개발 
+    * 콘텐츠 암호화 기능을 제공하는 Content Packager 개발
+
+
+    
