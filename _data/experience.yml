@@ -1,14 +1,23 @@
 - layout: left
+  company: NAVER
+  link: https://www.navercorp.com/
+  job_title: Backend Developer
+  dates: 2024.11 ~ 현재
+  quote:
+  description:
+
+
+
+- layout: left
   company: 네이버웹툰
   link: https://webtoonscorp.com
   job_title: Backend Developer
-  dates: 2022.06 ~ 현재
+  dates: 2022.06 ~ 2024.10
   quote: >
    MAU 1억 8000만의 글로벌 웹툰 서비스
   description: >
     네이버 웹툰은 글로벌 1위 웹툰 및 웹소설 플랫폼을 서비스하는 회사로, 전 세계 사용자들에게 다양한 웹툰과 웹소설 콘텐츠를 제공하며, 이를 기반으로 영상화, 게임화 등 다양한 IP 비즈니스도 수행하고 있습니다.
     
-    <br>
     <br>
     
     <br>
