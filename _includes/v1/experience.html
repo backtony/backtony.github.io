@@ -2,5 +2,11 @@
   <h3 id="{{ site.experience_title | slugify | default: 'experience' }}">{{ site.experience_title | default: "Experience" }}</h3>
   {% for experience in site.data.experience %}
     {% include {{ experience.layout | default: 'left' | append: ".html" | prepend: "v1/" }} item=experience %}
+    {% if experience.projects %}
+      {% for project in experience.projects %}
+        {% include {{ project.layout | default: 'left' | append: ".html" | prepend: "v1/" }} item=project %}
+      {% endfor %}
+    {% endif %}
+    {% unless forloop.last %}<hr class="experience-divider">{% endunless %}
   {% endfor %}
 </div>

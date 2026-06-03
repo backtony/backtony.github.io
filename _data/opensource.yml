@@ -7,13 +7,6 @@
       * [Spring 이슈에 버그 리포팅](https://github.com/spring-projects/spring-framework/issues/33095) 
       * [관련하여 정리한 포스팅](https://backtony.tistory.com/93)
 
-- layout: left
-  name: 개인 블로그
-  link: https://backtony.tistory.com
-#  quote: >
-#    개인 기술 블로그
-  description: | # this will include new lines to allow paragraphs
-    * 사내 Tech Share에 공유한 내용과 업무에서 해결한 이슈, 관심 있는 기술을 정리하여 공유하는 블로그
 
 
     

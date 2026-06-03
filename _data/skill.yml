@@ -3,16 +3,8 @@
   description: | # this will include new lines to allow paragraphs
     * Kotlin, Java
     * Spring Boot, Spring Batch, Spring Security
-    * Spring Data R2DBC / MongoDB / JPA / Redis 
-    * Spring Kafka
-    * gRPC, GraphQL
-    * Junit5, Mockito, Kotest
-    * Gradle
-    * IntelliJ
-- layout: left
-  name: DevOps
-  description: | # this will include new lines to allow paragraphs
-    * Kubernetes
+    * Kafka, MySQL, Redis
+    * gRPC
 
   
 

@@ -6,10 +6,7 @@
   description: | # this will include new lines to allow paragraphs
     * 컴퓨터공학과
     * 과학기술정보통신부 국가이공계장학생 선발
-      * 2년 전액 장학금
-    * 수석 장학생 (학점 4.3 / 4.5)
-    * 캡스톤 은상 수상
-    * SW 알고리즘 경시대회 3등
+    * 수석 장학생 (GPA 4.3 / 4.5)
 - layout: left
   name: 정보처리기사
   dates: 2022.06
