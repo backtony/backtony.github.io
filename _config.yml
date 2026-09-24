@@ -50,7 +50,7 @@ darkmode: never
 
 # About Section
 # about_title: About Me (Use this to override about section title)
-about_profile_image: images/profile.jpeg
+#about_profile_image: images/profile.jpeg
 about_content: | # this will include new lines to allow paragraphs
   <br>
 
@@ -58,9 +58,9 @@ about_content: | # this will include new lines to allow paragraphs
   
   - 3가지 전공을 공부하다 개발의 몰입과 문제를 해결해 나가는 성취감에 빠져 개발자로 일하고 있습니다.
   
-  - <mark>테스트 코드</mark> 작성을 기본으로 여기고, 변경에 강한 <mark>읽기 쉬운 코드</mark>를 지향합니다.
+  - **테스트 코드** 작성을 기본으로 여기고, 변경에 강한 **읽기 쉬운 코드**를 지향합니다.
   
-  - 반복적인 작업과 불편한 과정을 <mark>자동화</mark>해 개발 효율을 높이는 일을 좋아합니다.
+  - 반복적인 작업과 불편한 과정을 **자동화**해 개발 효율을 높이는 일을 좋아합니다.
   
   - 기술 선택에서는 최신 트렌드보다 현재 상황과 시스템 구조에 맞는 이유를 먼저 고민합니다.
 
