@@ -187,6 +187,11 @@ body {
 }
 
 @media print {
+  // bootstrap 3 print 스타일의 `* { color: #000 !important }`로 링크가 본문과 구분되지 않는 것을 방지
+  a[href] {
+    color: #477dca !important;
+  }
+
   a[href]:after {
     content: none !important;
   }

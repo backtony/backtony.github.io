@@ -130,6 +130,11 @@
 
   .details {
     margin-bottom: 2rem;
+
+    // col-print-12가 양쪽 모두 100%라 flex가 절반씩 나누므로 화면(col-md-3) 비율로 고정
+    @media print {
+      flex: 0 0 25%;
+    }
   }
 }
 
@@ -187,7 +192,6 @@ p.quote {
   text-align: center;
 
   @media print {
-    text-align: left;
     padding: 0rem 1rem;
     margin-top: 1rem;
   }
