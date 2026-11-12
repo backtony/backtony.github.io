@@ -3,8 +3,8 @@
   link:
   #  quote: >
   description: | # this will include new lines to allow paragraphs
-    * Coroutine 환경에서 AOP와 @Transactional을 함께 적용할 때 발생하는 AOP가 무시되는 버그 리포팅
-      * [Spring 이슈에 버그 리포팅](https://github.com/spring-projects/spring-framework/issues/33095) 
+    * Coroutine 환경에서 AOP와 @Transactional을 함께 적용할 때 발생하는 AOP가 무시되는 버그 제보
+      * [Spring 이슈에 버그 제보](https://github.com/spring-projects/spring-framework/issues/33095)
       * [관련하여 정리한 포스팅](https://backtony.tistory.com/93)
 
 

@@ -54,13 +54,13 @@ about_profile_image: images/profile.jpeg
 about_content: | # this will include new lines to allow paragraphs
   <br>
 
-  - 안녕하세요! Java(Kotlin) & Spring 기반의 5년 차 서버 백엔드 개발자 최준성입니다.
+  - 안녕하세요! Java/Kotlin & Spring 기반의 5년 차 서버 백엔드 개발자 최준성입니다.
   
-  - 3가지 전공을 공부하다 개발의 몰입과 문제를 해결해 나가는 성취감에 빠져 개발자로 일하고 있습니다.
+  - 3가지 전공을 공부하던 중 개발에 몰입하고 문제를 해결하는 성취감을 느껴 개발자로 일하고 있습니다.
   
-  - <mark>테스트 코드</mark> 작성을 기본으로 여기고, 변경에 강한 <mark>읽기 쉬운 코드</mark>를 지향합니다.
+  - <strong>테스트 코드</strong> 작성을 기본으로 여기고, 변경에 강한 <strong>읽기 쉬운 코드</strong>를 지향합니다.
   
-  - 반복적인 작업과 불편한 과정을 <mark>자동화</mark>해 개발 효율을 높이는 일을 좋아합니다.
+  - 반복적인 작업과 불편한 과정을 <strong>자동화</strong>해 개발 효율을 높이는 일을 좋아합니다.
   
   - 기술 선택에서는 최신 트렌드보다 현재 상황과 시스템 구조에 맞는 이유를 먼저 고민합니다.
 
